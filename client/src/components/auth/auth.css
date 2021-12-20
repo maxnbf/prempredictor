@@ -1,0 +1,13 @@
+.landing-container {
+  background-color: blanchedalmond;
+  height: 100vh;
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  font-weight: bolder;
+}
+
+.landing-contents {
+  display: flex;
+}
