@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "client": "npm start --prefix client",
+    "client": "npm start",
     "backend": "nodemon start.js",
-    "dev": "concurrently \"nodemon run backend\" \"npm run client\""
+    "dev": "concurrently \"npm run backend\" \"cd client && npm run client\""
   },
   "keywords": [],
   "author": "",
@@ -16,6 +16,7 @@
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.2",
-    "mongodb": "^4.2.2"
+    "mongodb": "^4.2.2",
+    "mongoose": "^6.1.2"
   }
 }
