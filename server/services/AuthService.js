@@ -1,42 +1,33 @@
+const jwt = require("jsonwebtoken");
 const User = require('../models/UserModel.js');
-const dbo = require("../db/conn");
-
 
 class AuthService {
-
     static async signup(username, password, name){
-
-
-        let conn = dbo.getDb();
-
-        let myobj = {
-            name: name,
-            username: username,
-            password: password,
-        };
-
-        // conn.collection("userclasses").insertOne(myobj, function (err, res) {
-        //     if (err) throw err;
-        //     console.log(res)
-        // });
-        return await User.create({name, username, password});
+        return await User.create({name, username, password})
     }
 
-    static async signin(username, password){
-        let conn = dbo.getDb();
-        //conn.collection("userclasses").findOne({username:username}, function (err, res) {
-        //  console.log(res)
-        //});
-
+    static async signin(username, password) {
         const user = await User.findOne({username: username}).exec();
-        
-        console.log("USER", user)
+ 
+        console.log(user)
+        if (user) {
+            if (user.password === password) {
+                const token = jwt.sign(
+                    { _id: this._id, roles: this.roles },
+                    'F3A9ADFEB65702D5E9536E2ACA22572DF144C9069ED167C07150C1F122F9D847',
+                    { algorithm: "HS256" },
+                    { expiresIn: "10d" }
+                );
+                return { token, user };
 
-        if (user.password === password) {
-            return user;
-        } else {
-            console.log('error')
+            } else {
+                console.log('error?')
+                return new Error('user not found')
+            }
         }
+        
+        return new Error('wrong password')
+        
    
     }
 }

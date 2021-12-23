@@ -17,13 +17,16 @@ function fetchAndRespond(serviceMethod) {
 const router = Router();
 
 function signup(request) {
+    console.log(request.body)
     const { username, password, name } = request.body;
     return AuthService.signup(username, password, name);
 }
 
 function signin(request) {
     const { username, password } = request.body;
-    return AuthService.signin(username, password);
+    const ret = AuthService.signin(username, password);
+    console.log('RET', ret);
+    return ret
 }
 
 router.post("/signup", fetchAndRespond(signup));

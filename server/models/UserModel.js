@@ -14,6 +14,8 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true
     }, 
-}, {autoCreate: true})
+}, { autoCreate: true})
 
-module.exports = User = mongoose.model('User', UserSchema);
+const User = mongoose.model('User', UserSchema);
+
+module.exports = User

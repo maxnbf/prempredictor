@@ -1,6 +1,8 @@
 import axios from 'axios'
 import { useHistory } from 'react-router-dom';
+import { SIGN_IN_RESPONSE } from '../types/authTypes';
 import setAuthToken from './setAuthToken';
+import { dispatchAction } from './utilActions';
 
 
 
@@ -14,21 +16,15 @@ export const loginUser = (userData) => {
             localStorage.setItem("jwtToken", token);
             const username = res.data.user.username;
             localStorage.setItem("username", username);
-            // Set token to Auth header
+
             setAuthToken(token);
 
-            window.location.href='/home'
+            dispatchAction(SIGN_IN_RESPONSE, {username: username});
 
-            // // Decode token to get user data
-            // const decoded = jwt_decode(token);
 
-            // decoded["username"] = username;
+            window.href="/home";
+      
 
-            // dispatchAction(SET_CURRENT_USER, decoded);
-
-            // //store full user data in fullUser object
-            // getAndSetUserState(username);
-            // //TODO: catch error and handle properly
         })
         .catch((err) => {
             console.log("FAILED SIGN IN", err)
@@ -37,7 +33,7 @@ export const loginUser = (userData) => {
 
 // Register User
 export const registerUser = (userData, history) => {
-
+    console.log(userData);
     // Reset any errors that may have occured in previous signup attempts
     axios
         .post("http://localhost:5000/api/auth/signup", userData)
@@ -45,7 +41,7 @@ export const registerUser = (userData, history) => {
             // re-direct to login on successful register
             console.log(res)
 
-            window.location.href='/login'
+            //window.location.href='/login'
         })
         .catch((err) => {
             console.log('ERROR', err)

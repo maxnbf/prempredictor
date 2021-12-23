@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 import { loginUser } from "../../redux/actions/authActions";
 
 
@@ -6,6 +8,13 @@ const Login = () => {
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+
+    const isAuthenticated = useSelector(state => state.auth.isAuthenticated)
+    const history = useHistory()
+    
+    if (isAuthenticated) {
+        history.push('/home')
+    }
 
     const login = () => {
         loginUser({username: username, password: password});
