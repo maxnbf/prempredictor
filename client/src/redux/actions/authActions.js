@@ -1,5 +1,8 @@
 import axios from 'axios'
+import { useHistory } from 'react-router-dom';
 import setAuthToken from './setAuthToken';
+
+
 
 export const loginUser = (userData) => {
     axios
@@ -14,6 +17,8 @@ export const loginUser = (userData) => {
             // Set token to Auth header
             setAuthToken(token);
 
+            window.location.href='/home'
+
             // // Decode token to get user data
             // const decoded = jwt_decode(token);
 
@@ -26,18 +31,21 @@ export const loginUser = (userData) => {
             // //TODO: catch error and handle properly
         })
         .catch((err) => {
-            console.log(err)
+            console.log("FAILED SIGN IN", err)
         });
 };
 
 // Register User
 export const registerUser = (userData, history) => {
+
     // Reset any errors that may have occured in previous signup attempts
     axios
         .post("http://localhost:5000/api/auth/signup", userData)
         .then((res) => {
             // re-direct to login on successful register
-            history.push("/login");
+            console.log(res)
+
+            window.location.href='/login'
         })
         .catch((err) => {
             console.log('ERROR', err)

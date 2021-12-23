@@ -5,6 +5,7 @@ import Landing from './components/auth/Landing';
 import Register from './components/auth/Register';
 import Login from './components/auth/Login';
 import { Component } from 'react';
+import Home from './components/home/Home';
 
 
 
@@ -14,7 +15,7 @@ class App extends Component {
           <Router>
             <div className="App">
               <Switch>
-                {/* <PrivateRoute exact path="/home" element={Home} /> */}
+                <PrivateRoute exact path="/home" element={Home} />
                 <Route exact path="/" component={Landing} />
                 <Route exact path="/register" component={Register} />
                 <Route exact path="/login" component={Login} />

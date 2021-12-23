@@ -1,19 +1,43 @@
 const User = require('../models/UserModel.js');
+const dbo = require("../db/conn");
 
 
 class AuthService {
+
     static async signup(username, password, name){
-        return await User.create({name:name, username:username, password:password});
+
+
+        let conn = dbo.getDb();
+
+        let myobj = {
+            name: name,
+            username: username,
+            password: password,
+        };
+
+        // conn.collection("userclasses").insertOne(myobj, function (err, res) {
+        //     if (err) throw err;
+        //     console.log(res)
+        // });
+        return await User.create({name, username, password});
     }
 
     static async signin(username, password){
-        const user = await User.findOne({username: username});
+        let conn = dbo.getDb();
+        //conn.collection("userclasses").findOne({username:username}, function (err, res) {
+        //  console.log(res)
+        //});
 
-        if (!(await user.comparePassword(password))) {
-            console.log('ERROR wrong password');
-            return;
+        const user = await User.findOne({username: username}).exec();
+        
+        console.log("USER", user)
+
+        if (user.password === password) {
+            return user;
+        } else {
+            console.log('error')
         }
-        return user.createJwt();
+   
     }
 }
 
