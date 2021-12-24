@@ -14,12 +14,17 @@ export const loginUser = (userData) => {
             console.log(res);
             const { token } = res.data;
             localStorage.setItem("jwtToken", token);
-            const username = res.data.user.username;
+
+            const { username, _id, name } = res.data.user;
             localStorage.setItem("username", username);
+            localStorage.setItem('name', name)
+            localStorage.setItem("id", _id);
 
             setAuthToken(token);
 
-            dispatchAction(SIGN_IN_RESPONSE, {username: username});
+
+
+            dispatchAction(SIGN_IN_RESPONSE, {username: username, id: _id, name: name});
 
 
             window.href="/home";
@@ -32,7 +37,7 @@ export const loginUser = (userData) => {
 };
 
 // Register User
-export const registerUser = (userData, history) => {
+export const registerUser = (userData) => {
     console.log(userData);
     // Reset any errors that may have occured in previous signup attempts
     axios
@@ -47,3 +52,10 @@ export const registerUser = (userData, history) => {
             console.log('ERROR', err)
         });
 };
+
+
+export const logoutUser = () => {
+    localStorage.removeItem("jwtToken");
+    console.log('hello')
+    window.location.href='./login';
+}

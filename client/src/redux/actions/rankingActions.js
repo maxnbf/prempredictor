@@ -18,6 +18,64 @@ export const makeRanking = (ranking) => {
     });
 };
 
+
+export const getRanking = (ranking) => {
+    console.log(ranking)
+    // Reset any errors that may have occured in previous signup attempts
+    return new Promise(function (resolve, reject) {
+        axios
+            .get(`http://localhost:5000/api/ranking/${ranking}/ranking`)
+            .then((res) => {
+                resolve(res)
+                console.log(res)
+
+            })
+            .catch((err) => {
+                reject(err)
+                console.log('ERROR', err)
+            });
+    });
+};
+
+export const getLiveRanking = (id) => {
+    // Reset any errors that may have occured in previous signup attempts
+    return new Promise(function (resolve, reject) {
+        axios
+            .get(`http://localhost:5000/api/ranking/live`)
+            .then((res) => {
+                resolve(res)
+                console.log(res)
+
+            })
+            .catch((err) => {
+                reject(err)
+                console.log('ERROR', err)
+            });
+    });
+};
+
+
+export const getAllRanking = () => {
+    // Reset any errors that may have occured in previous signup attempts
+    return new Promise(function (resolve, reject) {
+        axios
+            .get(`http://localhost:5000/api/ranking/leaderboard`)
+            .then((res) => {
+                resolve(res)
+                console.log(res)
+
+            })
+            .catch((err) => {
+                reject(err)
+                console.log('ERROR', err)
+            });
+    });
+};
+
+
+
+
+
 // export const liveTable = () => {
 //     var axios = require("axios").default;
 

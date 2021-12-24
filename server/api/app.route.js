@@ -11,4 +11,6 @@ appRoute.get('/', (req, res) => {
 appRoute.use('/auth', AuthRoute)
 appRoute.use('/ranking', RankingRoute)
 
+
 module.exports = appRoute;
+

@@ -1,0 +1,27 @@
+.leaderboard-table {
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 50px;
+  padding-bottom: 50px;
+}
+
+.leaderboard-row {
+}
+
+.leaderboard-row-rank {
+  padding: 10px;
+}
+
+.leaderboard-row-username {
+  text-align: left;
+  padding: 10px;
+}
+
+.leaderboard-row-points {
+  padding: 10px;
+}
+
+.leaderboard-username-link {
+  text-decoration: none;
+  color: black;
+}

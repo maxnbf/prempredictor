@@ -6,8 +6,20 @@ const RankingSchema = new mongoose.Schema({
         type: mongoose.Types.ObjectId,
         required: true
     },
+    username: {
+        type: String,
+        required: true
+    },
     ranking: {
         type: Array,
+        required: true
+    },
+    points: {
+        type: Array,
+        required: true
+    },
+    total_points: {
+        type: Number,
         required: true
     }
 }, { autoCreate: true})

@@ -1,4 +1,6 @@
 const Router = require('express')
+const jwt = require("jsonwebtoken");
+const LiveTable = require('../models/LiveTableModel');
 // import { fetchAndRespond } from "./Controller";
 const RankingService = require('../services/RankingService')
 
@@ -17,18 +19,27 @@ function fetchAndRespond(serviceMethod) {
 const router = Router();
 
 function makeRanking(request) {
-
-    console.log(request.user)
-    return RankingService.makeRanking(request.user._id, ranking);
+    const verified = jwt.verify(request.headers.authorization.substring(7), 'F3A9ADFEB65702D5E9536E2ACA22572DF144C9069ED167C07150C1F122F9D847');
+    return RankingService.makeRanking(verified._id, verified.username, request.body);
 }
 
 function getRanking(request) {
-    const { id } = request.body;
-    return RankingService.getRanking(id);
+    return RankingService.getRanking(request.params.username);
+}
 
+async function getLive(request) {
+    const live = await LiveTable.find().exec()
+    return live[0]
+}
+
+function getAllRankings(request) {
+    return RankingService.getAll();
 }
 
 router.post("/ranking", fetchAndRespond(makeRanking));
-router.get("/:id/ranking", fetchAndRespond(getRanking));
+router.get("/:username/ranking", fetchAndRespond(getRanking));
+router.get("/live", fetchAndRespond(getLive));
+router.get("/leaderboard", fetchAndRespond(getAllRankings))
+
 
 module.exports = router;

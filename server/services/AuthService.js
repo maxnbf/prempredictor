@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const Ranking = require("../models/RankingModel.js");
 const User = require('../models/UserModel.js');
 
 class AuthService {
@@ -8,17 +9,10 @@ class AuthService {
 
     static async signin(username, password) {
         const user = await User.findOne({username: username}).exec();
- 
-        console.log(user)
         if (user) {
             if (user.password === password) {
-                const token = jwt.sign(
-                    { _id: this._id, roles: this.roles },
-                    'F3A9ADFEB65702D5E9536E2ACA22572DF144C9069ED167C07150C1F122F9D847',
-                    { algorithm: "HS256" },
-                    { expiresIn: "10d" }
-                );
-                return { token, user };
+                let token = this.createJwt(user)
+                return token
 
             } else {
                 console.log('error?')
@@ -29,6 +23,18 @@ class AuthService {
         return new Error('wrong password')
         
    
+    }
+
+    static async createJwt(user) {
+        const token = await jwt.sign(
+            { _id: user._id, username: user.username },
+            'F3A9ADFEB65702D5E9536E2ACA22572DF144C9069ED167C07150C1F122F9D847',
+            { algorithm: "HS256" },
+            { expiresIn: "10d" }
+        );
+
+
+        return {token, user}
     }
 }
 

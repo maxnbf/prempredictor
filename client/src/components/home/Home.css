@@ -54,3 +54,33 @@ div.set-order-left-content div {
   padding: 15px;
   width: 100%;
 }
+
+.welcome-banner {
+  text-align: initial;
+  padding: 50px;
+  margin-left: 10px;
+  font-size: 35px;
+  font-weight: 300;
+}
+
+.welcome-banner-divider {
+  width: 90%;
+}
+
+.menu-buttons {
+  justify-content: space-evenly;
+  width: 100%;
+  display: flex;
+}
+
+.prediction-link,
+.leaderboard-link {
+  padding: 50px;
+  border-bottom: 1px solid black;
+  text-decoration: none;
+  color: black;
+}
+
+.selected {
+  background: lightblue;
+}
