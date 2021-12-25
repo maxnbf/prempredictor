@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { makeRanking } from '../../redux/actions/rankingActions'
 import SetOrder from '../SetOrder/SetOrder'
 
-const globalTeams = ['Arsenal', 'Aston Villa', 'Brentford', 'Brighton and Hove Albion', 'Burnley', 'Chelsea', 'Crystal Palace', 'Everton', 'Leeds', 'Leicester', 'Liverpool', 'Manchester City', 'Manchester United', 'Newcastle', 'Norwich', 'Southampton', 'Tottenham Hotspurs', 'Watford', 'West Ham', 'Wolves']
+const globalTeams = ['Arsenal', 'Aston Villa', 'Brentford', 'Brighton', 'Burnley', 'Chelsea', 'Crystal Palace', 'Everton', 'Leeds', 'Leicester', 'Liverpool', 'Manchester City', 'Manchester United', 'Newcastle United', 'Norwich', 'Southampton', 'Tottenham', 'Watford', 'West Ham', 'Wolverhampton Wanderers']
     
 const NewUserHomePage = () => {
 
@@ -10,6 +10,7 @@ const NewUserHomePage = () => {
 
     const saveTable = () => {
         makeRanking(teams)
+        window.location.reload()
     }
 
     return (

@@ -38,15 +38,12 @@ export const loginUser = (userData) => {
 
 // Register User
 export const registerUser = (userData) => {
-    console.log(userData);
     // Reset any errors that may have occured in previous signup attempts
     axios
         .post("http://localhost:5000/api/auth/signup", userData)
         .then((res) => {
-            // re-direct to login on successful register
-            console.log(res)
-
-            //window.location.href='/login'
+            //res includes all user info
+            window.location.href='/login'
         })
         .catch((err) => {
             console.log('ERROR', err)

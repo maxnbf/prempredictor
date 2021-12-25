@@ -13,6 +13,7 @@ import { dispatchAction } from './redux/actions/utilActions';
 import { SIGN_IN_RESPONSE } from './redux/types/authTypes';
 import jwt_decode from "jwt-decode";
 import LeaderBoard from './components/LeaderBoard/LeaderBoard';
+// import 'bootstrap/dist/css/bootstrap.min.css';
 const App = () => {
     console.log(localStorage)
     if (localStorage.jwtToken) {

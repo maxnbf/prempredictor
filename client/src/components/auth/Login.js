@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { loginUser } from "../../redux/actions/authActions";
 
 
@@ -21,13 +21,16 @@ const Login = () => {
     }
 
     return <div className="login-page-container">
-        <div>
-            <input className="login-username-input" onChange={(e) => setUsername(e.target.value)}></input>
+        <div className="login-header">
+            Enter details to log in
         </div>
         <div>
-            <input className="login-password-input" onChange={(e) => setPassword(e.target.value)}></input>
+            <input placeholder="Username" className="login-username-input" onChange={(e) => setUsername(e.target.value)}></input>
         </div>
-        <div className="login-button" onClick={() => login()}>Login</div>
+        <div>
+            <input placeholder="Password" className="login-password-input" onChange={(e) => setPassword(e.target.value)}></input>
+        </div>
+        <div className="login-button-row"><div className="login-button-area"  onClick={() => login()}>Login</div> or <Link to="/register">Register here</Link></div>
     </div>
 }
 

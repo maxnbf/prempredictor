@@ -31,3 +31,14 @@ td {
   border: 1px solid black;
   border-collapse: collapse;
 }
+
+.compare-table-logo {
+  display: flex;
+  width: 20px;
+  height: 20px;
+}
+
+.compare-table-cell {
+  display: flex;
+  justify-content: space-between;
+}

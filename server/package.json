@@ -2,7 +2,7 @@
   "name": "server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "client": "npm start",
@@ -19,6 +19,7 @@
     "express-jwt": "^6.1.0",
     "mongodb": "^4.2.2",
     "mongoose": "^5.10.18",
-    "node-schedule": "^2.1.0"
+    "node-schedule": "^2.1.0",
+    "request": "^2.88.2"
   }
 }
