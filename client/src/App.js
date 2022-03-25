@@ -13,34 +13,31 @@ import { dispatchAction } from './redux/actions/utilActions';
 import { SIGN_IN_RESPONSE } from './redux/types/authTypes';
 import jwt_decode from "jwt-decode";
 import LeaderBoard from './components/LeaderBoard/LeaderBoard';
+import { logoutUser } from './redux/actions/authActions';
 // import 'bootstrap/dist/css/bootstrap.min.css';
 const App = () => {
-    console.log(localStorage)
+  
+    
     if (localStorage.jwtToken) {
       // Set auth token header auth
       const token = localStorage.jwtToken;
       const username = localStorage.username;
       const id = localStorage.id
       const name = localStorage.name
+      const favorite_team = localStorage.favorite_team
       setAuthToken(token);
 
-      dispatchAction(SIGN_IN_RESPONSE, {username: username, id: id, name: name});
+      dispatchAction(SIGN_IN_RESPONSE, {username: username, id: id, name: name, favorite_team: favorite_team});
 
       window.href="./home";
 
-      const decoded = jwt_decode(token);
-      const currentTime = Date.now() / 1000; // to get in milliseconds
-      //if the token is expired or before July 25 2021 it is bad
-      if (decoded.exp < currentTime || decoded.iat < 1627172707) {
-        // Logout user
-        localStorage.removeItem("jwtToken");
-        // Remove auth header for future requests
-        setAuthToken(false);
-        // Set current user to empty object {} which will set isAuthenticated to false
-        dispatchAction(SIGN_IN_RESPONSE, {});
-        // Redirect to login
-        window.location.href = "./login";
-      }
+      // const decoded = jwt_decode(token);
+      // const currentTime = Date.now() / 1000; // to get in milliseconds
+
+      // if (decoded.exp < currentTime || decoded.iat < 1627172707) {
+      //   // Logout user
+      //   logoutUser()
+      // }
     
     }
 

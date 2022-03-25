@@ -11,7 +11,6 @@ export default function authReducer(state = initialState, action) {
                 isAuthenticated: !(action.payload === {})
             };
         case SIGN_IN_RESPONSE:
-            console.log(action.payload)
             return {
                 ...state,
                 user_info: action.payload,

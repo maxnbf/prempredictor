@@ -7,62 +7,89 @@ import logos from '../../teamlogos/logodict';
 import "./CompareTable.css"
 const MainHomePage = ({live, ranking, username}) => {
 
-    const name = useSelector(state => state.auth.user_info.name)
+    const user = useSelector(state => state.auth.user_info)
     return (
     <div>
        
-        <div>
-            <div className="welcome-banner">Welcome, {name}</div>
-            {username && <div>You are viewing {username}'s profile</div>}
-            <div onClick={() => logoutUser()}>logout</div>
-            <Link className="prediction-link selected" to='/home'>Prediction</Link>
-            <Link className="leaderboard-link" to='/leaderboard'>Leaderboard</Link>
-    
-            
+        <div className="main-navbar">
+            <div className="welcome-banner">Welcome, {user.name}</div>
+            {/*show their prediction*/}
+            <Link className="prediction-link selected" to='/home'>My Prediction</Link>
+
+            {/*show the overall points leaderboard, community prediction, and favorite team leaderboard*/} 
+            <Link className="leaderboard-link" to='/leaderboard'>Leaderboards</Link> 
+            <div className="logout-button" onClick={() => logoutUser()}>Logout</div>  
         </div>
-        <hr className="welcome-banner-divider"></hr>
-        
-        <table className="compare-table">
-            <tr>
-                <td>
 
-                </td>
-                <td className="compare-table-live-team">
-                    Live Table
-                </td>
-                <td className="compare-table-predicted-team">
-                    Predicitons
-                </td>
-                <td className="compare-table-points">
-                    Points
-                </td>
+        <div className="home-content-container">
+            <div className="named-prediction-header">@{username ? username : user.username}'s predictions</div>
+            <table className="compare-table">
+                <tr>
+                    <td>
 
-            </tr>
-            {ranking.ranking.map((team, index) => 
-                <tr className="compare-table-row" key = {index}>
-                    <td className="compare-table-ranking">{index + 1}</td>
+                    </td>
                     <td className="compare-table-live-team">
-                        <div className="compare-table-cell">
-                            <div>{live?.table[index]}</div>
-                            <div className="compare-table-logo">{logos[live?.table[index]]}</div>
-                        </div>
+                        Live Table
                     </td>
                     <td className="compare-table-predicted-team">
-                        <div className="compare-table-cell">
-                            <div>{team}</div>
-                            <div className="compare-table-logo">{logos[team]}</div>
-                        </div>
+                        Predicitons
                     </td>
-                    <td className="compare-table-points">{ranking.points[index]}</td>
+                    <td className="compare-table-points">
+                        Points
+                    </td>
+
                 </tr>
-            )}
-            <tr>
-                <td></td>
-                <td></td>
-                <td>Total points:</td>
-                <td>{ranking.total_points}</td>
-            </tr>
-        </table>
+                {ranking.ranking.map((team, index) => {
+                    
+                    let row_styling;
+
+                    if (index === 0) {
+                        row_styling = "compare-table-champions"
+                    } else if (index >=1 && index <= 3) {
+                        row_styling = "compare-table-top-four"
+                    } else if (index >= 17) {
+                        row_styling = "compare-table-relegation"
+                    } else {
+                        row_styling = "compare-table-other"
+                    }
+
+                    let points = ranking.points[index];
+                    let point_styling;
+
+                    if (points === 0) {
+                        point_styling = 'zero_points'
+                    } else if (points > 0) {
+                        point_styling = 'positive_points'
+                    } else {
+                        point_styling = 'negative_points'
+                    }
+
+                    return (
+                    <tr className="compare-table-row" key = {index}>
+                        <td className={`compare-table-ranking ${row_styling}`}>{index + 1}</td>
+                        <td className={`compare-table-live-team  ${row_styling}`}>
+                            <div className="compare-table-cell">
+                                <div>{live?.table[index]}</div>
+                                <div className="compare-table-logo">{logos[live?.table[index]]}</div>
+                            </div>
+                        </td>
+                        <td className={`compare-table-predicted-team ${row_styling}`}>
+                            <div className="compare-table-cell">
+                                <div>{team}</div>
+                                <div className="compare-table-logo">{logos[team]}</div>
+                            </div>
+                        </td>
+                        <td className={`compare-table-points ${point_styling}`}>{points>0 && '+'}{points}</td>
+                    </tr>)
+                })}
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td>Total points:</td>
+                    <td>{ranking.total_points}</td>
+                </tr>
+            </table>
+        </div>
 
      
     </div>)

@@ -2,6 +2,8 @@
   text-align: center;
   background-color: blanchedalmond;
   min-height: 100vh;
+  width: 100%;
+  overflow: overlay;
 }
 
 .App-logo {

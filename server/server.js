@@ -14,6 +14,8 @@ const cors = require("cors");
 const LiveTable = require("./models/LiveTableModel");
 const Ranking = require("./models/RankingModel");
 const RankingService = require("./services/RankingService");
+const AutomatedService = require("./services/AutomatedService");
+const User = require("./models/UserModel");
 
 app.use(cors());
 
@@ -58,50 +60,55 @@ const rule = new schedule.RecurrenceRule();
 rule.hour = 23;
 rule.tz = 'Etc/UTC';
 
-const def =  ['Arsenal', 'Aston Villa', 'Brentford', 'Brighton', 'Burnley', 'Chelsea', 'Crystal Palace', 'Everton', 'Leeds', 'Leicester', 'Liverpool', 'Manchester City', 'Manchester United', 'Newcastle', 'Norwich', 'Southampton', 'Tottenham', 'Watford', 'West Ham', 'Wolverhampton Wanderers'];
+const def =  ['Arsenal', 'Aston Villa', 'Brentford', 'Brighton', 'Burnley', 'Chelsea', 'Crystal Palace', 'Everton', 'Leeds', 'Leicester', 'Liverpool', 'Manchester City', 'Manchester United', 'Newcastle United', 'Norwich', 'Southampton', 'Tottenham', 'Watford', 'West Ham', 'Wolverhampton Wanderers'];
 
-// perform action at 6pm EST 11pm UTC every day
-const job = schedule.scheduleJob(rule, async function(){
+// // perform action at 6pm EST 11pm UTC every day
+// const job = schedule.scheduleJob(rule, async function(){
+//     //gets all instances of LiveTable model, returns an array with either 
+//     ///no items (server starting for first time that season) or with one item
+//     // (the live ranking currently)
+//     AutomatedService.updateLiveTable()
 
-    //gets all instances of LiveTable model, returns an array with either 
-    ///no items (server starting for first time that season) or with one item
-    // (the live ranking currently)
-    const live = await LiveTable.find().exec()
-    if (live.length === 0) {
-        LiveTable.create({table: def})
-    } else {
-
-        const options = {
-          method: 'GET',
-          url: 'https://heisenbug-premier-league-live-scores-v1.p.rapidapi.com/api/premierleague/table',
-          headers: {
-            'x-rapidapi-host': 'heisenbug-premier-league-live-scores-v1.p.rapidapi.com',
-            'x-rapidapi-key': '1c57e02111msh788bcae97a8aa2bp1fe287jsnb14f5e2f0780',
-            useQueryString: true
-          }
-        };
-  
-
-        request(options, function (error, response, body) {
-          if (error) throw new Error(error);
-        
-           let r = JSON.parse(body)
-           r = r["records"]
-           let live_ranking = []
-           r.map((team) => live_ranking.push(team.team))
-
-           console.log('LIVE_RANKING', live_ranking)
-           live[0].table = live_ranking
-           live[0].save()
-        });
-    }
-
-    //updates and saves points for each ranking
-    const usersRankings = await Ranking.find().exec()
-    usersRankings.map(ranking => RankingService.updatePoints(ranking, def))
-
+//     console.log('HELLO')
     
-});
+// });
+
+/*
+  THIS DOES EVERY MINUTE DURNG THE HOUR, just want once on the hour
+
+*/
+
+function shuffle(array) {
+  let currentIndex = array.length,  randomIndex;
+
+  // While there remain elements to shuffle...
+  while (currentIndex != 0) {
+
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+
+    // And swap it with the current element.
+    [array[currentIndex], array[randomIndex]] = [
+      array[randomIndex], array[currentIndex]];
+  }
+
+  return array;
+}
 
 
+// const job = schedule.scheduleJob("05 * * * * *", async function(){
+//   console.log('JOB DONE')
+//   let i; 
+//   for (i = 4; i < 100; i++) {
+//     let name = `testuser${i}`
+//     let r = Math.floor(Math.random() * 20)
 
+
+//     let user = await User.create({name: name, username: name, password: name})
+//     let def2 = def;
+//     shuffle(def2)
+//     await RankingService.makeRanking(user._id, name, def2, def[r])
+//   }
+//   console.log('JOB REALLY DONE')
+// });

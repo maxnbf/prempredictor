@@ -16,6 +16,8 @@
   text-align: left;
   padding: 10px;
   width: 30vh;
+  display: flex;
+  justify-content: space-between;
 }
 
 .leaderboard-row-points {
@@ -25,4 +27,17 @@
 .leaderboard-username-link {
   text-decoration: none;
   color: black;
+}
+
+.leaderboard-containers {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.overall-leaderboard {
+  overflow: auto;
+}
+
+.leaderboard-header {
+  margin-top: 20px;
 }

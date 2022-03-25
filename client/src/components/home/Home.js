@@ -19,13 +19,9 @@ const Home = () => {
     const { username } = useParams()
 
     useEffect(() => {
-        console.log('hello')
         getRanking(username ? username : ownUsername).then(res => setOwnRanking(res.data))
-
         getLiveRanking().then(res => setLive(res.data))
     }, [ownUsername, username])
-
-    console.log(username, ownRanking)
 
     
     if (ownRanking) {
@@ -35,16 +31,6 @@ const Home = () => {
     } else {
         return <div></div>
     }
-
-
 }
-
-
-    // const [liveTeams, setLiveTable] = useState(null)
-    // useEffect(() => {
-    //     liveTable().then(res => setLiveTable(res.records))
-    // }, [])
-
-    // console.log('LIVE TEAMS', liveTeams)
 
 export default Home

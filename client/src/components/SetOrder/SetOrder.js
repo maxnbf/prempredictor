@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 import logos from '../../teamlogos/logodict';
 import watford from '../../teamlogos/watford.png'
-const SetOrder = ({teams, setTeams}) => {
+const SetOrder = ({teams, setTeams, favorite, setFavorite}) => {
 
 
     const handleOnDragEnd = (result) => {
@@ -25,10 +25,11 @@ const SetOrder = ({teams, setTeams}) => {
                                     <li {...provided.draggableProps} 
                                         {...provided.dragHandleProps} 
                                         ref={provided.innerRef} 
-                                        className="table-row">
-                                        <div className="table-rank">{index+1}.</div>
-                                        <div>{team}</div>
-                                        <div className="table-logo">{logos[team]}</div>
+                                        className={favorite === team ? 'table-row make-ranking-favorite-team' : 'table-row'}
+                                        onDoubleClick={() => setFavorite(team)}>
+                                            <div className="table-rank">{index+1}.</div>
+                                            <div>{team}</div>
+                                            <div className="table-logo">{logos[team]}</div>
                                     </li>
                                 )}
                        

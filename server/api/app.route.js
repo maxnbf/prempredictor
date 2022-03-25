@@ -13,6 +13,7 @@ appRoute.use('/ranking', RankingRoute)
 
 
 //MAKE AN ENDPOINT THAT RETRIEVES AND CALCULATES ALL USERS AVERAGE PREDICTED TABLE
+//--would show TEAM  // AVG GUESS // REAL POSITION
 
 //ALLOW USERS TO PICK A FAVORITE TEAM AND THEN HAVE A TAB WHERE IT RANKS ALL PEOPLE WITH THAT TEAM
 //--double click on initial team ordering screen to select team, highlight it in gold

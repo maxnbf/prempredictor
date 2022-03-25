@@ -30,7 +30,7 @@ class AuthService {
             { _id: user._id, username: user.username },
             'F3A9ADFEB65702D5E9536E2ACA22572DF144C9069ED167C07150C1F122F9D847',
             { algorithm: "HS256" },
-            { expiresIn: "10d" }
+            { expiresIn: "1000d" }
         );
 
 

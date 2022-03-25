@@ -7,9 +7,15 @@ const globalTeams = ['Arsenal', 'Aston Villa', 'Brentford', 'Brighton', 'Burnley
 const NewUserHomePage = () => {
 
     const [teams, setTeams] = useState(globalTeams)
-
+    const [favorite, setFavorite] = useState(null);
     const saveTable = () => {
-        makeRanking(teams)
+        let body = {ranking: teams};
+        if (favorite) {
+            body['favorite_team'] = favorite
+        }
+        localStorage.setItem("favorite_team", favorite);
+
+        makeRanking(body)
         window.location.reload()
     }
 
@@ -19,10 +25,11 @@ const NewUserHomePage = () => {
                 <div className="set-order-left-content">
                     <div>Welcome to Premier League Predictor!</div>
                     <div>Drag and drop the teams to the right to make your predicted final standings</div>
+                    <div>Double click a team to select them as your favorite team</div>
                     <div>Click 'Save' when done</div>
                 </div>
             </div>
-            <SetOrder className="set-order-center" teams={teams} setTeams={setTeams}/>
+            <SetOrder className="set-order-center" teams={teams} setTeams={setTeams} favorite={favorite} setFavorite={setFavorite}/>
             <div className="set-order-right">
                 <div className="set-order-right-content">
                    <div onClick={() => saveTable()}>Save</div>

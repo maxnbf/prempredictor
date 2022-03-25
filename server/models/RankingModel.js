@@ -21,6 +21,10 @@ const RankingSchema = new mongoose.Schema({
     total_points: {
         type: Number,
         required: true
+    },
+    favorite_team: {
+        type: String,
+        required: false
     }
 }, { autoCreate: true})
 

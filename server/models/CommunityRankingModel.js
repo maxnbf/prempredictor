@@ -5,20 +5,23 @@ const TeamPoints = new mongoose.Schema({
         type: String,
         required: true
     },
-    points: {
+    ranking: {
         type: Number,
         required: true
     }
 }, { autoCreate: true})
 
-const CommunityRanking = new mongoose.Schema({
-    table: {
+const CommunityRankingSchema = new mongoose.Schema({
+    teams: {
         type: [TeamPoints],
         required: true
-    }, 
-
+    },
+    num_rankings: {
+        type: Number,
+        required: true
+    } 
 }, { autoCreate: true})
 
-const CommunityRanking = mongoose.model('CommunityRanking', CommunityRanking);
+const CommunityRanking = mongoose.model('CommunityRanking', CommunityRankingSchema);
 
 module.exports = CommunityRanking

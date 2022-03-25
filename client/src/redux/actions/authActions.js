@@ -11,20 +11,20 @@ export const loginUser = (userData) => {
         .post("http://localhost:5000/api/auth/signin", userData)
         .then((res) => {
             
-            console.log(res);
             const { token } = res.data;
             localStorage.setItem("jwtToken", token);
 
-            const { username, _id, name } = res.data.user;
+            const { username, _id, name, favorite_team } = res.data.user;
             localStorage.setItem("username", username);
             localStorage.setItem('name', name)
             localStorage.setItem("id", _id);
+            localStorage.setItem("favorite_team", favorite_team);
 
             setAuthToken(token);
 
-
-
-            dispatchAction(SIGN_IN_RESPONSE, {username: username, id: _id, name: name});
+        
+        
+            dispatchAction(SIGN_IN_RESPONSE, {username: username, id: _id, name: name, favorite_team: favorite_team});
 
 
             window.href="/home";
@@ -53,6 +53,16 @@ export const registerUser = (userData) => {
 
 export const logoutUser = () => {
     localStorage.removeItem("jwtToken");
-    console.log('hello')
-    window.location.href='./login';
+    localStorage.removeItem("username");
+    localStorage.removeItem("name");
+    localStorage.removeItem("id");
+    localStorage.removeItem("favorite_team");
+    
+
+    // Remove auth header for future requests
+    setAuthToken(false);
+    // Set current user to empty object {} which will set isAuthenticated to false
+    dispatchAction(SIGN_IN_RESPONSE, {});
+    // Redirect to login
+    window.location.href = "./login";
 }
