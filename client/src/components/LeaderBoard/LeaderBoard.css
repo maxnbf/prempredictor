@@ -31,13 +31,33 @@
 
 .leaderboard-containers {
   display: flex;
+  height: 90vh;
+  margin-top: -65px;
   justify-content: space-evenly;
+  padding-top: 65px;
 }
 
-.overall-leaderboard {
+.overall-leaderboard,
+.fan-leaderboard,
+.community-leaderboard {
   overflow: auto;
+  height: auto;
+
+  
+  /* for mobile 
+  padding: 30px;
+  width: 50%; */
 }
 
 .leaderboard-header {
   margin-top: 20px;
+}
+
+.dropdown-body {
+  width: 30vh;
+  margin: 20px;
+}
+
+.dropdown-body.div {
+  color: #7B63FF;
 }

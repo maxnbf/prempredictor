@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { makeRanking } from '../../redux/actions/rankingActions'
-import SetOrder from '../SetOrder/SetOrder'
+import SetOrder from './drag-and-drop-table/DragAndDropTable'
+import { InstructionsContent, NewUserContainer, NewUserInstructions, NewUserSaveButton, NewUserSaveContainer } from './style'
 
 const globalTeams = ['Arsenal', 'Aston Villa', 'Brentford', 'Brighton', 'Burnley', 'Chelsea', 'Crystal Palace', 'Everton', 'Leeds', 'Leicester', 'Liverpool', 'Manchester City', 'Manchester United', 'Newcastle United', 'Norwich', 'Southampton', 'Tottenham', 'Watford', 'West Ham', 'Wolverhampton Wanderers']
     
@@ -20,23 +21,23 @@ const NewUserHomePage = () => {
     }
 
     return (
-        <div className="set-order-view">
-            <div className="set-order-left">
-                <div className="set-order-left-content">
+        <NewUserContainer>
+            <NewUserInstructions>
+                <InstructionsContent>
                     <div>Welcome to Premier League Predictor!</div>
-                    <div>Drag and drop the teams to the right to make your predicted final standings</div>
-                    <div>Double click a team to select them as your favorite team</div>
-                    <div>Click 'Save' when done</div>
-                </div>
-            </div>
+                    <li>Drag and drop the teams to the right to make your predicted final standings</li>
+                    <li>Double click a team to select them as your favorite team</li>
+                    <li>Click 'Save' when done</li>
+                </InstructionsContent>
+            </NewUserInstructions>
             <SetOrder className="set-order-center" teams={teams} setTeams={setTeams} favorite={favorite} setFavorite={setFavorite}/>
-            <div className="set-order-right">
-                <div className="set-order-right-content">
-                   <div onClick={() => saveTable()}>Save</div>
-                </div>
-            </div>
-        </div>)
+            <NewUserSaveContainer>
+                <NewUserSaveButton onClick={() => saveTable()}>
+                   Save
+                </NewUserSaveButton>
+            </NewUserSaveContainer>
+        </NewUserContainer>)
 }
 
 
-export default NewUserHomePage
+export default NewUserHomePage;

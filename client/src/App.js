@@ -1,10 +1,9 @@
 import './App.css';
-import { BrowserRouter as Router, Route, Routes, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import PrivateRoute from './components/PrivateRoute';
-import Landing from './components/auth/Landing';
-import Register from './components/auth/Register';
-import Login from './components/auth/Login';
-import { Component } from 'react';
+import Landing from './components/auth/landing/Landing';
+import Register from './components/auth/register/Register';
+import Login from './components/auth/login/Login';
 import Home from './components/home/Home';
 import { Provider } from 'react-redux';
 import store from './redux/store';

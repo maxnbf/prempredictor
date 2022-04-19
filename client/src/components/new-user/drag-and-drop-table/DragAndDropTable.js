@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
-import logos from '../../teamlogos/logodict';
-import watford from '../../teamlogos/watford.png'
-const SetOrder = ({teams, setTeams, favorite, setFavorite}) => {
+import logos from '../../../teamlogos/logodict';
+
+const DragAndDropTable = ({teams, setTeams, favorite, setFavorite}) => {
 
 
     const handleOnDragEnd = (result) => {
@@ -46,4 +46,4 @@ const SetOrder = ({teams, setTeams, favorite, setFavorite}) => {
 }
 
 
-export default SetOrder
+export default DragAndDropTable

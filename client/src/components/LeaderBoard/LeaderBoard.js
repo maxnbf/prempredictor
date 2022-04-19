@@ -4,6 +4,10 @@ import { Link } from 'react-router-dom'
 import { logoutUser } from '../../redux/actions/authActions'
 import { getAllRanking, getCommunityRanking, getFanRanking } from '../../redux/actions/rankingActions'
 import logos from '../../teamlogos/logodict'
+import Navbar from '../navbar/Navbar'
+import Dropdown from 'react-dropdown';
+import 'react-dropdown/style.css';
+
 import "./LeaderBoard.css"
 
 const LeaderBoard = () => {
@@ -19,18 +23,28 @@ const LeaderBoard = () => {
         getCommunityRanking().then(res => setCommRanking(res.data))
     }, [])
 
+    const options = [
+        {value: 'all', label: 'All Users'},
+        {value: 'club', label:`${favorite_team}'s Fans`}, 
+        {value: 'community', label: 'Community Average'},
+        ];
+    const defaultOption = options[0];
+    const [dropdownLeaderboard, setDropdownLeaderboard] = useState('all')
+    const onSelect = (option) => {
+        console.log(option.value)
+        setDropdownLeaderboard(option.value)
+    }
+
     return <div>
-         <div className="main-navbar">
-            <div className="welcome-banner">Welcome, {name}</div>
-            {/*show their prediction*/}
-            <Link className="prediction-link" to='/home'>My Prediction</Link>
+                
+        <Navbar username={name} page={'leaderboard'} ></Navbar>
 
-            {/*show the overall points leaderboard, community prediction, and favorite team leaderboard*/} 
-            <Link className="leaderboard-link selected" to='/leaderboard'>Leaderboards</Link> 
-            <div className="logout-button" onClick={() => logoutUser()}>Logout</div>  
-        </div>
-
+          
+        <Dropdown className="dropdown-body" options={options} onChange={onSelect} value={defaultOption} placeholder="Select an option" />
+            
         <div className="leaderboard-containers">
+        {dropdownLeaderboard === 'all' && 
+       
             <div className="overall-leaderboard">
                 <div className="leaderboard-header">All users scores</div>
                 <table className='leaderboard-table'>
@@ -47,8 +61,10 @@ const LeaderBoard = () => {
                     })}
                 </table>
             </div>
+        }
 
-            <div>
+        {dropdownLeaderboard === 'club' && 
+           <div className ="fan-leaderboard">
                 <div className="leaderboard-header">All {favorite_team}'s fan scores</div>
                 <table className='leaderboard-table'>
                     {favLeaderboard?.map((user, index) => {
@@ -63,8 +79,10 @@ const LeaderBoard = () => {
                     })}
                 </table>
             </div>
+        }
 
-            <div>
+        {dropdownLeaderboard === 'community' && 
+         <div className="community-leaderboard">
                 <div className="leaderboard-header">Community Average Ranking</div>
                 <table className='leaderboard-table'>
                     {commRanking?.map((team) => {
@@ -73,12 +91,12 @@ const LeaderBoard = () => {
                             <td className="leaderboard-row-rank">{Number.parseFloat(team.ranking).toFixed(2)}</td> 
                             <td className="leaderboard-row-username">
                                 {team.team}
-                                {/* <Link className="leaderboard-username-link" to={`/home/${user.username}`}>{user.username}</Link> */}
                             </td> 
                         </tr>)
                     })}
                 </table>
             </div>
+            }
         </div>
     </div>
 }
