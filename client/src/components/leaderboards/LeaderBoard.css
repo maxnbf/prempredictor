@@ -1,7 +1,6 @@
 .leaderboard-table {
   margin-left: auto;
   margin-right: auto;
-  margin-top: 50px;
   padding-bottom: 50px;
 }
 
@@ -15,7 +14,7 @@
 .leaderboard-row-username {
   text-align: left;
   padding: 10px;
-  width: 30vh;
+  width: 50vh;
   display: flex;
   justify-content: space-between;
 }
@@ -31,7 +30,7 @@
 
 .leaderboard-containers {
   display: flex;
-  height: 90vh;
+  height: 80vh;
   margin-top: -65px;
   justify-content: space-evenly;
   padding-top: 65px;
@@ -40,6 +39,7 @@
 .overall-leaderboard,
 .fan-leaderboard,
 .community-leaderboard {
+  padding: 50px;
   overflow: auto;
   height: auto;
 

@@ -1,27 +1,16 @@
 import React from 'react'
+import { PointsHeader, TeamHeader } from './style'
 
 const HeaderRow = ({otherRanking, user, username}) => {
-return<tr>
-    <td>
+return <tr>
+        <td></td>
+        <TeamHeader> Live Table </TeamHeader>
+        <TeamHeader> {user.username ? user.username : username}'s Predicitons </TeamHeader>
+        <PointsHeader> My Points</PointsHeader> 
+        {otherRanking && <TeamHeader> {username}'s Predicitons </TeamHeader>}
+        {otherRanking && <PointsHeader>Their Points </PointsHeader>}
+    </tr>
 
-    </td>
-    <td className="compare-table-live-team">
-        Live Table
-    </td>
-    <td className="compare-table-predicted-team">
-        {user.username ? user.username : username}'s Predicitons
-    </td>
-    <td className="compare-table-points">
-        My Points
-    </td>
-    {otherRanking && <td className="compare-table-predicted-team">
-        {username}'s Predicitons
-    </td>}
-    {otherRanking && <td className="compare-table-points">
-        Their Points
-    </td>}
-
-</tr>
 }
 
 export default HeaderRow

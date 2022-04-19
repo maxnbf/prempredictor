@@ -39,11 +39,7 @@ export const NewUserSaveContainer = styled.div`
     width: 33%;
 `
 
-export const NewUserSaveButton = styled.div`
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);    
+export const NewUserSaveButton = styled.div`  
     background: #7B63FF;
     color: white;
     width: 200px;
@@ -55,4 +51,17 @@ export const NewUserSaveButton = styled.div`
     cursor: pointer;
     box-shadow: 0px 0px 10px rgb(0 0 0 / 25%);
 
+`
+export const NewUserSaveButtonContainer = styled.div`
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);  
+`
+
+export const ErrorMessage = styled.div`
+    font-size: 11px;
+    color:  #7B63FF;
+    font-weight: 600;
+    padding: 5px;
 `

@@ -1,38 +1,24 @@
 import React from 'react';
-import logos from '../../../../teamlogos/logodict';
 import { indexToRowStyle, pointsToColorStyle } from '../helpers';
+import PointCell from './point-cell/PointCell';
+import TeamCell from './team-cell/TeamCell';
 
 const PredictionContent = ({myRanking, otherRanking, live}) => {
+
     return myRanking.ranking.map((team, index) => {
                     
-        let myRow_styling = indexToRowStyle(index)
+        let positionColor = indexToRowStyle(index)
         let myPoints = myRanking.points[index];
-        let myPoint_styling = pointsToColorStyle(myPoints)
-
+        let theirPoints = otherRanking?.points[index]
 
         return (
-        <tr className="compare-table-row" key = {index}>
-            <td className={`compare-table-ranking ${myRow_styling}`}>{index + 1}</td>
-            <td className={`compare-table-live-team  ${myRow_styling}`}>
-                <div className="compare-table-cell">
-                    <div>{live?.table[index]}</div>
-                    <div className="compare-table-logo">{logos[live?.table[index]]}</div>
-                </div>
-            </td>
-            <td className={`compare-table-predicted-team ${myRow_styling}`}>
-                <div className="compare-table-cell">
-                    <div>{team}</div>
-                    <div className="compare-table-logo">{logos[team]}</div>
-                </div>
-            </td>
-            <td className={`compare-table-points ${myPoint_styling}`}>{myPoints>0 && '+'}{myPoints}</td>
-            {otherRanking && <td className={`compare-table-predicted-team ${myRow_styling}`}>
-                <div className="compare-table-cell">
-                    <div>{otherRanking.ranking[index]}</div>
-                    <div className="compare-table-logo">{logos[otherRanking.ranking[index]]}</div>
-                </div>
-            </td>}
-            {otherRanking && <td className={`compare-table-points ${myPoint_styling}`}>{myPoints>0 && '+'}{otherRanking.points[index]}</td>}
+        <tr key = {index}>
+            <td className={`compare-table-ranking ${positionColor}`}>{index + 1}</td>
+            <TeamCell className={positionColor} team={live?.table[index]}/>
+            <TeamCell className={positionColor} team={team}/>
+            <PointCell className={pointsToColorStyle(myPoints)} points={myPoints}/>
+            {otherRanking && <TeamCell className={positionColor} team={otherRanking.ranking[index]}/>}
+            {otherRanking && <PointCell className={pointsToColorStyle(theirPoints)} points={theirPoints} />}
         </tr>)
     })
 }

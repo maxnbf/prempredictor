@@ -2,19 +2,6 @@
   padding: 10px;
 }
 
-.compare-table-live-team {
-  padding: 10px;
-  text-align: left;
-}
-
-.compare-table-predicted-team {
-  padding: 10px;
-  text-align: left;
-}
-
-.compare-table-points {
-  padding: 10px;
-}
 
 table,
 th,
@@ -23,61 +10,13 @@ td {
   border-collapse: collapse;
 }
 
-.compare-table-logo {
-  display: flex;
-  width: 20px;
-  height: 20px;
-}
 
-.compare-table-cell {
-  display: flex;
-  justify-content: space-between;
-}
-
-.compare-table-champions {
-  background-color: rgba(30, 212, 87, 0.5);
-}
-
-.compare-table-top-four {
-  background-color: rgba(106, 191, 15, 0.5);
-}
-
-.compare-table-relegation {
-  background-color: rgba(209, 37, 10, 0.5);
-}
-
-.compare-table-other {
-  background-color: rgba(214, 217, 54, 0.5);
-}
-
-.zero_points {
-  background-color: rgba(255, 255, 255, 0.65);
-}
-
-.negative_points {
-  background: rgba(255, 0, 0, 0.65);
-}
-
-.positive_points {
-  background-color: rgba(0, 128, 0, 0.75);
-}
 
 .profile-card {
   width: 300px;
   height: 300px;
   border: 2px solid black;
   margin-top: 150px;
-}
-
-.home-content-container {
-  justify-content: space-evenly;
-}
-
-.compare-table {
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 25px;
-  margin-bottom: 50px;
 }
 
 .named-prediction-header {
