@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import { getRanking, getLiveRanking } from '../../redux/actions/rankingActions'
-import "./Home.css"
 import MainHomePage from './main-home-page/MainHomePage'
 import NewUserHomePage from '../new-user/NewUserHomePage'
 

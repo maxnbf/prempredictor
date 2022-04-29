@@ -10,7 +10,7 @@ const Navbar = ({username, page}) => {
         <NavRight>
             <NavRightText isSelected={page === 'prediction'} to='/home'><p>My Prediction</p></NavRightText>
             <NavRightText isSelected={page === 'leaderboard'} to='/leaderboard'><p>Leaderboards</p></NavRightText>
-            <NavRightText className="logout-button" onClick={() => logoutUser()}><p>Logout</p></NavRightText>
+            <NavRightText onClick={() => logoutUser()}><p>Logout</p></NavRightText>
         </NavRight>
     </Nav>
 }

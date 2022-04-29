@@ -34,8 +34,16 @@ export const NavRightText = styled(Link)`
     transform: skew(20deg);
     margin: 0px;
   }
+
+  
+  @media (max-width: 767px) {
+    font-size: 12px;
+  }
 `
 
 export const NavWelcomeBanner = styled.div`
   padding: 20px;
+  @media (max-width: 767px) {
+    font-size: 12px;
+  }
 `

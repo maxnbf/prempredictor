@@ -1,7 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import Navbar from '../../navbar/Navbar';
-import "../CompareTable.css"
 import HeaderRow from './header-row/HeaderRow';
 import PredictionContent from './prediction-content/PredictionContent';
 import { HomeContainer, MyPredictionTable } from './style';

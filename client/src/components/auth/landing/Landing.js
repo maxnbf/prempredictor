@@ -3,7 +3,7 @@ import { LandingContainer, LandingLink, LandingLogo, LandingBanner } from "./sty
 import logo from "../../../teamlogos/premlogo.JPG"
 
 const Landing = () => {
-    return <LandingContainer className="landing-container">
+    return <LandingContainer>
         <div>
             <LandingBanner>
                 <LandingLogo src={logo}/>

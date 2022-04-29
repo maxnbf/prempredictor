@@ -11,7 +11,7 @@ import setAuthToken from './redux/actions/setAuthToken';
 import { dispatchAction } from './redux/actions/utilActions';
 import { SIGN_IN_RESPONSE } from './redux/types/authTypes';
 import jwt_decode from "jwt-decode";
-import LeaderBoard from './components/leaderboards/LeaderBoard';
+import LeaderBoard from './components/leaderboards/LeaderBoards';
 import { logoutUser } from './redux/actions/authActions';
 // import 'bootstrap/dist/css/bootstrap.min.css';
 const App = () => {

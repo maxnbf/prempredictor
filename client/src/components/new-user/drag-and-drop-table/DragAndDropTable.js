@@ -1,6 +1,7 @@
 import React from 'react'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 import logos from '../../../teamlogos/logodict';
+import { Logo, Rank, TableRow } from './style';
 
 const DragAndDropTable = ({teams, setTeams, favorite, setFavorite}) => {
 
@@ -14,23 +15,23 @@ const DragAndDropTable = ({teams, setTeams, favorite, setFavorite}) => {
         setTeams(items)
     }
 
-    return <div className="table">
-            <DragDropContext onDragEnd={handleOnDragEnd}>
+    return <DragDropContext onDragEnd={handleOnDragEnd}>
                 <Droppable droppableId='teams'>
                     {(provided) => (
                         <ul {...provided.droppableProps} ref={provided.innerRef}>
                             {teams.map((team, index) => 
                             <Draggable key={team} draggableId={team} index={index}>
                                 {(provided) => (
-                                    <li {...provided.draggableProps} 
+                                    <TableRow {...provided.draggableProps} 
                                         {...provided.dragHandleProps} 
                                         ref={provided.innerRef} 
-                                        className={favorite === team ? 'table-row make-ranking-favorite-team' : 'table-row'}
-                                        onDoubleClick={() => setFavorite(team)}>
-                                            <div className="table-rank">{index+1}.</div>
+                                        onDoubleClick={() => setFavorite(team)}
+                                        isFavorite={favorite === team}
+                                    >
+                                            <Rank className="table-rank">{index+1}.</Rank>
                                             <div>{team}</div>
-                                            <div className="table-logo">{logos[team]}</div>
-                                    </li>
+                                            <Logo className="table-logo">{logos[team]}</Logo>
+                                    </TableRow>
                                 )}
                        
                             </Draggable>
@@ -41,7 +42,7 @@ const DragAndDropTable = ({teams, setTeams, favorite, setFavorite}) => {
                 
                 </Droppable>
             </DragDropContext>
-        </div>
+    
 
 }
 

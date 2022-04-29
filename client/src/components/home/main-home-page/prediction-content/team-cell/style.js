@@ -28,16 +28,29 @@ export const Cell = styled.td`
 export const CellContent = styled.div`
     display: flex;
     justify-content: space-between;
+    
 `
 
 export const CellLogo = styled.div`
     display: flex;
     width: 20px;
     height: 20px;
+
+    
+    @media (max-width: 767px) {
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+ 
 `
 
 export const TeamName = styled.div`
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+
+    @media (max-width: 767px) {
+        display: none;
+    }
 `
