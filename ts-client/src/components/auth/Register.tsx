@@ -1,21 +1,13 @@
-import React, { useState } from "react";
-import {
-  Container,
-  TextField,
-  Button,
-  Typography,
-  Box,
-  Link,
-  FormHelperText
-} from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import { registerUser } from "../../actions/auth";
+import React, { useState } from 'react';
+import { Container, TextField, Button, Typography, Box, Link, FormHelperText } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { registerUser } from '../../actions/auth';
 
 const Register: React.FC = () => {
-  const [name, setName] = useState("");
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [name, setName] = useState('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
@@ -24,15 +16,15 @@ const Register: React.FC = () => {
 
     // Check if passwords match
     if (password !== confirmPassword) {
-      setError("Passwords do not match");
+      setError('Passwords do not match');
       return;
     }
 
     setError(null); // Reset error if passwords match
 
-    registerUser({username, password, name})
+    registerUser({ username, password, name });
 
-    navigate("/login"); // redirect to login after successful registration
+    navigate('/login'); // redirect to login after successful registration
   };
 
   return (
@@ -45,7 +37,7 @@ const Register: React.FC = () => {
             fullWidth
             margin="normal"
             value={name}
-            onChange={e => setName(e.target.value)}
+            onChange={(e) => setName(e.target.value)}
             required
           />
           <TextField
@@ -53,7 +45,7 @@ const Register: React.FC = () => {
             fullWidth
             margin="normal"
             value={username}
-            onChange={e => setUsername(e.target.value)}
+            onChange={(e) => setUsername(e.target.value)}
             required
           />
           <TextField
@@ -62,7 +54,7 @@ const Register: React.FC = () => {
             fullWidth
             margin="normal"
             value={password}
-            onChange={e => setPassword(e.target.value)}
+            onChange={(e) => setPassword(e.target.value)}
             required
           />
           <TextField
@@ -71,7 +63,7 @@ const Register: React.FC = () => {
             fullWidth
             margin="normal"
             value={confirmPassword}
-            onChange={e => setConfirmPassword(e.target.value)}
+            onChange={(e) => setConfirmPassword(e.target.value)}
             required
           />
           {error && <FormHelperText error>{error}</FormHelperText>}

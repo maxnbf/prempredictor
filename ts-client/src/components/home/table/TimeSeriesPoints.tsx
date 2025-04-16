@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import {
   LineChart,
   Line,
@@ -8,12 +8,12 @@ import {
   Tooltip,
   ResponsiveContainer,
   Label,
-} from "recharts";
-import { TimeSeriesPoints } from "../../../types/types";
-import { getTimeSeriesPoints } from "../../../actions/rankings";
-import { useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
-import { Box, Typography } from "@mui/material";
+} from 'recharts';
+import { TimeSeriesPoints } from '../../../types/types';
+import { getTimeSeriesPoints } from '../../../actions/rankings';
+import { useSelector } from 'react-redux';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Box, Typography } from '@mui/material';
 
 export const TimeSeriesPointsGraph: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -38,10 +38,10 @@ export const TimeSeriesPointsGraph: React.FC = () => {
 
         setOwnData(ownRes);
         if (isComparingUsers) {
-              setUserData(userRes as TimeSeriesPoints[]);
+          setUserData(userRes as TimeSeriesPoints[]);
         }
       } catch (err) {
-        console.error("Error fetching time series data:", err);
+        console.error('Error fetching time series data:', err);
       }
 
       setIsLoading(false);
@@ -53,20 +53,16 @@ export const TimeSeriesPointsGraph: React.FC = () => {
   if (isLoading) {
     return <div>Loading...</div>;
   }
-    
-  const mergeScores = (
-    own: TimeSeriesPoints[],
-    other: TimeSeriesPoints[]
-  ): any[] => {
+
+  const mergeScores = (own: TimeSeriesPoints[], other: TimeSeriesPoints[]): any[] => {
     const merged = own.map((entry, index) => ({
       currentRound: entry.currentRound,
       [ownUsername]: entry.score,
       ...(other[index] && { [username as string]: other[index].score }),
     }));
-  
+
     return merged;
   };
-    
 
   return (
     <Box>
@@ -77,14 +73,14 @@ export const TimeSeriesPointsGraph: React.FC = () => {
       </Typography>
       <ResponsiveContainer width="100%" height={300}>
         <LineChart
-             data={
-                isComparingUsers
-                  ? mergeScores(ownData, userData)
-                  : ownData.map((entry) => ({
-                      currentRound: entry.currentRound,
-                      [ownUsername]: entry.score,
-                    }))
-              }
+          data={
+            isComparingUsers
+              ? mergeScores(ownData, userData)
+              : ownData.map((entry) => ({
+                  currentRound: entry.currentRound,
+                  [ownUsername]: entry.score,
+                }))
+          }
           onClick={(e) =>
             navigate(
               `/home/${username ?? ownUsername}/${ownData[e.activeTooltipIndex ?? 0]?.currentRound}`
@@ -100,18 +96,9 @@ export const TimeSeriesPointsGraph: React.FC = () => {
             <Label value="Points" angle={-90} position="left" />
           </YAxis>
           <Tooltip />
-          <Line
-            type="monotone"
-            dataKey={ownUsername}
-            stroke="#8884d8"
-            activeDot={{ r: 6 }}
-            />
-            {isComparingUsers && (<Line
-                type="monotone"
-                dataKey={username}
-                stroke="#82ca9d"
-                activeDot={{ r: 6 }}
-            />
+          <Line type="monotone" dataKey={ownUsername} stroke="#8884d8" activeDot={{ r: 6 }} />
+          {isComparingUsers && (
+            <Line type="monotone" dataKey={username} stroke="#82ca9d" activeDot={{ r: 6 }} />
           )}
         </LineChart>
       </ResponsiveContainer>

@@ -1,16 +1,6 @@
 import React from 'react';
-import {
-  DndContext,
-  MouseSensor,
-  TouchSensor,
-  useSensor,
-  useSensors,
-} from '@dnd-kit/core';
-import {
-  SortableContext,
-  verticalListSortingStrategy,
-  useSortable,
-} from '@dnd-kit/sortable';
+import { DndContext, MouseSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core';
+import { SortableContext, verticalListSortingStrategy, useSortable } from '@dnd-kit/sortable';
 import {
   Paper,
   Table,
@@ -26,18 +16,10 @@ interface DraggableTableProps {
   setItems: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
-const DraggableRow: React.FC<{ item: string; index: number }> = ({
-  item,
-  index,
-}) => {
-  const {
-    setNodeRef,
-    attributes,
-    listeners,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({ id: item });
+const DraggableRow: React.FC<{ item: string; index: number }> = ({ item, index }) => {
+  const { setNodeRef, attributes, listeners, transform, transition, isDragging } = useSortable({
+    id: item,
+  });
 
   return (
     <TableRow
@@ -45,25 +27,20 @@ const DraggableRow: React.FC<{ item: string; index: number }> = ({
       {...attributes}
       {...listeners}
       style={{
-        transform: transform
-          ? `translate3d(${transform.x}px, ${transform.y}px, 0)`
-          : undefined,
+        transform: transform ? `translate3d(${transform.x}px, ${transform.y}px, 0)` : undefined,
         transition,
         cursor: 'grab',
         opacity: isDragging ? 0.5 : 1,
       }}
     >
-      <TableCell sx={{padding: .5, paddingLeft: 2}}>{index + 1}</TableCell>
-      <TableCell sx={{padding: .5}}>{item}</TableCell>
+      <TableCell sx={{ padding: 0.5, paddingLeft: 2 }}>{index + 1}</TableCell>
+      <TableCell sx={{ padding: 0.5 }}>{item}</TableCell>
     </TableRow>
   );
 };
 
 const DraggableTable: React.FC<DraggableTableProps> = ({ items, setItems }) => {
-  const sensors = useSensors(
-    useSensor(MouseSensor),
-    useSensor(TouchSensor)
-  );
+  const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
 
   const handleDragEnd = (event: any) => {
     const { active, over } = event;
@@ -85,8 +62,8 @@ const DraggableTable: React.FC<DraggableTableProps> = ({ items, setItems }) => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell sx={{padding: .5, paddingLeft: 2}}>Pos.</TableCell>
-                <TableCell sx={{padding: .5}}>Team</TableCell>
+                <TableCell sx={{ padding: 0.5, paddingLeft: 2 }}>Pos.</TableCell>
+                <TableCell sx={{ padding: 0.5 }}>Team</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>

@@ -1,15 +1,10 @@
 // src/components/Layout.tsx
-import React from "react";
-import {
-  BottomNavigation,
-  BottomNavigationAction,
-  Paper,
-  Box
-} from "@mui/material";
-import HomeIcon from "@mui/icons-material/Home";
-import PersonIcon from "@mui/icons-material/Person";
-import { useLocation, useNavigate } from "react-router-dom";
-import { TableRows } from "@mui/icons-material";
+import React from 'react';
+import { BottomNavigation, BottomNavigationAction, Paper, Box } from '@mui/material';
+import HomeIcon from '@mui/icons-material/Home';
+import PersonIcon from '@mui/icons-material/Person';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { TableRows } from '@mui/icons-material';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -17,9 +12,9 @@ interface LayoutProps {
 }
 
 const navItems = [
-  { label: "My Table", icon: <HomeIcon />, path: "/home" },
-  { label: "Explore", icon: <TableRows />, path: "/all" },
-  { label: "Profile", icon: <PersonIcon />, path: "/profile" },
+  { label: 'My Table', icon: <HomeIcon />, path: '/home' },
+  { label: 'Explore', icon: <TableRows />, path: '/all' },
+  { label: 'Profile', icon: <PersonIcon />, path: '/profile' },
 ];
 
 const NavLayout: React.FC<LayoutProps> = ({ children, disableNav = false }) => {
@@ -32,10 +27,7 @@ const NavLayout: React.FC<LayoutProps> = ({ children, disableNav = false }) => {
     <>
       <Box sx={{ pb: 8, zIndex: 1 }}>{children}</Box>
 
-      <Paper
-        sx={{ position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 2 }}
-        elevation={3}
-      >
+      <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 2 }} elevation={3}>
         <BottomNavigation
           value={currentIndex}
           onChange={(_, newValue) => {
@@ -52,9 +44,9 @@ const NavLayout: React.FC<LayoutProps> = ({ children, disableNav = false }) => {
               icon={item.icon}
               disabled={disableNav}
               sx={{
-                color: disableNav ? "gray" : "inherit",
-                "&.Mui-disabled": {
-                  color: "gray",
+                color: disableNav ? 'gray' : 'inherit',
+                '&.Mui-disabled': {
+                  color: 'gray',
                 },
               }}
             />

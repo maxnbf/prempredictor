@@ -1,24 +1,17 @@
-import React, { useState } from "react";
-import {
-  Container,
-  TextField,
-  Button,
-  Typography,
-  Box,
-  Link
-} from "@mui/material";
-import { useNavigate } from "react-router-dom";  // useNavigate in v6
-import { loginUser } from "../../actions/auth";
+import React, { useState } from 'react';
+import { Container, TextField, Button, Typography, Box, Link } from '@mui/material';
+import { useNavigate } from 'react-router-dom'; // useNavigate in v6
+import { loginUser } from '../../actions/auth';
 
 const Login: React.FC = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const navigate = useNavigate(); // replaced useHistory with useNavigate
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    loginUser({username, password})
-    navigate("/"); // navigate to home or dashboard
+    loginUser({ username, password });
+    navigate('/'); // navigate to home or dashboard
   };
 
   return (
@@ -31,7 +24,7 @@ const Login: React.FC = () => {
             fullWidth
             margin="normal"
             value={username}
-            onChange={e => setUsername(e.target.value)}
+            onChange={(e) => setUsername(e.target.value)}
             required
           />
           <TextField
@@ -40,7 +33,7 @@ const Login: React.FC = () => {
             fullWidth
             margin="normal"
             value={password}
-            onChange={e => setPassword(e.target.value)}
+            onChange={(e) => setPassword(e.target.value)}
             required
           />
           <Button type="submit" fullWidth variant="contained" color="primary" sx={{ mt: 2 }}>

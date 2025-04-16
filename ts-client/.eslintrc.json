@@ -1,0 +1,16 @@
+{
+    "extends": [
+      "react-app",
+      "plugin:react/recommended",
+      "plugin:@typescript-eslint/recommended",
+      "plugin:prettier/recommended"
+    ],
+    "plugins": ["prettier"],
+    "rules": {
+      "prettier/prettier": "error",
+      "indent": ["error", 2],
+      "react/jsx-indent": ["error", 2],
+      "react/jsx-indent-props": ["error", 2]
+    }
+  }
+  
