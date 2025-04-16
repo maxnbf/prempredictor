@@ -1,3 +1,0 @@
-export const SIGN_UP_RESPONSE = "SIGN_UP_RESPONSE";
-export const SIGN_IN_RESPONSE = "SIGN_IN_RESPONSE";
-export const RESET_STORE = "RESET_STORE";

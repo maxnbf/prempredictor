@@ -1,15 +1,43 @@
 import React from 'react';
-import { DndContext } from '@dnd-kit/core';
-import { SortableContext, verticalListSortingStrategy, useSortable } from '@dnd-kit/sortable';
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import {
+  DndContext,
+  MouseSensor,
+  TouchSensor,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core';
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+  useSortable,
+} from '@dnd-kit/sortable';
+import {
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from '@mui/material';
 
 interface DraggableTableProps {
   items: string[];
   setItems: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
-const DraggableRow: React.FC<{ item: string; index: number }> = ({ item, index }) => {
-  const { setNodeRef, attributes, listeners, transform, transition } = useSortable({ id: item });
+const DraggableRow: React.FC<{ item: string; index: number }> = ({
+  item,
+  index,
+}) => {
+  const {
+    setNodeRef,
+    attributes,
+    listeners,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: item });
 
   return (
     <TableRow
@@ -17,23 +45,31 @@ const DraggableRow: React.FC<{ item: string; index: number }> = ({ item, index }
       {...attributes}
       {...listeners}
       style={{
-        transform: `translate3d(${transform?.x ?? 0}px, ${transform?.y ?? 0}px, 0)`,
+        transform: transform
+          ? `translate3d(${transform.x}px, ${transform.y}px, 0)`
+          : undefined,
         transition,
-        cursor: 'move',
+        cursor: 'grab',
+        opacity: isDragging ? 0.5 : 1,
       }}
     >
-      <TableCell>{index + 1}</TableCell>
-      <TableCell>{item}</TableCell>
+      <TableCell sx={{padding: .5, paddingLeft: 2}}>{index + 1}</TableCell>
+      <TableCell sx={{padding: .5}}>{item}</TableCell>
     </TableRow>
   );
 };
 
 const DraggableTable: React.FC<DraggableTableProps> = ({ items, setItems }) => {
+  const sensors = useSensors(
+    useSensor(MouseSensor),
+    useSensor(TouchSensor)
+  );
+
   const handleDragEnd = (event: any) => {
     const { active, over } = event;
     if (active.id !== over?.id) {
       const oldIndex = items.indexOf(active.id);
-      const newIndex = items.indexOf(over?.id);
+      const newIndex = items.indexOf(over.id);
 
       const updatedItems = [...items];
       updatedItems.splice(oldIndex, 1);
@@ -43,14 +79,14 @@ const DraggableTable: React.FC<DraggableTableProps> = ({ items, setItems }) => {
   };
 
   return (
-    <DndContext onDragEnd={handleDragEnd}>
+    <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
       <SortableContext items={items} strategy={verticalListSortingStrategy}>
         <TableContainer component={Paper}>
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>Rank</TableCell>
-                <TableCell>Team</TableCell>
+                <TableCell sx={{padding: .5, paddingLeft: 2}}>Pos.</TableCell>
+                <TableCell sx={{padding: .5}}>Team</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
