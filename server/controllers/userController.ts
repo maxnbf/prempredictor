@@ -1,47 +1,22 @@
-import { LiveTable } from "../models/liveTableModel";
-import * as rankingService from "../services/rankingService";
+import { getFavoriteService, getUserMetadataService, searchUsersService, setFavoriteService } from "../services/userService"
 
-export async function makeRanking(request, response) {
+export async function setFavorite(request) {
     const activeUser = request?.body?.user?.username;
-
-    const { teams, favorite } = request.body;
-    try {
-        const ranking = await rankingService.makeRanking(activeUser, teams, favorite);
-        return response.status(201).json(ranking);
-    }
-    catch (e) {
-        response.status(500).json({error: e})
-    }
+    const { favorite } = request.body;
+    await setFavoriteService(activeUser, favorite);
+    return true;
 }
 
-export async function getRanking(request, response) {
-    try {
-        const ranking = await rankingService.getRanking(request.params.username);
-        return response.status(201).json(ranking);
-    }
-    catch (e) {
-        response.status(500).json({error: e})
-    }
+export async function getFavorite(request) {
+    const activeUser = request?.body?.user?.username;
+    return await getFavoriteService(activeUser);
 }
 
-export async function getLive(request, response) {
-
-    try {
-        const liveTable = await LiveTable.findOne();
-        return response.status(201).json(liveTable);
-    }
-    catch (e) {
-        response.status(500).json({error: e})
-    }
+export async function getUserMetadata(request) {
+    const activeUser = request?.body?.user?.username;
+    return await getUserMetadataService(activeUser);
 }
 
-export async function getAllRankings(request, response) {
-    try {
-        const allRankings = await rankingService.getAll() 
-        return response.status(201).json(allRankings);
-    }
-    catch (e) {
-        response.status(500).json({error: e})
-    }
-
+export async function searchUsers(request) {
+    return await searchUsersService(request.params.query)
 }

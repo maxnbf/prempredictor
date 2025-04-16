@@ -1,5 +1,4 @@
 import axios from "axios";
-import { useHistory } from "react-router-dom";
 import { SIGN_IN_RESPONSE } from "../types/authTypes";
 import setAuthToken from "./setAuthToken";
 import { dispatchAction } from "./utilActions";

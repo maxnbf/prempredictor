@@ -1,6 +1,7 @@
 import { User } from "../models/userModel";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import { UserMetadata } from "../models/userMetadataModel";
 
 const secretKey = process.env.SECRET_KEY;
 
@@ -39,7 +40,7 @@ export const signup = async (req, res) => {
   }
   
 export const signin = async (req, res) => {
-    const { username, password } = req.body;
+  const { username, password } = req.body;
 
     try {
       const user = await User.findOne({ username });

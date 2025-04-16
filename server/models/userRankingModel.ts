@@ -18,17 +18,13 @@ const userRankingSchema: Schema<UserRankingDocument> = new mongoose.Schema(
             type: [String],
             required: true,
         },
-        points: {
-            type: [Number],
-            required: true,
-        },
         total: {
             type: Number,
             required: true,
         },
         favorite: {
             type: String,
-            required: true,
+            required: false,
         }
     },
     { autoCreate: true }

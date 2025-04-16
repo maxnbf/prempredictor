@@ -8,13 +8,13 @@ export default function authReducer(state = initialState, action) {
             return {
                 ...state,
                 user_info: action.payload,
-                isAuthenticated: !(action.payload === {})
+                isAuthenticated: !(Object.keys(action.payload).length == 0)
             };
         case SIGN_IN_RESPONSE:
             return {
                 ...state,
                 user_info: action.payload,
-                isAuthenticated: !(action.payload === {})
+                isAuthenticated: !(Object.keys(action.payload).length == 0)
             };
         case RESET_STORE:
                 return{
