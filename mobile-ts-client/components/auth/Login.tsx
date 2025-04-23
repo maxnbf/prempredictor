@@ -17,10 +17,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
 
   const handleLogin = async () => {
     await loginUser({ username, password });
-    navigation.navigate("Main", {
-      screen: "Home",
-      params: { username: undefined, gameweek: undefined },
-    });
+    navigation.navigate("Onboarding");
   };
 
   return (

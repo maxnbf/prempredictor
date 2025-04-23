@@ -9,16 +9,11 @@ export const navigationRef = createNavigationContainerRef<RootStackParamList>();
 
 export const navigateToLogin = async () => {
     await AsyncStorage.removeItem("jwtToken");
+    await AsyncStorage.removeItem("username");
+  
     store.dispatch(resetStore());
-    console.log("Is nav ready:", navigationRef.isReady());
-    console.log("root state:", navigationRef.getRootState());
-    console.log("Current Route:", navigationRef.getCurrentRoute()?.name);
-
   
     if (navigationRef.isReady()) {
-      navigationRef.reset({
-        index: 0,
-        routes: [{ name: "Login" }],
-      });
+      navigationRef.navigate("Login");
     }
   };

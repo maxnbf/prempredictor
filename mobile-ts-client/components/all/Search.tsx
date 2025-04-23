@@ -4,6 +4,7 @@ import { TextInput, Card, Text, ActivityIndicator } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import { searchUsers } from "../../actions/user"; // your API call
 import { AllScreenProps, TabParamList } from "../../types/routes";
+import { Loading } from "../common/Loading";
 
 export const Search = () => {
   const [query, setQuery] = useState("");
@@ -52,9 +53,7 @@ export const Search = () => {
         style={{ marginBottom: 8 }}
       />
 
-      {loading && !users && (
-        <ActivityIndicator animating size="small" style={{ marginTop: 8 }} />
-      )}
+      {loading && !users && <Loading />}
 
       {!loading && users && users.length === 0 && query.length > 0 && (
         <Text style={{ marginTop: 8 }}>No results for: "{query}"</Text>
@@ -69,7 +68,6 @@ export const Search = () => {
             borderRadius: 8,
             backgroundColor: "#fff",
             borderWidth: 1,
-            borderColor: "#ddd",
           }}
           renderItem={({ item }) => (
             <TouchableOpacity onPress={() => navigateToUser(item)}>

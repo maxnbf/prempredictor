@@ -2,69 +2,81 @@ import React, { useState, useEffect } from "react";
 import { View, Text, Button, StyleSheet, Alert } from "react-native";
 import { getLiveRanking, makeRanking } from "../../../actions/rankings";
 import { setFavorite } from "../../../actions/user";
-import { Picker } from "@react-native-picker/picker";
 import { SafeAreaView } from "react-native-safe-area-context";
-import DraggableStringList from "./DragAndDrop";
+import { DragAndDrop } from "./DragAndDrop";
+import { ScrollView } from "react-native-gesture-handler";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from "@react-navigation/native";
+import { OnboardingScreenProps } from "../../../types/routes";
 
-const CreatePrediction: React.FC = () => {
-  const [teams, setTeams] = useState<string[]>([]);
+export type Item = {
+  team: string;
+  logo: string;
+};
+
+const CreatePrediction: React.FC<OnboardingScreenProps> = ({ navigation }) => {
+  const [teams, setTeams] = useState<Item[]>([]);
   const [favoriteTeam, setFavoriteTeam] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
+    setIsLoading(true);
     getLiveRanking()
       .then((liveRanking) => {
-        setTeams(liveRanking.ranking);
+        setTeams(
+          liveRanking.ranking.map((team: string, index) => ({
+            team,
+            logo: liveRanking.logoUrls[index],
+          }))
+        );
         setFavoriteTeam(liveRanking.ranking[0]);
+        setIsLoading(false);
       })
       .catch((error) => {
         console.error("Error fetching live ranking:", error);
       });
   }, []);
 
-  const saveTable = () => {
-    makeRanking({ teams })
-      .then(() => {
-        setFavorite(favoriteTeam);
-      })
-      .then(() => {
-        Alert.alert("Success", "Your standings have been saved");
-      })
-      .catch((error) => {
-        console.error("Error saving data:", error);
-      });
+  const saveTable = async () => {
+    await makeRanking({ teams: teams.map((team) => team.team) });
+    setFavorite(favoriteTeam);
+    await AsyncStorage.setItem("favoriteTeam", favoriteTeam);
+    navigation.navigate("Main", {
+      screen: "Home",
+      params: { username: undefined, gameweek: undefined },
+    });
   };
 
-  console.log(teams);
+  if (isLoading) {
+    return <Text>Loading...</Text>;
+  }
   return (
     <SafeAreaView>
-      <View style={styles.container}>
-        <DraggableStringList items={teams} setItems={setTeams} />
-        <View style={styles.dropdownContainer}>
-          <Text style={styles.label}>Favorite Team</Text>
-          <Picker
-            selectedValue={favoriteTeam}
-            onValueChange={(itemValue) => setFavoriteTeam(itemValue)}
-            style={styles.picker}
-          >
-            {teams.map((team) => (
-              <Picker.Item key={team} label={team} value={team} />
-            ))}
-          </Picker>
+      <Text>
+        Reorder the standings below to make your prediction. Double click your
+        favorite team, then click 'Save'
+      </Text>
+      <Button title="Save" onPress={() => saveTable()} />
+      <ScrollView>
+        <View style={styles.container}>
+          <DragAndDrop
+            items={teams}
+            setItems={setTeams}
+            favoriteTeam={favoriteTeam}
+            setFavoriteTeam={setFavoriteTeam}
+          />
         </View>
-
-        <View style={styles.buttonContainer}>
-          <Button title="Save Standings" onPress={saveTable} />
-        </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    padding: 16,
+    paddingLeft: 16,
+    paddingRight: 16,
     justifyContent: "center",
-    marginBottom: 150,
+    marginBottom: 100,
   },
   dropdownContainer: {
     marginTop: 16,

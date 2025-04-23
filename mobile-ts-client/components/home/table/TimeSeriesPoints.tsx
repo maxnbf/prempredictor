@@ -7,6 +7,7 @@ import { TimeSeriesPoints } from "../../../types/types";
 import { HomeScreenProps } from "../../../types/routes";
 import { useSelector } from "react-redux";
 import { getDimensions } from "../../../utils/utils";
+import { Loading } from "../../common/Loading";
 
 type TimeSeriesPointsGraphProps = {
   username?: string;
@@ -64,11 +65,7 @@ export const TimeSeriesPointsGraph: React.FC<TimeSeriesPointsGraphProps> = ({
   const validUserData = validateData(userData);
 
   if (isLoading) {
-    return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <ActivityIndicator size="large" color="#0000ff" />
-      </View>
-    );
+    return <Loading />;
   }
 
   return (

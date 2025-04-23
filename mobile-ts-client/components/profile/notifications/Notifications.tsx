@@ -10,6 +10,7 @@ import { FriendRequest } from "../../../types/types";
 import { SingleNotification } from "./SingleNotification";
 import { SingleFriendRequest } from "./SingleFriendRequest";
 import { useFocusEffect } from "@react-navigation/native";
+import { Loading } from "../../common/Loading";
 export const Notifications = () => {
   const [notifsData, setNotifsData] = useState<
     NotificationsResponse | undefined
@@ -41,11 +42,7 @@ export const Notifications = () => {
   }, []);
 
   if (isLoading || !notifsData) {
-    return (
-      <View style={styles.center}>
-        <ActivityIndicator size="large" color="#0000ff" />
-      </View>
-    );
+    return <Loading />;
   }
 
   const { notifs, newNotifs } = notifsData;

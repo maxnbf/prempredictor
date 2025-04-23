@@ -7,6 +7,7 @@ import {
   unfriendUser,
 } from "../../../actions/friends";
 import { FriendRequest, FriendRequestType } from "../../../types/types";
+import { Loading } from "../../common/Loading";
 
 interface FriendButtonProps {
   activeUser: string;
@@ -56,11 +57,7 @@ export const FriendButton = ({
   };
 
   if (isLoading) {
-    return (
-      <View style={styles.loaderContainer}>
-        <ActivityIndicator size="large" color="#0000ff" />
-      </View>
-    );
+    return <Loading />;
   }
 
   if (isFriends) {

@@ -19,8 +19,8 @@ interface PaginatedTableProps {
 export const PaginatedTable: React.FC<PaginatedTableProps> = ({
   data,
   title,
-  rowsPerPageOptions = [2, 10, 25],
-  defaultRowsPerPage = 2,
+  rowsPerPageOptions = [5, 10, 25],
+  defaultRowsPerPage = 5,
 }) => {
   const navigation = useNavigation<AllScreenProps>();
   const [page, setPage] = useState(0);
@@ -30,6 +30,13 @@ export const PaginatedTable: React.FC<PaginatedTableProps> = ({
     page * rowsPerPage,
     page * rowsPerPage + rowsPerPage
   );
+
+  // Add empty rows if there are fewer than `rowsPerPage`
+  const emptyRowsCount = rowsPerPage - paginatedData.length;
+  const paginatedDataWithEmptyRows = [
+    ...paginatedData,
+    ...Array(emptyRowsCount).fill({ username: "", total: 0 }), // Adding empty rows
+  ];
 
   const handleChangePage = (newPage: number) => setPage(newPage);
 
@@ -45,10 +52,11 @@ export const PaginatedTable: React.FC<PaginatedTableProps> = ({
           <DataTable.Title numeric>Score</DataTable.Title>
         </DataTable.Header>
 
-        {paginatedData.map((row, index) => (
+        {paginatedDataWithEmptyRows.map((row, index) => (
           <TouchableOpacity
             key={index}
             onPress={() =>
+              row.username &&
               navigation.navigate("Home", {
                 username: row.username,
                 gameweek: undefined,
@@ -56,9 +64,11 @@ export const PaginatedTable: React.FC<PaginatedTableProps> = ({
             }
           >
             <DataTable.Row>
-              <DataTable.Cell>{page * rowsPerPage + index + 1}</DataTable.Cell>
-              <DataTable.Cell>{row.username}</DataTable.Cell>
-              <DataTable.Cell numeric>{row.total}</DataTable.Cell>
+              <DataTable.Cell>
+                {row.username ? page * rowsPerPage + index + 1 : ""}
+              </DataTable.Cell>
+              <DataTable.Cell>{row.username || ""}</DataTable.Cell>
+              <DataTable.Cell numeric>{row.total || ""}</DataTable.Cell>
             </DataTable.Row>
           </TouchableOpacity>
         ))}

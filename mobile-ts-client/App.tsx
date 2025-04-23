@@ -1,3 +1,5 @@
+import "react-native-gesture-handler"; // FIRST import
+import "react-native-reanimated"; // SECOND import
 import React, { useEffect, useState } from "react";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -20,6 +22,8 @@ import { navigationRef } from "./navigation/navigation";
 import { Provider as PaperProvider } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { NewUserOnboarding } from "./components/home/onboarding/NewUserOnboarding";
+
 enableScreens();
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -94,17 +98,46 @@ const AppNavigator = () => {
 
   if (loading) return null; // Show a splash/loading screen here if needed
 
+  // OHHHH... ALL OF THE "Do you have Screen ___" literally refers to the screens not existing here. Think of a better way to do this
   return (
     <NavigationContainer ref={navigationRef}>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         {!isAuthenticated ? (
           <>
-            <Stack.Screen name="Login" component={Login} />
-            <Stack.Screen name="Register" component={Register} />
+            <Stack.Screen
+              name="Login"
+              component={Login}
+              options={{ animation: "none" }}
+            />
+            <Stack.Screen
+              name="Register"
+              component={Register}
+              options={{ animation: "none" }}
+            />
           </>
         ) : (
-          // If authenticated, show the Tab Navigator with Home, All, and Profile
-          <Stack.Screen name="Main" component={TabNavigator} />
+          <>
+            <Stack.Screen
+              name="Onboarding"
+              component={NewUserOnboarding}
+              options={{ animation: "none" }}
+            />
+            <Stack.Screen
+              name="Main"
+              component={TabNavigator}
+              options={{ animation: "none" }}
+            />
+            <Stack.Screen
+              name="Login"
+              component={Login}
+              options={{ animation: "none" }}
+            />
+            <Stack.Screen
+              name="Register"
+              component={Register}
+              options={{ animation: "none" }}
+            />
+          </>
         )}
       </Stack.Navigator>
     </NavigationContainer>

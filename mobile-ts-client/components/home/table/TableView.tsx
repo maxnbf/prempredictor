@@ -11,6 +11,7 @@ import { TimeSeriesPointsGraph } from "./TimeSeriesPoints";
 import { getLiveRankingForGameWeek } from "../../../actions/rankings";
 import { LiveRanking, UserRanking } from "../../../types/types";
 import DropDownPicker from "react-native-dropdown-picker";
+import { Loading } from "../../common/Loading";
 
 interface TableViewProps {
   setLive: React.Dispatch<React.SetStateAction<LiveRanking | undefined>>;
@@ -51,11 +52,11 @@ export const TableView = ({
   }, [selectedGameweekState, setLive]);
 
   if (!live) {
-    return <ActivityIndicator size="large" color="#0000ff" />;
+    return <Loading />;
   }
 
   return (
-    <View>
+    <>
       <View style={styles.selectContainer}>
         <Text style={styles.selectLabel}>Select Gameweek</Text>
         <DropDownPicker
@@ -69,7 +70,7 @@ export const TableView = ({
           style={styles.dropdown}
           dropDownContainerStyle={styles.dropDownStyle}
           listMode="SCROLLVIEW"
-          dropDownDirection="AUTO"
+          dropDownDirection="BOTTOM"
           autoScroll={true}
           placeholder="Select Gameweek"
           multiple={false}
@@ -81,29 +82,24 @@ export const TableView = ({
         keyboardShouldPersistTaps="handled"
       >
         <MyTable liveTable={live} myTable={myTable} otherTable={otherTable} />
-
-        <View style={{ marginBottom: 150 }}>
-          <TimeSeriesPointsGraph username={otherTable?.username} />
-        </View>
+        <TimeSeriesPointsGraph username={otherTable?.username} />
       </ScrollView>
-    </View>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     padding: 16,
-    paddingBottom: 260,
+    paddingBottom: 75,
   },
   selectContainer: {
-    marginTop: "15%",
     padding: 16,
     zIndex: 1000,
   },
   selectLabel: {
     fontSize: 18,
     fontWeight: "bold",
-    marginBottom: 8,
   },
   picker: {
     height: 50,

@@ -16,6 +16,7 @@ import { LiveRanking, UserRanking } from "../../types/types";
 import { TableView } from "./table/TableView";
 import { HomeRouteProp, HomeScreenProps } from "../../types/routes";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Loading } from "../common/Loading";
 
 export const Home = () => {
   const [myTable, setMyTable] = useState<UserRanking | undefined>(undefined);
@@ -82,27 +83,22 @@ export const Home = () => {
     fetchData();
   }, [ownUsername, username, gameweek]);
 
-  console.log(myTable);
   return (
     <SafeAreaView>
-      <View>
-        {isLoading ? (
-          <ActivityIndicator size="large" color="#0000ff" />
-        ) : myTable && live ? (
-          <TableView
-            setLive={setLive}
-            live={live}
-            myTable={myTable}
-            otherTable={otherTable}
-            currentGameWeek={currentGameWeek}
-            selectedGameWeek={selectedGameWeek}
-          />
-        ) : myTable === null ? (
-          <NewUserOnboarding />
-        ) : (
-          <Text>Something Went Wrong</Text>
-        )}
-      </View>
+      {isLoading ? (
+        <Loading />
+      ) : myTable && live ? (
+        <TableView
+          setLive={setLive}
+          live={live}
+          myTable={myTable}
+          otherTable={otherTable}
+          currentGameWeek={currentGameWeek}
+          selectedGameWeek={selectedGameWeek}
+        />
+      ) : (
+        <Text>Something Went Wrong</Text>
+      )}
     </SafeAreaView>
   );
 };

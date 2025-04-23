@@ -1,22 +1,15 @@
 import axios, { AxiosResponse } from 'axios';
 import { LiveRanking, TimeSeriesPoints, UserRanking } from '../types/types';
-import { UserScore } from '../components/all/All';
+import { UserScore } from '../components/all/PaginatedTable';
 
-// TODO: rewrite as user.ts
-export const makeRanking = (data: any): Promise<AxiosResponse> => {
-  return new Promise((resolve, reject) => {
-    axios
-      .post('http://localhost:9000/api/myTable/ranking', data)
-      .then((res: AxiosResponse) => {
-        resolve(res);
-      })
-      .catch((err) => {
-        reject(err);
-        console.log('ERROR', err);
-      });
-  });
+export const makeRanking = async (data: any) => {
+   await axios.post('http://localhost:9000/api/myTable/ranking', data)
 };
 
+export const checkNewUser = async (user: string): Promise<UserRanking> => {
+  const response = await axios.get(`http://localhost:9000/api/myTable/${user}/ranking`)
+  return response.data as UserRanking
+}
 export const getRanking = (user: string): Promise<UserRanking> => {
   return new Promise((resolve, reject) => {
     axios

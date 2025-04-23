@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import {
   View,
@@ -7,12 +7,41 @@ import {
   StyleSheet,
   ScrollView,
   SafeAreaView,
+  ActivityIndicator,
 } from "react-native";
 import CreatePrediction from "./CreatePrediction";
+import { OnboardingScreenProps } from "../../../types/routes";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getRanking } from "../../../actions/rankings";
+import { Loading } from "../../common/Loading";
 
-export const NewUserOnboarding: React.FC = () => {
+export const NewUserOnboarding: React.FC<OnboardingScreenProps> = ({
+  navigation,
+  route,
+}) => {
   const username = useSelector((state: any) => state.auth.user_info.username);
   const [onboardingPage, setOnboardingPage] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const checkNewUser = async () => {
+      const ranking = await getRanking(username);
+      if (ranking?.ranking) {
+        navigation.navigate("Main", {
+          screen: "Home",
+          params: { username: undefined, gameweek: undefined },
+        });
+      } else {
+        setIsLoading(false);
+      }
+    };
+
+    checkNewUser();
+  }, []);
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   if (onboardingPage === 0) {
     return (
@@ -34,7 +63,7 @@ export const NewUserOnboarding: React.FC = () => {
       </SafeAreaView>
     );
   } else if (onboardingPage === 1) {
-    return <CreatePrediction />;
+    return <CreatePrediction navigation={navigation} route={route} />;
   } else {
     return <Text>Something went wrong</Text>;
   }

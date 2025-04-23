@@ -7,6 +7,7 @@ export type RootStackParamList = {
     Login: undefined;
     Register: undefined;
     ForgotPassword: undefined;
+    Onboarding: undefined; 
     Main: NavigatorScreenParams<TabParamList>
 }
 
@@ -22,3 +23,4 @@ export type HomeScreenProps = BottomTabNavigationProp<TabParamList, 'Home'>;
 export type HomeRouteProp = RouteProp<TabParamList, 'Home'>;
 export type AllScreenProps = BottomTabNavigationProp<TabParamList, 'All'>;
 export type ProfileScreenProps = BottomTabNavigationProp<TabParamList, 'Profile'>;
+export type OnboardingScreenProps = NativeStackScreenProps<RootStackParamList, 'Onboarding'>;

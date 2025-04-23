@@ -6,6 +6,7 @@ import { getFriends } from "../../../actions/friends";
 import { Friend } from "../../../types/types";
 import { SingleFriend } from "./SingleFriend";
 import { useFocusEffect } from "@react-navigation/native";
+import { Loading } from "../../common/Loading";
 
 export const Friends = () => {
   const [friends, setFriends] = useState<Friend[] | undefined>(undefined);
@@ -32,11 +33,7 @@ export const Friends = () => {
   }, []);
 
   if (isLoading) {
-    return (
-      <View style={{ padding: 16 }}>
-        <ActivityIndicator animating size="large" />
-      </View>
-    );
+    return <Loading />;
   }
 
   return (

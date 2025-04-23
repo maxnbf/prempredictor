@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, Image, ActivityIndicator } from "react-native";
 import { LiveRanking, UserRanking } from "../../../types/types";
 import { FriendButton } from "./FriendButton";
+import { Loading } from "../../common/Loading";
+import { getTeamAbbreviation, timeAgo } from "../../../utils/utils";
 
 interface RankingTableProps {
   liveTable: LiveRanking;
@@ -12,21 +14,6 @@ interface RankingTableProps {
 interface MyScore {
   offsets: number[];
   totalOffset: number;
-}
-
-export function timeAgo(epochMillis: number): string {
-  const now = Date.now();
-  const diff = now - epochMillis;
-
-  const seconds = Math.floor(diff / 1000);
-  const minutes = Math.floor(diff / (1000 * 60));
-  const hours = Math.floor(diff / (1000 * 60 * 60));
-  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-
-  if (seconds < 60) return `${seconds} seconds ago`;
-  if (minutes < 60) return `${minutes} minutes ago`;
-  if (hours < 24) return `${hours} hours ago`;
-  return `${days} days ago`;
 }
 
 const calculateOffsets = (live: string[], user: string[]): MyScore => {
@@ -67,7 +54,7 @@ export const MyTable: React.FC<RankingTableProps> = ({
   };
 
   if (!liveTable || !myTable) {
-    return <ActivityIndicator size="large" color="#0000ff" />;
+    return <Loading />;
   }
 
   return (
@@ -108,6 +95,7 @@ export const MyTable: React.FC<RankingTableProps> = ({
           <Text style={[styles.headerText, { flex: 1 }]}>Pts</Text>
         </View>
 
+        {/* Table Rows */}
         {liveTable.ranking.map((team, index) => {
           const myOffset = myScore?.offsets[index] ?? 0;
           const otherOffset = otherScore?.offsets[index] ?? 0;
@@ -121,6 +109,7 @@ export const MyTable: React.FC<RankingTableProps> = ({
                   source={{ uri: liveTable.logoUrls[index] }}
                   style={styles.logo}
                 />
+                <Text>{getTeamAbbreviation(liveTable.ranking[index])}</Text>
               </View>
 
               {otherTable && (
@@ -134,6 +123,9 @@ export const MyTable: React.FC<RankingTableProps> = ({
                       }}
                       style={styles.logo}
                     />
+                    <Text>
+                      {getTeamAbbreviation(otherTable.ranking[index])}
+                    </Text>
                   </View>
                   <Text
                     style={{
@@ -142,7 +134,7 @@ export const MyTable: React.FC<RankingTableProps> = ({
                       flex: 1,
                     }}
                   >
-                    {otherOffset > 0 ? `+${otherOffset}` : otherOffset}
+                    {Math.abs(otherOffset)}
                   </Text>
                 </>
               )}
@@ -156,6 +148,7 @@ export const MyTable: React.FC<RankingTableProps> = ({
                   }}
                   style={styles.logo}
                 />
+                <Text>{getTeamAbbreviation(myTable.ranking[index])}</Text>
               </View>
               <Text
                 style={{
@@ -164,7 +157,7 @@ export const MyTable: React.FC<RankingTableProps> = ({
                   flex: 1,
                 }}
               >
-                {myOffset > 0 ? `+${myOffset}` : myOffset}
+                {Math.abs(myOffset)}
               </Text>
             </View>
           );
@@ -228,7 +221,6 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 8,
     paddingVertical: 4,
     borderBottomWidth: 1,
     borderColor: "#ddd",
