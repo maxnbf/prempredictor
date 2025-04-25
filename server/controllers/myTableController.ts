@@ -1,4 +1,5 @@
 import { LiveTable } from "../models/liveTableModel";
+import { getRankingSnapshotService } from "../services/rankSnapshotService";
 import { getAllFriendRankingsService, getAllService, getLiveRankingForGameWeekService, getRankingService, getTimeSeriesPointsService, getUsersByFavoriteService, makeRankingService } from "../services/rankingService"
 
 export async function makeRanking(request) {
@@ -16,7 +17,7 @@ export async function getRanking(request) {
 }
 
 export async function getLive(request) {
-    return await LiveTable.findOne().sort({ currentRound: -1 });;
+    return await LiveTable.findOne().sort({ currentRound: -1 });
 }
 
 export async function getAllRankings(request) {
@@ -36,4 +37,9 @@ export async function getTimeSeriesPoints(request, response) {
 export async function getAllFriendRankings(request) {
     const activeUser = request?.body?.user?.username;
     return await getAllFriendRankingsService(activeUser);
+}
+
+export async function getRankingSnapshot(request) {
+    const activeUser = request?.body?.user?.username;
+    return await getRankingSnapshotService(activeUser)
 }

@@ -2,12 +2,8 @@ import React, { useState } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import { DataTable } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
-import { AllScreenProps } from "../../types/routes";
-
-export interface UserScore {
-  username: string;
-  total: number;
-}
+import { HomeScreenProps } from "../../types/routes";
+import { UserScore } from "../../types/types";
 
 interface PaginatedTableProps {
   data: UserScore[];
@@ -22,7 +18,7 @@ export const PaginatedTable: React.FC<PaginatedTableProps> = ({
   rowsPerPageOptions = [5, 10, 25],
   defaultRowsPerPage = 5,
 }) => {
-  const navigation = useNavigation<AllScreenProps>();
+  const navigation = useNavigation<HomeScreenProps>();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(defaultRowsPerPage);
 

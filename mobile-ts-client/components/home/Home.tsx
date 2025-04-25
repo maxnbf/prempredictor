@@ -10,11 +10,10 @@ import {
   getLiveRankingForGameWeek,
   getRanking,
 } from "../../actions/rankings";
-import { NewUserOnboarding } from "./onboarding/NewUserOnboarding";
-import { View, Text, ActivityIndicator, StyleSheet } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { LiveRanking, UserRanking } from "../../types/types";
 import { TableView } from "./table/TableView";
-import { HomeRouteProp, HomeScreenProps } from "../../types/routes";
+import { HomeRouteProps, HomeScreenProps } from "../../types/routes";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Loading } from "../common/Loading";
 
@@ -31,7 +30,7 @@ export const Home = () => {
   const ownUsername = useSelector(
     (state: any) => state.auth.user_info.username
   );
-  const route = useRoute<HomeRouteProp>();
+  const route = useRoute<HomeRouteProps>();
   const { username, gameweek } = route.params || {};
   const [selectedGameWeek, setSelectedGameWeek] = useState<string | undefined>(
     undefined
@@ -51,7 +50,6 @@ export const Home = () => {
       if (gameweek) {
         getLiveRankingForGameWeek(gameweek).then((res: any) => {
           setLive(res);
-          console.log("setting selected gameweek to:", gameweek);
           setSelectedGameWeek(gameweek);
           setIsLoading(false);
         });
@@ -85,9 +83,14 @@ export const Home = () => {
 
   return (
     <SafeAreaView>
+      <View style={styles.topBanner}>
+        <View style={{ width: 24 }} />
+        <Text style={styles.topBannerTitle}>Prem Predictor</Text>
+        <View style={{ width: 24 }} />
+      </View>
       {isLoading ? (
         <Loading />
-      ) : myTable && live ? (
+      ) : (
         <TableView
           setLive={setLive}
           live={live}
@@ -96,9 +99,29 @@ export const Home = () => {
           currentGameWeek={currentGameWeek}
           selectedGameWeek={selectedGameWeek}
         />
-      ) : (
-        <Text>Something Went Wrong</Text>
       )}
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  topBanner: {
+    paddingHorizontal: 16,
+    paddingBottom: 12,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    borderBottomWidth: 1,
+    borderColor: "#eee",
+  },
+
+  topBannerTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    textAlign: "center",
+    flex: 1,
+  },
+  iconPlaceholder: {
+    width: 24, // matches icon size
+  },
+});

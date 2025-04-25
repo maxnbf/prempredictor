@@ -3,14 +3,14 @@ import { View, StyleSheet, TouchableOpacity } from "react-native";
 import { Avatar, Text } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import { Notification } from "../../../types/types";
-import { ProfileScreenProps } from "../../../types/routes";
+import { HomeScreenProps, ProfileScreenProps } from "../../../types/routes";
 
 interface NotificationProps {
   notif: Notification;
 }
 
 export const SingleNotification = ({ notif }: NotificationProps) => {
-  const navigation = useNavigation<ProfileScreenProps>();
+  const navigation = useNavigation<HomeScreenProps>();
 
   const goToProfile = () => {
     navigation.navigate("Home", { username: notif.from, gameweek: undefined });

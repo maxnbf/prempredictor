@@ -5,8 +5,7 @@ import Fuse from "fuse.js";
 export async function setFavoriteService(username: string, favorite: string) {
     await UserRanking.findOneAndUpdate(
         { username },
-        { favorite: favorite },
-        { new: true } // returns the updated document
+        { favorite: favorite }
     );
 
     const userMetadata = new UserMetadata({ username, favoriteTeam: favorite })

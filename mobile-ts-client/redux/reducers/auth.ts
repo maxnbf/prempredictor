@@ -1,7 +1,6 @@
-// src/reducers/auth.ts
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-// Define the state shape for `auth` slice
+
 interface AuthState {
   user_info: any;
   isAuthenticated: boolean;
@@ -12,7 +11,7 @@ const initialState: AuthState = {
   isAuthenticated: false,
 };
 
-// Create the slice for auth
+
 const authSlice = createSlice({
   name: 'auth',
   initialState,
@@ -32,8 +31,6 @@ const authSlice = createSlice({
   },
 });
 
-// Export the actions
 export const { signInResponse, signUpResponse, resetStore } = authSlice.actions;
 
-// Export the reducer
 export default authSlice.reducer;

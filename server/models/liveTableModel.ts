@@ -2,7 +2,6 @@ import mongoose, { Schema, Document } from "mongoose";
 
 export interface LiveTableDocument extends Document {
     ranking: [string];
-    logoUrls: [string]
     lastUpdated: number;
     season: string;
     currentRound: number;
@@ -12,10 +11,6 @@ export interface LiveTableDocument extends Document {
 const liveTableDocument: Schema<LiveTableDocument> = new mongoose.Schema(
     {
         ranking: {
-            type: [String],
-            required: true
-        },
-        logoUrls: {
             type: [String],
             required: true
         },

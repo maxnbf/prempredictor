@@ -7,6 +7,6 @@ export interface NotificationsResponse {
 }
 
 export const getNotifs = async (): Promise<NotificationsResponse> => {
-  const response = await axios.get(`http://localhost:9000/api/notifs/get-notifs`);
+  const response = await axios.get(`http://10.0.0.169:9000/api/notifs/get-notifs`);
   return response.data as NotificationsResponse;
 };

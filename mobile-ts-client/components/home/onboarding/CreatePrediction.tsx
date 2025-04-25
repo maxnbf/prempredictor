@@ -8,6 +8,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import { OnboardingScreenProps } from "../../../types/routes";
+import { useSelector } from "react-redux";
 
 export type Item = {
   team: string;
@@ -19,14 +20,16 @@ const CreatePrediction: React.FC<OnboardingScreenProps> = ({ navigation }) => {
   const [favoriteTeam, setFavoriteTeam] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
+  const logos = useSelector((state: any) => state.logos.logos);
+
   useEffect(() => {
     setIsLoading(true);
     getLiveRanking()
       .then((liveRanking) => {
         setTeams(
-          liveRanking.ranking.map((team: string, index) => ({
+          liveRanking.ranking.map((team: string) => ({
             team,
-            logo: liveRanking.logoUrls[index],
+            logo: logos[team],
           }))
         );
         setFavoriteTeam(liveRanking.ranking[0]);

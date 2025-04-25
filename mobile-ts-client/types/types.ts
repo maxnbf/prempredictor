@@ -8,7 +8,6 @@ export interface UserRanking {
 
 export interface LiveRanking {
   ranking: string[];
-  logoUrls: string[];
   season: string;
   currentRound: number;
   lastUpdated: number;
@@ -54,4 +53,24 @@ export interface Friend {
 export interface FriendStatus {
   isFriends: boolean;
   request: FriendRequest;
+}
+
+export interface RankingSnapshot {
+  favoriteTeamRank?: number;
+  overallRank?: number;
+  friendsRank?: number;
+  username: string
+  averagePoints: number
+  lowestPoints: {
+    username: string;
+    points: number;
+  };
+  myPoints: number;
+  currentGameWeek: number;
+}
+
+export interface UserScore {
+  username: string;
+  score: number;
+  favorite: string
 }

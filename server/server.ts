@@ -7,7 +7,10 @@ import axios from "axios";
 import cheerio from "cheerio"
 import { LiveTable } from "./models/liveTableModel";
 import { UserRanking } from "./models/userRankingModel";
+import { TeamLogos } from "./models/teamLogosModel";
 import { updatePointsService } from "./services/rankingService";
+import { assignFavoriteTeamRankService, assignFriendRankService, assignOverallRankService, assignTopLevelStatsService } from "./services/rankSnapshotService";
+
 const app = express();
 
 app.use(cors())
@@ -27,7 +30,6 @@ app.use("/api", authenticatedRoutes)
 
 const PORT = 9000;
 app.listen(PORT, () => {console.log(`Server is running on port: ${PORT}`)})
-
 
 // Function to scrape the web page
 async function scrapeStandings(): Promise<{ table: string[], srcUrls: string[] }> {
@@ -121,22 +123,32 @@ async function runScheduledTask() {
     try {
         const { table, srcUrls } = await scrapeStandings();
         const { gameWeek, isWeekComplete, isGamesToday } = await scrapeFixtures();
-        //console.log(`Scraped standings: ${JSON.stringify(standings, null, 2)}`);
-
-        console.log(new Date())
         await LiveTable.findOneAndUpdate(
-            { currentRound: gameWeek }, // filter, find the standings for that week
+            { currentRound: gameWeek },
             {
                 ranking: table,
                 season: process.env.SEASON,
                 currentRound: parseInt(gameWeek),
-                logoUrls: srcUrls,
                 lastUpdated: new Date().getTime(),
-                isWeekComplete: true
+                isWeekComplete: isWeekComplete
                 // TODO: isWeekComplete and use this on register to determine which week they started
-            }, // new object to write
-            { new: true, upsert: true } // create new and upsert if necessary
+            },
+            { new: true, upsert: true }
         );
+
+        const teamLogosMap = new Map<string, string>();
+        table.forEach((teamName, index) => {
+        if (srcUrls[index]) {
+            teamLogosMap.set(teamName, srcUrls[index]);
+        }
+        });
+
+        await TeamLogos.findOneAndUpdate(
+            { },
+            { logos: teamLogosMap },
+            { new: true, upsert: true }
+        );
+
 
         // If games being played today, update every 5 minutes
         if (isGamesToday) {
@@ -155,6 +167,11 @@ async function runScheduledTask() {
                 }
             })
         );
+
+        await assignOverallRankService();
+        await assignFavoriteTeamRankService();
+        await assignFriendRankService();
+        await assignTopLevelStatsService();
     
     } catch (error) {
         console.error(`Scheduled task error: ${error.message}`);

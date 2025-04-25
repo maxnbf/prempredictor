@@ -8,28 +8,87 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
 
-import store from "./redux/store";
+import store, { AppDispatch } from "./redux/store";
 import { signInResponse } from "./redux/reducers/auth";
 import { setAuthToken } from "./actions/util";
 import Login from "./components/auth/Login";
 import { Home } from "./components/home/Home";
 import Register from "./components/auth/Register";
-import { All } from "./components/all/All";
+import { Groups } from "./components/all/Groups";
 import Profile from "./components/profile/Profile";
-import { TabParamList, RootStackParamList } from "./types/routes";
+import {
+  TabParamList,
+  RootStackParamList,
+  GroupsStackParamList,
+  ProfileStackParamList,
+} from "./types/routes";
 import { enableScreens } from "react-native-screens";
 import { navigationRef } from "./navigation/navigation";
 import { Provider as PaperProvider } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { NewUserOnboarding } from "./components/home/onboarding/NewUserOnboarding";
+import { SingleTable } from "./components/all/SingleTable";
+import { fetchLogos } from "./redux/reducers/logos";
+import { Friends } from "./components/profile/friends/Friends";
 
 enableScreens();
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator<TabParamList>();
+const GroupsStack = createNativeStackNavigator<GroupsStackParamList>();
+const ProfileStack = createNativeStackNavigator<ProfileStackParamList>();
 
-// Tab Navigator for Home, All, and Profile
+const ProfileNavigator = () => {
+  return (
+    <ProfileStack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      <ProfileStack.Screen
+        name="ProfileHome"
+        component={Profile}
+        options={{ title: "Profile" }}
+      />
+      <ProfileStack.Screen
+        name="Friends"
+        component={Friends}
+        options={() => ({
+          title: "Friends",
+          headerBackTitleVisible: false,
+          headerShown: true,
+        })}
+      />
+    </ProfileStack.Navigator>
+  );
+};
+
+const GroupsNavigator = () => {
+  return (
+    <GroupsStack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      <GroupsStack.Screen
+        name="GroupHome"
+        component={Groups}
+        options={{ title: "Groups" }}
+      />
+      <GroupsStack.Screen
+        name="Table"
+        component={SingleTable}
+        options={({ route }) => ({
+          title: route.params.type,
+          headerBackTitleVisible: false,
+          headerShown: true,
+        })}
+      />
+    </GroupsStack.Navigator>
+  );
+};
+
 const TabNavigator = () => {
   return (
     <Tab.Navigator
@@ -51,8 +110,8 @@ const TabNavigator = () => {
         }}
       />
       <Tab.Screen
-        name="All"
-        component={All}
+        name="Groups"
+        component={GroupsNavigator}
         options={{
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="list" size={size} color={color} />
@@ -61,7 +120,7 @@ const TabNavigator = () => {
       />
       <Tab.Screen
         name="Profile"
-        component={Profile}
+        component={ProfileNavigator}
         options={{
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="person" size={size} color={color} />
@@ -74,10 +133,11 @@ const TabNavigator = () => {
 
 // Main Navigator that checks for authentication
 const AppNavigator = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const isAuthenticated = useSelector(
     (state: any) => state.auth.isAuthenticated
   );
+  const logosLoading = useSelector((state: any) => state.logos.loading);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -90,13 +150,14 @@ const AppNavigator = () => {
         dispatch(signInResponse({ username, token }));
       }
 
+      await dispatch(fetchLogos());
       setLoading(false);
     };
 
     restoreAuth();
   }, []);
 
-  if (loading) return null; // Show a splash/loading screen here if needed
+  if (loading || logosLoading) return null; // Show a splash/loading screen here if needed
 
   // OHHHH... ALL OF THE "Do you have Screen ___" literally refers to the screens not existing here. Think of a better way to do this
   return (

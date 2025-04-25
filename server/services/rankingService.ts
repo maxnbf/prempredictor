@@ -1,9 +1,10 @@
 import { Friends } from "../models/friendModel";
 import { LiveTable } from "../models/liveTableModel";
 import { UserRanking } from "../models/userRankingModel";
+import { UserScore } from "../types/types";
 
 export async function makeRankingService(username, ranking) {
-    const live = await LiveTable.findOne()
+    const live = await LiveTable.findOne().sort({ currentRound: -1 });;
     const table = live?.ranking
 
     if (table == undefined) {
@@ -11,29 +12,27 @@ export async function makeRankingService(username, ranking) {
     }
 
     const total = calculateScore(ranking, table)
-    const userRanking = await new UserRanking({username, ranking, total})
+    // If the week is complete, say the user started at the next round
+    const userRanking = await new UserRanking({username, ranking, total, weekStarted: live.isWeekComplete ? live.currentRound + 1 : live.currentRound}).save();
     userRanking.save()
 
     return userRanking;
 }
 
-export async function getUsersByFavoriteService(favorite) {
-    const rankings = await UserRanking.find({ favorite });
+export async function getUsersByFavoriteService(favorite): Promise<UserScore[]> {
+    const rankings = await UserRanking.find({ favorite }).lean();
     rankings.sort(function (a, b) {
         if (a.total < b.total) return -1;
         if (a.total > b.total) return 1;
         return 0;
     });
     
-    return rankings
+    return rankings.map(ranking => ({ username: ranking.username, score: ranking.total, favorite: ranking.favorite }));
 }
 
 
 export async function updatePointsService(rankingModel, live) {
-    const total = calculateScore(rankingModel.ranking, live)
-    // const points = rankingModel.ranking.map((team, index) => index - live.indexOf(team))
-    // const total = points.reduce((acc, a) => {return acc+Math.abs(a)}, 0);
-    rankingModel.total = total;
+    rankingModel.total = calculateScore(rankingModel.ranking, live);
     rankingModel.save()
 }
 
@@ -41,8 +40,8 @@ export async function getRankingService(username) {
     return await UserRanking.findOne({username: username});
 }
 
-export async function getAllService() {
-    const rankings = await UserRanking.find();
+export async function getAllService(): Promise<UserScore[]> {
+    const rankings = await UserRanking.find().lean();
 
     rankings.sort(function(a, b) {
         if (a.total < b.total) return -1;
@@ -50,7 +49,7 @@ export async function getAllService() {
         return 0;
         });
 
-    return rankings;
+    return rankings.map(ranking => ({ username: ranking.username, score: ranking.total, favorite: ranking.favorite }));
 }
 
 export async function getLiveRankingForGameWeekService(gameWeek) {
@@ -86,7 +85,7 @@ export async function getTimeSeriesPointsService(username) {
       return scores; 
 }
 
-export async function getAllFriendRankingsService(username) {
+export async function getAllFriendRankingsService(username): Promise<UserScore[]> {
     const results = await Friends.find({
         $or: [
           { from: username },
@@ -100,7 +99,7 @@ export async function getAllFriendRankingsService(username) {
 
     const rankings = await UserRanking.find({
         username: { $in: usernames }
-    });
+    }).lean();
     
     rankings.sort(function(a, b) {
         if (a.total < b.total) return -1;
@@ -108,7 +107,7 @@ export async function getAllFriendRankingsService(username) {
         return 0;
         });
 
-    return rankings;
+    return rankings.map(ranking => ({ username: ranking.username, score: ranking.total, favorite: ranking.favorite }));
 }
 
 // Function to calculate the score

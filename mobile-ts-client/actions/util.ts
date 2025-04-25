@@ -11,3 +11,8 @@ export const setAuthToken = (token: string | null): void => {
     delete axios.defaults.headers.common['Authorization'];
   }
 };
+
+export const getLogos = async (): Promise<Record<string, string>> => {
+  const response = await axios.get(`http://10.0.0.169:9000/api/util/getLogos`)
+  return response.data as Record<string, string>;
+};

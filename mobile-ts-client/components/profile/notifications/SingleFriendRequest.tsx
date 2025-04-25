@@ -7,7 +7,7 @@ import {
   acceptFriendRequest,
   rejectFriendRequest,
 } from "../../../actions/friends";
-import { ProfileScreenProps } from "../../../types/routes";
+import { HomeScreenProps, ProfileScreenProps } from "../../../types/routes";
 
 interface SingleFriendRequestProps {
   friendRequest: FriendRequest;
@@ -16,7 +16,7 @@ interface SingleFriendRequestProps {
 export const SingleFriendRequest = ({
   friendRequest,
 }: SingleFriendRequestProps) => {
-  const navigation = useNavigation<ProfileScreenProps>();
+  const navigation = useNavigation<HomeScreenProps>();
   const [requestStatus, setRequestStatus] = useState<FriendRequestType>(
     FriendRequestType.REQUEST
   );

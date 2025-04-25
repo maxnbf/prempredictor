@@ -1,3 +1,5 @@
+import { getTeamLogosService } from '../services/utilServices';
+
 export function withHandler(handler) {
   return async function (request, response) {
     try {
@@ -8,4 +10,8 @@ export function withHandler(handler) {
       return response.status(500).json({ error: error.message || 'Internal Server Error' });
     }
   };
+}
+
+export const getTeamLogos = async () => {
+  return await getTeamLogosService();
 }

@@ -1,4 +1,4 @@
-import { Button, ActivityIndicator, View, StyleSheet } from "react-native";
+import { Button } from "react-native";
 import { useEffect, useState } from "react";
 import {
   acceptFriendRequest,
@@ -7,7 +7,6 @@ import {
   unfriendUser,
 } from "../../../actions/friends";
 import { FriendRequest, FriendRequestType } from "../../../types/types";
-import { Loading } from "../../common/Loading";
 
 interface FriendButtonProps {
   activeUser: string;
@@ -57,7 +56,7 @@ export const FriendButton = ({
   };
 
   if (isLoading) {
-    return <Loading />;
+    return <Button title={""} />;
   }
 
   if (isFriends) {
@@ -84,11 +83,3 @@ export const FriendButton = ({
     );
   }
 };
-
-const styles = StyleSheet.create({
-  loaderContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-});

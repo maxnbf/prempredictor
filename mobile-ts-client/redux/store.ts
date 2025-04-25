@@ -1,12 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit';
 import authReducer from './reducers/auth';
+import logosReducer from "./reducers/logos";
 
-// Create the store with the root reducer
 const store = configureStore({
   reducer: {
-    auth: authReducer, // Add your reducers here
+    auth: authReducer,
+    logos: logosReducer, 
   },
-  // You can also add middleware and other configurations if needed
 });
 
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
 export default store;

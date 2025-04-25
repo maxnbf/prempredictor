@@ -5,6 +5,7 @@ import {
   StyleSheet,
   ActivityIndicator,
   ScrollView,
+  RefreshControl,
 } from "react-native";
 import { MyTable } from "./MyTable";
 import { TimeSeriesPointsGraph } from "./TimeSeriesPoints";
@@ -12,11 +13,12 @@ import { getLiveRankingForGameWeek } from "../../../actions/rankings";
 import { LiveRanking, UserRanking } from "../../../types/types";
 import DropDownPicker from "react-native-dropdown-picker";
 import { Loading } from "../../common/Loading";
+import { useSelector } from "react-redux";
 
 interface TableViewProps {
   setLive: React.Dispatch<React.SetStateAction<LiveRanking | undefined>>;
-  live: LiveRanking;
-  myTable: UserRanking;
+  live: LiveRanking | undefined;
+  myTable: UserRanking | undefined;
   otherTable: UserRanking | undefined;
   currentGameWeek: string;
   selectedGameWeek: string | undefined;
@@ -38,16 +40,25 @@ export const TableView = ({
     }))
   );
   const [selectedGameweekState, setSelectedGameweekState] = useState<string>(
-    selectedGameWeek ?? live.currentRound.toString()
+    selectedGameWeek ?? live?.currentRound.toString() ?? "1"
   );
+
+  const [refreshing, setRefreshing] = useState(false);
+
+  const fetchData = async () => {
+    const liveRanking = await getLiveRankingForGameWeek(selectedGameweekState);
+    setLive(liveRanking);
+  };
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await fetchData();
+    setRefreshing(false);
+  };
 
   useEffect(() => {
     if (selectedGameweekState) {
-      getLiveRankingForGameWeek(selectedGameweekState).then(
-        (res: LiveRanking) => {
-          setLive(res);
-        }
-      );
+      fetchData();
     }
   }, [selectedGameweekState, setLive]);
 
@@ -80,6 +91,9 @@ export const TableView = ({
       <ScrollView
         contentContainerStyle={styles.container}
         keyboardShouldPersistTaps="handled"
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
       >
         <MyTable liveTable={live} myTable={myTable} otherTable={otherTable} />
         <TimeSeriesPointsGraph username={otherTable?.username} />
@@ -91,7 +105,7 @@ export const TableView = ({
 const styles = StyleSheet.create({
   container: {
     padding: 16,
-    paddingBottom: 75,
+    paddingBottom: 100,
   },
   selectContainer: {
     padding: 16,

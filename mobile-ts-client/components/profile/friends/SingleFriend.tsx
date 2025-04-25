@@ -4,14 +4,14 @@ import { Avatar, Button, Text } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import { sendFriendRequest, unfriendUser } from "../../../actions/friends";
 import { Friend } from "../../../types/types";
-import { ProfileScreenProps } from "../../../types/routes";
+import { HomeScreenProps, ProfileScreenProps } from "../../../types/routes";
 
 interface SingleFriendProps {
   friend: Friend;
 }
 
 export const SingleFriend: React.FC<SingleFriendProps> = ({ friend }) => {
-  const navigation = useNavigation<ProfileScreenProps>();
+  const navigation = useNavigation<HomeScreenProps>();
   const [isFriend, setIsFriend] = useState(true);
   const [isRequest, setIsRequest] = useState(false);
 

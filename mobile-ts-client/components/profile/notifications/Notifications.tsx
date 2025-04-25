@@ -48,7 +48,7 @@ export const Notifications = () => {
   const { notifs, newNotifs } = notifsData;
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <View>
       <Text variant="titleMedium" style={styles.sectionTitle}>
         Notifications ({newNotifs} new)
       </Text>
@@ -92,14 +92,11 @@ export const Notifications = () => {
           )}
         </>
       )}
-    </ScrollView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 16,
-  },
   center: {
     flex: 1,
     justifyContent: "center",

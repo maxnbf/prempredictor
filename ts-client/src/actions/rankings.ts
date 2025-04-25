@@ -6,7 +6,7 @@ import { UserScore } from '../components/all/All';
 export const makeRanking = (data: any): Promise<AxiosResponse> => {
   return new Promise((resolve, reject) => {
     axios
-      .post('http://localhost:9000/api/myTable/ranking', data)
+      .post('http://10.0.0.169:9000/api/myTable/ranking', data)
       .then((res: AxiosResponse) => {
         resolve(res);
       })
@@ -20,7 +20,7 @@ export const makeRanking = (data: any): Promise<AxiosResponse> => {
 export const getRanking = (user: string): Promise<UserRanking> => {
   return new Promise((resolve, reject) => {
     axios
-      .get(`http://localhost:9000/api/myTable/${user}/ranking`)
+      .get(`http://10.0.0.169:9000/api/myTable/${user}/ranking`)
       .then((res: AxiosResponse) => {
         resolve(res.data as UserRanking);
       })
@@ -33,7 +33,7 @@ export const getRanking = (user: string): Promise<UserRanking> => {
 export const getLiveRanking = (): Promise<LiveRanking> => {
   return new Promise((resolve, reject) => {
     axios
-      .get('http://localhost:9000/api/myTable/live')
+      .get('http://10.0.0.169:9000/api/myTable/live')
       .then((res: AxiosResponse) => {
         // Type assertion to ensure res.data.ranking is a string[]
         const ranking = res.data as LiveRanking;
@@ -49,7 +49,7 @@ export const getLiveRanking = (): Promise<LiveRanking> => {
 export const getAllRanking = (): Promise<AxiosResponse> => {
   return new Promise((resolve, reject) => {
     axios
-      .get('http://localhost:9000/api/myTable/leaderboard')
+      .get('http://10.0.0.169:9000/api/myTable/leaderboard')
       .then((res: AxiosResponse) => {
         resolve(res);
       })
@@ -63,7 +63,7 @@ export const getAllRanking = (): Promise<AxiosResponse> => {
 export const getFanRanking = (favorite: string): Promise<AxiosResponse> => {
   return new Promise((resolve, reject) => {
     axios
-      .get(`http://localhost:9000/api/myTable/${favorite}/rankingByFavorite`)
+      .get(`http://10.0.0.169:9000/api/myTable/${favorite}/rankingByFavorite`)
       .then((res: AxiosResponse) => {
         resolve(res);
       })
@@ -77,7 +77,7 @@ export const getFanRanking = (favorite: string): Promise<AxiosResponse> => {
 export const getTimeSeriesPoints = (user: string): Promise<TimeSeriesPoints[]> => {
   return new Promise((resolve, reject) => {
     axios
-      .get(`http://localhost:9000/api/myTable/${user}/getTimeSeriesPoints`)
+      .get(`http://10.0.0.169:9000/api/myTable/${user}/getTimeSeriesPoints`)
       .then((res: AxiosResponse) => {
         const points = res.data as TimeSeriesPoints[];
         resolve(points);
@@ -92,7 +92,7 @@ export const getTimeSeriesPoints = (user: string): Promise<TimeSeriesPoints[]> =
 export const getLiveRankingForGameWeek = (gameWeek: string): Promise<LiveRanking> => {
   return new Promise((resolve, reject) => {
     axios
-      .get(`http://localhost:9000/api/myTable/${gameWeek}/liveRanking`)
+      .get(`http://10.0.0.169:9000/api/myTable/${gameWeek}/liveRanking`)
       .then((res: AxiosResponse) => {
         resolve(res.data as LiveRanking);
       })
@@ -104,7 +104,7 @@ export const getLiveRankingForGameWeek = (gameWeek: string): Promise<LiveRanking
 };
 
 export const getAllFriendsRankings = async (): Promise<UserScore[]> => {
-  const response = await axios.get(`http://localhost:9000/api/myTable/all-friends-rankings`);
+  const response = await axios.get(`http://10.0.0.169:9000/api/myTable/all-friends-rankings`);
   return response.data as UserScore[];
 };
 
@@ -112,7 +112,7 @@ export const getAllFriendsRankings = async (): Promise<UserScore[]> => {
 // export const getCommunityRanking = (): Promise<AxiosResponse> => {
 //   return new Promise((resolve, reject) => {
 //     axios
-//       .get("http://localhost:9000/api/ranking/community_ranking")
+//       .get("http://10.0.0.169:9000/api/ranking/community_ranking")
 //       .then((res: AxiosResponse) => {
 //         resolve(res);
 //       })

@@ -3,9 +3,9 @@ import mongoose, { Schema, Document } from "mongoose";
 export interface UserRankingDocument extends Document {
   username: string;
   ranking: [string];
-  points: [number];
   total: number;
-  favorite: string;
+    favorite: string;
+    weekStarted?: number;
 }
 
 const userRankingSchema: Schema<UserRankingDocument> = new mongoose.Schema(
@@ -24,6 +24,10 @@ const userRankingSchema: Schema<UserRankingDocument> = new mongoose.Schema(
         },
         favorite: {
             type: String,
+            required: false,
+        },
+        weekStarted: {
+            type: Number,
             required: false,
         }
     },

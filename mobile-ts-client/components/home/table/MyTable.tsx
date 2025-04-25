@@ -4,10 +4,11 @@ import { LiveRanking, UserRanking } from "../../../types/types";
 import { FriendButton } from "./FriendButton";
 import { Loading } from "../../common/Loading";
 import { getTeamAbbreviation, timeAgo } from "../../../utils/utils";
+import { useSelector } from "react-redux";
 
 interface RankingTableProps {
   liveTable: LiveRanking;
-  myTable: UserRanking;
+  myTable: UserRanking | undefined;
   otherTable: UserRanking | undefined;
 }
 
@@ -38,6 +39,7 @@ export const MyTable: React.FC<RankingTableProps> = ({
   const [myScore, setMyScore] = useState<MyScore | undefined>(undefined);
   const [otherScore, setOtherScore] = useState<MyScore | undefined>(undefined);
 
+  const logos = useSelector((state: any) => state.logos.logos);
   useEffect(() => {
     if (liveTable && myTable) {
       setMyScore(calculateOffsets(liveTable.ranking, myTable.ranking));
@@ -106,7 +108,7 @@ export const MyTable: React.FC<RankingTableProps> = ({
 
               <View style={[styles.teamRow, { flex: 2 }]}>
                 <Image
-                  source={{ uri: liveTable.logoUrls[index] }}
+                  source={{ uri: logos[liveTable.ranking[index]] }}
                   style={styles.logo}
                 />
                 <Text>{getTeamAbbreviation(liveTable.ranking[index])}</Text>
@@ -117,9 +119,7 @@ export const MyTable: React.FC<RankingTableProps> = ({
                   <View style={[styles.teamRow, { flex: 2 }]}>
                     <Image
                       source={{
-                        uri: liveTable.logoUrls[
-                          liveTable.ranking.indexOf(otherTable.ranking[index])
-                        ],
+                        uri: logos[otherTable.ranking[index]],
                       }}
                       style={styles.logo}
                     />
@@ -142,9 +142,7 @@ export const MyTable: React.FC<RankingTableProps> = ({
               <View style={[styles.teamRow, { flex: 2 }]}>
                 <Image
                   source={{
-                    uri: liveTable.logoUrls[
-                      liveTable.ranking.indexOf(myTable.ranking[index])
-                    ],
+                    uri: logos[myTable.ranking[index]],
                   }}
                   style={styles.logo}
                 />
