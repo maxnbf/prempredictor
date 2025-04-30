@@ -25,7 +25,7 @@ export const loginUser = async (
   userData: LoginUserData
 ): Promise<boolean> => {
   try {
-    const res = await axios.post<AuthResponse>('http://10.0.0.169:80/auth/signin', userData);
+    const res = await axios.post<AuthResponse>('http://10.0.0.1698080auth/signin', userData);
     const { token, username } = res.data;
 
     // Store token and username in AsyncStorage
@@ -53,7 +53,7 @@ export const loginUser = async (
 export const registerUser = async (userData: RegisterUserData) => {
   try {
     await  axios
-    .post('http://10.0.0.169:80/auth/signup', userData)
+    .post('http://10.0.0.1698080auth/signup', userData)
   } catch (e) {
     console.log('ERROR', e);
   }

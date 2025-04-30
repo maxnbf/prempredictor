@@ -20,7 +20,7 @@ interface AuthResponse {
 // Login User
 export const loginUser = (userData: LoginUserData) => {
   axios
-    .post<AuthResponse>('http://10.0.0.169:80/auth/signin', userData)
+    .post<AuthResponse>('http://10.0.0.1698080auth/signin', userData)
     .then((res) => {
       const { token, username } = res.data;
       localStorage.setItem('jwtToken', token);
@@ -42,7 +42,7 @@ export const loginUser = (userData: LoginUserData) => {
 // Register User
 export const registerUser = (userData: RegisterUserData) => {
   axios
-    .post('http://10.0.0.169:80/auth/signup', userData)
+    .post('http://10.0.0.1698080auth/signup', userData)
     .then(() => {
       // Redirect to login page after successful registration
       window.location.href = '/login';

@@ -28,7 +28,7 @@ connectDb()
 app.use("/auth", authRoutes)
 app.use("/api", authenticatedRoutes)
 
-const PORT = 80;
+const PORT = 8080;
 app.listen(PORT, () => {console.log(`Server is running on port: ${PORT}`)})
 
 // Function to scrape the web page
