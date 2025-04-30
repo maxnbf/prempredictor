@@ -8,9 +8,10 @@ export async function makeRanking(request) {
     const { teams, favoriteTeam } = request.body;
     const ranking = await makeRankingService(activeUser, teams);
     await setFavoriteService(activeUser, favoriteTeam);
-    
+
     await assignFavoriteTeamRankService();
     await assignOverallRankService();
+    // TODO: reevallate this just for the active user
     await assignFriendRankService();
     await assignTopLevelStatsService();
 

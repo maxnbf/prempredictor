@@ -13,6 +13,6 @@ export const setAuthToken = (token: string | null): void => {
 };
 
 export const getLogos = async (): Promise<Record<string, string>> => {
-  const response = await axios.get('http://10.0.0.169:9000/api/util/getLogos')
+  const response = await axios.get('http://10.0.0.169:80/api/util/getLogos')
   return response.data as Record<string, string>;
 };
