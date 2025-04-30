@@ -126,7 +126,12 @@ export const TimeSeriesPointsGraph: React.FC<TimeSeriesPointsGraphProps> = ({
       )}
       <LineChart
         data={{
-          labels: validOwnData?.map((entry) => `GW${entry.currentRound}`),
+          labels: validOwnData.map((entry, index) => {
+            // Show around 8 labels for x-axis
+            return index % Math.ceil(validOwnData.length / 8) === 0
+              ? `GW${entry.currentRound}`
+              : "";
+          }),
           datasets: [
             {
               data: validOwnData.map((entry) => entry.score),
@@ -146,11 +151,15 @@ export const TimeSeriesPointsGraph: React.FC<TimeSeriesPointsGraphProps> = ({
         }}
         width={getDimensions().width * 0.8}
         transparent={true}
+        withShadow={false}
         height={getDimensions().width * 0.8}
         chartConfig={{
           decimalPlaces: 0,
           color: () => "#000000",
           labelColor: () => "#000000",
+          propsForBackgroundLines: {
+            stroke: "transparent",
+          },
           style: {
             borderRadius: 16,
           },

@@ -6,6 +6,8 @@ import {
   View,
   StyleSheet,
   TouchableOpacity,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 import { Search } from "./Search";
 import { getFavorite } from "../../actions/user";
@@ -51,131 +53,141 @@ export const Groups: React.FC = () => {
 
   return (
     <SafeAreaView>
-      <View style={styles.topBanner}>
-        <View style={{ width: 24 }} />
-        <Text style={styles.topBannerTitle}>Prem Predictor</Text>
-        <View style={{ width: 24 }} />
-      </View>
-      <View style={{ padding: 20 }}>
-        <Search />
-        <View style={styles.banner}>
-          <Text style={styles.bannerText}>
-            Gameweek {rankingSnapshot.currentGameWeek}
-          </Text>
-
-          <View style={styles.statsRow}>
-            <View style={styles.statBox}>
-              <Text style={styles.statValue}>
-                {rankingSnapshot.averagePoints}
+      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+        <View>
+          <View style={styles.topBanner}>
+            <View style={{ width: 24 }} />
+            <Text style={styles.topBannerTitle}>Prem Predictor</Text>
+            <View style={{ width: 24 }} />
+          </View>
+          <View style={{ padding: 20 }}>
+            <Search />
+            <View style={styles.banner}>
+              <Text style={styles.bannerText}>
+                Gameweek {rankingSnapshot.currentGameWeek}
               </Text>
-              <Text style={styles.statLabel}>Average</Text>
+
+              <View style={styles.statsRow}>
+                <View style={styles.statBox}>
+                  <Text style={styles.statValue}>
+                    {rankingSnapshot.averagePoints}
+                  </Text>
+                  <Text style={styles.statLabel}>Average</Text>
+                </View>
+
+                <TouchableOpacity
+                  style={styles.myPointsContainer}
+                  onPress={() =>
+                    tabNavigation.navigate("Home", {
+                      username: undefined,
+                      gameweek: undefined,
+                    })
+                  }
+                >
+                  <Text style={styles.myPointsValue}>
+                    {rankingSnapshot.myPoints}
+                  </Text>
+                  <View style={styles.statWithIcon}>
+                    <Text style={styles.myPointsLabel}>My Points</Text>
+                    <Ionicons name="chevron-forward" size={16} color="#555" />
+                  </View>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={styles.statBox}
+                  onPress={() =>
+                    tabNavigation.navigate("Home", {
+                      username: rankingSnapshot.lowestPoints?.username,
+                      gameweek: undefined,
+                    })
+                  }
+                >
+                  <Text style={styles.statValue}>
+                    {rankingSnapshot?.lowestPoints?.points}
+                  </Text>
+                  <View style={styles.statWithIcon}>
+                    <Text style={styles.statLabel}>Highest</Text>
+                    <Ionicons name="chevron-forward" size={16} color="#555" />
+                  </View>
+                </TouchableOpacity>
+              </View>
             </View>
 
-            <TouchableOpacity
-              style={styles.myPointsContainer}
-              onPress={() =>
-                tabNavigation.navigate("Home", {
-                  username: undefined,
-                  gameweek: undefined,
-                })
-              }
-            >
-              <Text style={styles.myPointsValue}>
-                {rankingSnapshot.myPoints}
+            <View>
+              <Text
+                style={{ fontSize: 24, fontWeight: "bold", marginBottom: 8 }}
+              >
+                My Groups
               </Text>
-              <View style={styles.statWithIcon}>
-                <Text style={styles.myPointsLabel}>My Points</Text>
-                <Ionicons name="chevron-forward" size={16} color="#555" />
-              </View>
-            </TouchableOpacity>
 
-            <TouchableOpacity
-              style={styles.statBox}
-              onPress={() =>
-                tabNavigation.navigate("Home", {
-                  username: rankingSnapshot.lowestPoints.username,
-                  gameweek: undefined,
-                })
-              }
-            >
-              <Text style={styles.statValue}>
-                {rankingSnapshot?.lowestPoints.points}
-              </Text>
-              <View style={styles.statWithIcon}>
-                <Text style={styles.statLabel}>Highest</Text>
-                <Ionicons name="chevron-forward" size={16} color="#555" />
+              {/* Table Header */}
+              <View style={styles.tableHeader}>
+                <Text style={[styles.headerCell, { flex: 1 }]}>Rank</Text>
+                <Text style={[styles.headerCell, { flex: 4 }]}>Group Name</Text>
+                <Text style={[styles.headerCell, { flex: 1 }]}>{""}</Text>
+                {/* Placeholder for icon */}
               </View>
-            </TouchableOpacity>
+
+              {/* Group Rows */}
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate("Table", { type: "Overall" })
+                }
+                style={styles.leagueRow}
+              >
+                <Text style={[styles.leagueText, { flex: 1 }]}>
+                  {rankingSnapshot.overallRank}
+                </Text>
+                <Text style={[styles.leagueText, { flex: 4 }]}>Overall</Text>
+                <Ionicons
+                  name="chevron-forward"
+                  size={20}
+                  color="#555"
+                  style={{ flex: 1, textAlign: "right" }}
+                />
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate("Table", { type: "Friends" })
+                }
+                style={styles.leagueRow}
+              >
+                <Text style={[styles.leagueText, { flex: 1 }]}>
+                  {rankingSnapshot.friendsRank}
+                </Text>
+                <Text style={[styles.leagueText, { flex: 4 }]}>Friends</Text>
+                <Ionicons
+                  name="chevron-forward"
+                  size={20}
+                  color="#555"
+                  style={{ flex: 1, textAlign: "right" }}
+                />
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate("Table", { type: `${favoriteTeam} Fans` })
+                }
+                style={styles.leagueRow}
+              >
+                <Text style={[styles.leagueText, { flex: 1 }]}>
+                  {rankingSnapshot.favoriteTeamRank}
+                </Text>
+                <Text style={[styles.leagueText, { flex: 4 }]}>
+                  {`${favoriteTeam} Fans`}
+                </Text>
+                <Ionicons
+                  name="chevron-forward"
+                  size={20}
+                  color="#555"
+                  style={{ flex: 1, textAlign: "right" }}
+                />
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
-
-        <View>
-          <Text style={{ fontSize: 24, fontWeight: "bold", marginBottom: 8 }}>
-            My Groups
-          </Text>
-
-          {/* Table Header */}
-          <View style={styles.tableHeader}>
-            <Text style={[styles.headerCell, { flex: 1 }]}>Rank</Text>
-            <Text style={[styles.headerCell, { flex: 4 }]}>Group Name</Text>
-            <Text style={[styles.headerCell, { flex: 1 }]}>{""}</Text>
-            {/* Placeholder for icon */}
-          </View>
-
-          {/* Group Rows */}
-          <TouchableOpacity
-            onPress={() => navigation.navigate("Table", { type: "Overall" })}
-            style={styles.leagueRow}
-          >
-            <Text style={[styles.leagueText, { flex: 1 }]}>
-              {rankingSnapshot.overallRank}
-            </Text>
-            <Text style={[styles.leagueText, { flex: 4 }]}>Overall</Text>
-            <Ionicons
-              name="chevron-forward"
-              size={20}
-              color="#555"
-              style={{ flex: 1, textAlign: "right" }}
-            />
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={() => navigation.navigate("Table", { type: "Friends" })}
-            style={styles.leagueRow}
-          >
-            <Text style={[styles.leagueText, { flex: 1 }]}>
-              {rankingSnapshot.friendsRank}
-            </Text>
-            <Text style={[styles.leagueText, { flex: 4 }]}>Friends</Text>
-            <Ionicons
-              name="chevron-forward"
-              size={20}
-              color="#555"
-              style={{ flex: 1, textAlign: "right" }}
-            />
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={() =>
-              navigation.navigate("Table", { type: `${favoriteTeam} Fans` })
-            }
-            style={styles.leagueRow}
-          >
-            <Text style={[styles.leagueText, { flex: 1 }]}>
-              {rankingSnapshot.favoriteTeamRank}
-            </Text>
-            <Text style={[styles.leagueText, { flex: 4 }]}>
-              {`${favoriteTeam} Fans`}
-            </Text>
-            <Ionicons
-              name="chevron-forward"
-              size={20}
-              color="#555"
-              style={{ flex: 1, textAlign: "right" }}
-            />
-          </TouchableOpacity>
-        </View>
-      </View>
+      </TouchableWithoutFeedback>
     </SafeAreaView>
   );
 };

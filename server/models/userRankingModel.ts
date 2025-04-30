@@ -4,8 +4,8 @@ export interface UserRankingDocument extends Document {
   username: string;
   ranking: [string];
   total: number;
-    favorite: string;
-    weekStarted?: number;
+  favorite: string;
+  weekStarted: number;
 }
 
 const userRankingSchema: Schema<UserRankingDocument> = new mongoose.Schema(
@@ -28,7 +28,7 @@ const userRankingSchema: Schema<UserRankingDocument> = new mongoose.Schema(
         },
         weekStarted: {
             type: Number,
-            required: false,
+            required: true,
         }
     },
     { autoCreate: true }

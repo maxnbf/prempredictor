@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -6,80 +6,143 @@ import {
   Image,
   ScrollView,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
-import { Avatar } from "react-native-paper";
+import { Avatar, Menu } from "react-native-paper";
 import { ProfileScreenProps } from "../../types/routes";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { Notifications } from "./notifications/Notifications";
+import { logoutUser } from "../../navigation/navigation";
+import { deleteAccount, getProfile } from "../../actions/user";
+import { Profile } from "../../types/types";
+import { Loading } from "../common/Loading";
 
-const Profile = () => {
-  // Example data — replace with real data
-  const fullName = "John Doe";
-  const username = "johndoe";
-  const friendsCount = 42;
-  const favoriteTeam = "Arsenal";
-  const joinedDate = "Jan 1, 2024";
-  const score = 1280;
-  const notifications = [
-    "Reminder: Update your picks!",
-    "New friend request from @alex99",
-  ];
+export const ProfileView = () => {
+  const [profile, setProfile] = useState<Profile | undefined>(undefined);
+
+  const fetchData = async () => {
+    const response: Profile = await getProfile();
+    setProfile(response);
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchData();
+    }, [])
+  );
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const navigation = useNavigation<ProfileScreenProps>();
 
+  const [menuVisible, setMenuVisible] = useState(false);
+
+  const openMenu = () => setMenuVisible(true);
+  const closeMenu = () => setMenuVisible(false);
+
+  const handleLogout = () => {
+    logoutUser();
+    closeMenu();
+  };
+
+  const handleDeleteAccount = () => {
+    Alert.alert(
+      "Delete Account",
+      "Are you sure you want to delete your account? This action cannot be undone.",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Delete",
+          style: "destructive",
+          onPress: async () => {
+            await deleteAccount();
+            handleLogout();
+          },
+        },
+      ]
+    );
+  };
+
+  const handlePrivacyPolicy = () => {
+    closeMenu();
+    navigation.navigate("PrivacyPolicy");
+  };
+
+  const handleTerms = () => {
+    closeMenu();
+    // TODO: Navigate to Terms page
+    console.log("Opening Terms and Conditions...");
+  };
+
+  if (profile === undefined) {
+    return <Loading />;
+  }
+
   return (
     <SafeAreaView style={styles.safeArea}>
-      {/* Top Banner */}
       <View style={styles.topBanner}>
         <View style={styles.iconPlaceholder} />
         <Text style={styles.topBannerTitle}>Prem Predictor</Text>
-        <TouchableOpacity>
-          <Ionicons name="settings-outline" size={24} color="#333" />
-        </TouchableOpacity>
+
+        <Menu
+          visible={menuVisible}
+          onDismiss={closeMenu}
+          anchor={
+            <TouchableOpacity onPress={openMenu}>
+              <Ionicons name="settings-outline" size={24} color="#333" />
+            </TouchableOpacity>
+          }
+        >
+          <Menu.Item onPress={handleLogout} title="Logout" />
+          <Menu.Item onPress={handleDeleteAccount} title="Delete Account" />
+          <Menu.Item onPress={handlePrivacyPolicy} title="Privacy Policy" />
+          <Menu.Item onPress={handleTerms} title="Terms & Conditions" />
+        </Menu>
       </View>
 
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        {/* Top Section */}
         <View style={styles.topSection}>
           <Avatar.Text
-            label={fullName.charAt(0).toUpperCase()}
+            label={profile.username.charAt(0).toUpperCase()}
             style={styles.avatar}
           />
           <View style={styles.userInfo}>
-            <Text style={styles.fullName}>{fullName}</Text>
-            <Text style={styles.username}>@{username}</Text>
+            <Text style={styles.fullName}>{profile.fullName}</Text>
+            <Text style={styles.username}>@{profile.username}</Text>
           </View>
           <TouchableOpacity
             style={styles.friendsCountContainer}
             onPress={() => navigation.navigate("Friends")}
           >
-            <Text style={styles.friendsCount}>{friendsCount}</Text>
+            <Text style={styles.friendsCount}>{profile.friendCount}</Text>
             <Text style={styles.friendsLabel}>Friends</Text>
           </TouchableOpacity>
         </View>
 
-        {/* Label */}
         <Text style={styles.sectionLabel}>Your Info</Text>
 
-        {/* Details Section */}
         <View style={styles.detailsSection}>
           <Text style={styles.detailItem}>
             <Text style={styles.detailLabel}>Favorite Team: </Text>
-            {favoriteTeam}
+            {profile.favoriteTeam}
           </Text>
           <Text style={styles.detailItem}>
             <Text style={styles.detailLabel}>Joined: </Text>
-            {joinedDate}
+            {profile.joined.toString().substring(0, 10)}
           </Text>
           <Text style={styles.detailItem}>
             <Text style={styles.detailLabel}>Score: </Text>
-            {score}
+            {profile.total}
           </Text>
         </View>
 
-        {/* Notifications Section */}
         <View style={styles.notificationsSection}>
           <Notifications />
         </View>
@@ -172,5 +235,3 @@ const styles = StyleSheet.create({
     color: "#444",
   },
 });
-
-export default Profile;

@@ -4,7 +4,7 @@ import { UserRanking } from "../models/userRankingModel";
 import { UserScore } from "../types/types";
 
 export async function makeRankingService(username, ranking) {
-    const live = await LiveTable.findOne().sort({ currentRound: -1 });;
+    const live = await LiveTable.findOne().sort({ currentRound: -1 });
     const table = live?.ranking
 
     if (table == undefined) {

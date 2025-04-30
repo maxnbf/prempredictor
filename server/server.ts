@@ -54,6 +54,36 @@ async function scrapeStandings(): Promise<{ table: string[], srcUrls: string[] }
     }
 }
 
+// async function scrapeAllStandings() {
+//     const url = "https://www.transfermarkt.us/premier-league/spieltag/wettbewerb/GB1/plus/?saison_id=2024&spieltag="
+
+//     for (let i = 1; i <= 31; i++) {
+//         const { data } = await axios.get(url + i);
+//         const $ = cheerio.load(data);
+
+//         const table = [];
+//         $("[class*='no-border-links hauptlink']").each((index, element) => {
+//             table.push($(element).text().trim());
+//         });
+
+//         console.log(table, i)
+    
+        
+//         await LiveTable.findOneAndUpdate(
+//             { currentRound: i },
+//             {
+//                 ranking: table.map(team => shortNameToFullName[team]),
+//                 season: process.env.SEASON,
+//                 currentRound: i,
+//                 lastUpdated: new Date().getTime(),
+//                 isWeekComplete: true
+//                 // TODO: isWeekComplete and use this on register to determine which week they started
+//             },
+//             { new: true, upsert: true }
+//         );
+//     }
+// }
+
 async function scrapeFixtures(): Promise<{ gameWeek: string, isWeekComplete: boolean, isGamesToday: boolean}> {
     const url = "https://onefootball.com/en/competition/premier-league-9/results"
     try {
@@ -131,16 +161,15 @@ async function runScheduledTask() {
                 currentRound: parseInt(gameWeek),
                 lastUpdated: new Date().getTime(),
                 isWeekComplete: isWeekComplete
-                // TODO: isWeekComplete and use this on register to determine which week they started
             },
             { new: true, upsert: true }
         );
 
         const teamLogosMap = new Map<string, string>();
         table.forEach((teamName, index) => {
-        if (srcUrls[index]) {
-            teamLogosMap.set(teamName, srcUrls[index]);
-        }
+            if (srcUrls[index]) {
+                teamLogosMap.set(teamName, srcUrls[index]);
+            }
         });
 
         await TeamLogos.findOneAndUpdate(
@@ -148,7 +177,6 @@ async function runScheduledTask() {
             { logos: teamLogosMap },
             { new: true, upsert: true }
         );
-
 
         // If games being played today, update every 5 minutes
         if (isGamesToday) {
@@ -175,12 +203,10 @@ async function runScheduledTask() {
     
     } catch (error) {
         console.error(`Scheduled task error: ${error.message}`);
-        currentInterval = 60 * 1000; // e.g., 1 minute backoff
+        currentInterval = 60 * 1000;
     }
 
-    // Schedule the next run dynamically
     setTimeout(runScheduledTask, currentInterval);
 }
 
-// Start the loop
 runScheduledTask();

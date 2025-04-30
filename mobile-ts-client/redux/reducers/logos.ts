@@ -18,8 +18,8 @@ const initialState: LogosState = {
 export const fetchLogos = createAsyncThunk(
   'logos/fetchLogos',
     async () => {
-      console.log("Fetching logos...");
-    return await getLogos()
+        const logos = await getLogos()
+        return logos;
   }
 );
 

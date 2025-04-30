@@ -7,6 +7,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
+import { Provider as PaperProvider, DefaultTheme } from "react-native-paper";
 
 import store, { AppDispatch } from "./redux/store";
 import { signInResponse } from "./redux/reducers/auth";
@@ -15,7 +16,7 @@ import Login from "./components/auth/Login";
 import { Home } from "./components/home/Home";
 import Register from "./components/auth/Register";
 import { Groups } from "./components/all/Groups";
-import Profile from "./components/profile/Profile";
+import { ProfileView } from "./components/profile/Profile";
 import {
   TabParamList,
   RootStackParamList,
@@ -24,13 +25,12 @@ import {
 } from "./types/routes";
 import { enableScreens } from "react-native-screens";
 import { navigationRef } from "./navigation/navigation";
-import { Provider as PaperProvider } from "react-native-paper";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { NewUserOnboarding } from "./components/home/onboarding/NewUserOnboarding";
 import { SingleTable } from "./components/all/SingleTable";
 import { fetchLogos } from "./redux/reducers/logos";
 import { Friends } from "./components/profile/friends/Friends";
+import { PrivacyPolicy } from "./components/profile/PrivacyPolicy";
 
 enableScreens();
 
@@ -48,7 +48,7 @@ const ProfileNavigator = () => {
     >
       <ProfileStack.Screen
         name="ProfileHome"
-        component={Profile}
+        component={ProfileView}
         options={{ title: "Profile" }}
       />
       <ProfileStack.Screen
@@ -56,6 +56,15 @@ const ProfileNavigator = () => {
         component={Friends}
         options={() => ({
           title: "Friends",
+          headerBackTitleVisible: false,
+          headerShown: true,
+        })}
+      />
+      <ProfileStack.Screen
+        name="PrivacyPolicy"
+        component={PrivacyPolicy}
+        options={() => ({
+          title: "Privacy Policy",
           headerBackTitleVisible: false,
           headerShown: true,
         })}
@@ -205,9 +214,36 @@ const AppNavigator = () => {
   );
 };
 
+const theme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: "#000000", // <- black instead of purple
+    onPrimary: "#ffffff", // <- text/icons on top of primary (usually white)
+    secondary: "#666666", // <- optional, in case secondary is used
+    background: "#ffffff", // <- app background
+    surface: "#ffffff", // <- cards/menus background
+    text: "#000000", // <- default text color
+    onSurface: "#000000", // <- text/icon color for surfaces like TextInput/Menu
+    outline: "#cccccc", // <- borders (like TextInput outline)
+    inversePrimary: "#ffffff", // <- inverse primary color (used in dark mode)
+    tertiary: "#000000", // <- optional, in case tertiary is used
+    onSecondary: "#ffffff", // Text on secondary
+    elevation: {
+      // used for Menu
+      level0: "#ffffff", // Light gray shadow
+      level1: "#ffffff", // Medium gray shadow
+      level2: "#ffffff", // Darker gray shadow
+      level3: "#ffffff", // Even darker shadow
+      level4: "#ffffff", // Deep shadow
+      level5: "#ffffff", // Deep shadow
+    },
+  },
+};
+
 const App = () => (
   <GestureHandlerRootView>
-    <PaperProvider>
+    <PaperProvider theme={theme}>
       <Provider store={store}>
         <AppNavigator />
       </Provider>

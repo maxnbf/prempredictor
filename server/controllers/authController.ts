@@ -6,7 +6,6 @@ import { UserMetadata } from "../models/userMetadataModel";
 const secretKey = process.env.SECRET_KEY;
 
 function createJwt(userId: string, username: string): string {
-  console.log("creating token: ", userId, username)
   const token = jwt.sign({ userId, username }, secretKey);
   return token;
 }
@@ -20,13 +19,13 @@ export const signup = async (req, res) => {
           return res.status(400).json({ message: "Username already exists" });
         }
     
-        const newUser = new User({ username, password, name });
-        await newUser.save();
-    
-        const token = createJwt(newUser._id.toString(), username);
+      const newUser = new User({ username, password });
+      const userMetadata = new UserMetadata({ username, fullName: name, dateJoined: new Date() });
 
-        console.log(token)
+      await newUser.save();
+      await userMetadata.save();
     
+      const token = createJwt(newUser._id.toString(), username);
         res.status(201).json({
           message: "User created successfully",
           token,
@@ -35,7 +34,7 @@ export const signup = async (req, res) => {
           name,
         });
       } catch (e) {
-        res.status(500).json({ message: "Internal server error" });
+        res.status(500).json({ message: e.message });
       }
   }
   
@@ -53,14 +52,12 @@ export const signin = async (req, res) => {
         return res.status(401).json({ message: "Invalid username or password" });
       }
   
-      // Create JWT token
       const token = createJwt(user._id.toString(), username);
       res.json({
         message: "User signed in successfully",
         token,
         userId: user._id,
-        username,
-        name: user.name,
+        username
       });
     } catch (error) {
       res.status(500).json({ message: "Internal server error" });

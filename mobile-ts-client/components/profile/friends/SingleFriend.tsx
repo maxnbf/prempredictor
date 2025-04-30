@@ -35,10 +35,15 @@ export const SingleFriend: React.FC<SingleFriendProps> = ({ friend }) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.avatarContainer} onPress={goToProfile}>
-        <Avatar.Text label={friend.user.username[0].toUpperCase()} size={40} />
+        <Avatar.Text label={friend.user.username[0].toUpperCase()} size={50} />
       </TouchableOpacity>
       <View style={styles.infoContainer}>
-        <Text variant="bodyLarge">{friend.user.username}</Text>
+        <Text variant="bodyLarge" style={styles.fullName}>
+          {friend.user.fullName}
+        </Text>
+        <Text variant="bodyMedium" style={styles.username}>
+          @{friend.user.username}
+        </Text>
       </View>
       <View>
         {isFriend ? (
@@ -71,5 +76,13 @@ const styles = StyleSheet.create({
   },
   infoContainer: {
     flex: 1,
+  },
+  fullName: {
+    fontSize: 18,
+    fontWeight: "600",
+  },
+  username: {
+    fontSize: 14,
+    color: "gray",
   },
 });

@@ -2,17 +2,12 @@ import mongoose, { Schema, Document } from "mongoose";
 import bcrypt from "bcrypt";
 
 export interface UserDocument extends Document {
-  name: string;
   username: string;
   password: string;
 }
 
 const userSchema: Schema<UserDocument> = new mongoose.Schema(
   {
-    name: {
-      type: String,
-      required: true,
-    },
     username: {
       type: String,
       required: true,

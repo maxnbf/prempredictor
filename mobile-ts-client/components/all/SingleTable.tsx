@@ -10,7 +10,6 @@ import {
 } from "react-native";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";
-
 import { HomeScreenProps, TableRouteProps } from "../../types/routes";
 import { UserScore } from "../../types/types";
 import {
@@ -64,7 +63,7 @@ export const SingleTable: React.FC = () => {
   }
 
   return (
-    <>
+    <View>
       <View style={styles.tableHeader}>
         <Text style={[styles.cell, styles.position]}>Pos</Text>
         <Text style={[styles.cell, styles.usernameHeader]}>User</Text>
@@ -97,13 +96,14 @@ export const SingleTable: React.FC = () => {
                   resizeMode="contain"
                 />
               )}
-              <Text style={styles.usernameText}>{user.username}</Text>
+              {/* <Text style={styles.fullName}>{user.fullName}</Text> */}
+              <Text style={styles.username}>@{user.username}</Text>
             </View>
             <Text style={[styles.cell, styles.points]}>{user.score}</Text>
           </TouchableOpacity>
         ))}
       </ScrollView>
-    </>
+    </View>
   );
 };
 
@@ -155,5 +155,13 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
     marginRight: 8,
+  },
+  fullName: {
+    fontSize: 18,
+    fontWeight: "600",
+  },
+  username: {
+    fontSize: 14,
+    color: "gray",
   },
 });

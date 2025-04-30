@@ -1,11 +1,20 @@
 import { LiveTable } from "../models/liveTableModel";
-import { getRankingSnapshotService } from "../services/rankSnapshotService";
+import { assignFavoriteTeamRankService, assignFriendRankService, assignOverallRankService, assignTopLevelStatsService, getRankingSnapshotService } from "../services/rankSnapshotService";
 import { getAllFriendRankingsService, getAllService, getLiveRankingForGameWeekService, getRankingService, getTimeSeriesPointsService, getUsersByFavoriteService, makeRankingService } from "../services/rankingService"
+import { setFavoriteService } from "../services/userService";
 
 export async function makeRanking(request) {
     const activeUser = request?.body?.user?.username;
-    const { teams } = request.body;
-    return await makeRankingService(activeUser, teams);
+    const { teams, favoriteTeam } = request.body;
+    const ranking = await makeRankingService(activeUser, teams);
+    await setFavoriteService(activeUser, favoriteTeam);
+    
+    await assignFavoriteTeamRankService();
+    await assignOverallRankService();
+    await assignFriendRankService();
+    await assignTopLevelStatsService();
+
+    return ranking;
 }
 
 export async function getRankingsByFavorite(request) {

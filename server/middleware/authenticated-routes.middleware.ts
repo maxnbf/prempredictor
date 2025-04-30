@@ -8,8 +8,8 @@ import { Router } from "express";
 
 const router = Router()
 
-router.use(verifyToken);
 router.use('/util', utilRoutes)
+router.use(verifyToken);
 router.use('/user', userRoutes)
 router.use('/myTable', myTableRoutes)
 router.use('/friends', friendRoutes)

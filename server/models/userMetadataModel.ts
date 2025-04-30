@@ -1,9 +1,10 @@
-import mongoose, { Schema, Document, mongo } from "mongoose";
-import bcrypt from "bcrypt";
+import mongoose, { Schema, Document, Date } from "mongoose";
 
 export interface UserMetadataDocument extends Document {
     username: string;
     favoriteTeam: string;
+    dateJoined: Date;
+    fullName: string;
     bio?: string;
 }
 
@@ -15,11 +16,19 @@ const userMetadataSchema: Schema<UserMetadataDocument> = new mongoose.Schema(
         },
         favoriteTeam: {
             type: String,
-            required: true,
+            required: false,
         },
         bio: {
             type: String,
             required: false
+        }, 
+        dateJoined: {
+            type: Date,
+            required: true
+        }, 
+        fullName: {
+            type: String,
+            required: true
         }
     }
 );

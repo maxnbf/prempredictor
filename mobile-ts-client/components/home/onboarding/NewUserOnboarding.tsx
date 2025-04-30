@@ -7,11 +7,10 @@ import {
   StyleSheet,
   ScrollView,
   SafeAreaView,
-  ActivityIndicator,
+  Image,
 } from "react-native";
 import CreatePrediction from "./CreatePrediction";
 import { OnboardingScreenProps } from "../../../types/routes";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getRanking } from "../../../actions/rankings";
 import { Loading } from "../../common/Loading";
 
@@ -45,21 +44,31 @@ export const NewUserOnboarding: React.FC<OnboardingScreenProps> = ({
 
   if (onboardingPage === 0) {
     return (
-      <SafeAreaView>
-        <ScrollView contentContainerStyle={styles.scrollContainer}>
-          <Text style={styles.title}>Hello, {username}!</Text>
-          <Text style={styles.subtitle}>
-            Welcome to Premier League Season Predictor.
+      <SafeAreaView style={styles.safeArea}>
+        <View style={styles.scrollContainer}>
+          <Image
+            source={require("../../../assets/premlogo.png")}
+            style={styles.logo}
+            resizeMode="contain"
+          />
+
+          <Text style={styles.welcomeText}>Welcome, {username}!</Text>
+
+          <Text style={styles.heading}>
+            Build your Premier League season predictions.
           </Text>
+
           <Text style={styles.paragraph}>
-            To complete your new account, you must create a prediction for the
-            final standings of the 2024/2025 Premier League season.
+            To get started, create your full prediction for the 2024/2025
+            Premier League final standings.{"\n\n"}
+            Your accuracy will determine your ranking throughout the season!
           </Text>
+
           <Button
-            title="Continue to Create Prediction"
+            title="Get Started"
             onPress={() => setOnboardingPage((prev) => prev + 1)}
           />
-        </ScrollView>
+        </View>
       </SafeAreaView>
     );
   } else if (onboardingPage === 1) {
@@ -72,29 +81,39 @@ export const NewUserOnboarding: React.FC<OnboardingScreenProps> = ({
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#ffffff",
   },
   scrollContainer: {
-    padding: 24,
+    paddingHorizontal: 24,
     justifyContent: "center",
     alignItems: "center",
     flexGrow: 1,
+    marginBottom: "30%",
   },
-  title: {
-    fontSize: 24,
+  logo: {
+    width: 120,
+    height: 120,
+    marginBottom: 24,
+  },
+  welcomeText: {
+    fontSize: 28,
     fontWeight: "bold",
-    marginBottom: 8,
     textAlign: "center",
+    marginBottom: 12,
+    color: "#222222",
   },
-  subtitle: {
-    fontSize: 18,
-    fontWeight: "500",
-    marginBottom: 16,
+  heading: {
+    fontSize: 20,
+    fontWeight: "600",
     textAlign: "center",
+    marginBottom: 16,
+    color: "#444444",
   },
   paragraph: {
     fontSize: 16,
-    marginBottom: 16,
     textAlign: "center",
+    marginBottom: 24,
+    color: "#666666",
+    lineHeight: 22,
   },
 });

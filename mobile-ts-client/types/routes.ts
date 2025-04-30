@@ -24,6 +24,7 @@ export type GroupsStackParamList = {
 export type ProfileStackParamList = {
     ProfileHome: undefined;
     Friends: undefined;
+    PrivacyPolicy: undefined
 }
 
 
@@ -38,6 +39,7 @@ export type GroupHomeScreenProps = BottomTabNavigationProp<GroupsStackParamList,
 export type TableScreenProps = BottomTabNavigationProp<GroupsStackParamList, 'Table'>;
 export type ProfileScreenProps = BottomTabNavigationProp<ProfileStackParamList, 'ProfileHome'>;
 export type FriendScreenProps = BottomTabNavigationProp<ProfileStackParamList, 'Friends'>;
+export type PrivacyPolicyProps = BottomTabNavigationProp<ProfileStackParamList, 'PrivacyPolicy'>;
 
 export type HomeRouteProps = RouteProp<TabParamList, 'Home'>;
 export type TableRouteProps = RouteProp<GroupsStackParamList, 'Table'>;

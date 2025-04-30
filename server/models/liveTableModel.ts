@@ -5,7 +5,7 @@ export interface LiveTableDocument extends Document {
     lastUpdated: number;
     season: string;
     currentRound: number;
-    isWeekComplete?: number
+    isWeekComplete: number
 }
 
 const liveTableDocument: Schema<LiveTableDocument> = new mongoose.Schema(
@@ -28,7 +28,7 @@ const liveTableDocument: Schema<LiveTableDocument> = new mongoose.Schema(
         },
         isWeekComplete: {
             type: Number,
-            require: false
+            require: true
         }
     },
     { autoCreate: true }

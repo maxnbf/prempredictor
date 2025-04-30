@@ -1,4 +1,5 @@
-import { getFavoriteService, getUserMetadataService, searchUsersService, setFavoriteService } from "../services/userService"
+import { assignFavoriteTeamRankService } from "../services/rankSnapshotService";
+import { deleteAccountService, getFavoriteService, getUserMetadataService, getUserProfileService, searchUsersService, setFavoriteService } from "../services/userService"
 
 export async function setFavorite(request) {
     const activeUser = request?.body?.user?.username;
@@ -19,4 +20,14 @@ export async function getUserMetadata(request) {
 
 export async function searchUsers(request) {
     return await searchUsersService(request.params.query)
+}
+
+export async function getUserProfile(request) {
+    const activeUser = request?.body?.user?.username;
+    return await getUserProfileService(activeUser)
+}
+
+export async function deleteAccount(request) {
+    const activeUser = request?.body?.user?.username;
+    return await deleteAccountService(activeUser)
 }

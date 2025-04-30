@@ -50,32 +50,11 @@ export const loginUser = async (
 
 
 // Register User
-export const registerUser = (userData: RegisterUserData) => {
-  axios
-    .post('http://10.0.0.169:9000/auth/signup', userData)
-    .then(() => {
-
-    })
-    .catch((err) => {
-      console.error('ERROR', err);
-    });
-};
-
-// Logout User
-export const logoutUser = async () => {
+export const registerUser = async (userData: RegisterUserData) => {
   try {
-    await AsyncStorage.removeItem('jwtToken');
-    await AsyncStorage.removeItem('username');
-
-    // Remove auth header for future requests
-    setAuthToken(null);
-
-    // Dispatching empty user object to set isAuthenticated to false
-    store.dispatch(resetStore());
-
-    return true;
-  } catch (err) {
-    Alert.alert('Logout Failed', 'An error occurred while logging out');
-    return false;
+    await  axios
+    .post('http://10.0.0.169:9000/auth/signup', userData)
+  } catch (e) {
+    console.log('ERROR', e);
   }
 };

@@ -41,8 +41,10 @@ const CreatePrediction: React.FC<OnboardingScreenProps> = ({ navigation }) => {
   }, []);
 
   const saveTable = async () => {
-    await makeRanking({ teams: teams.map((team) => team.team) });
-    setFavorite(favoriteTeam);
+    await makeRanking({
+      teams: teams.map((team) => team.team),
+      favoriteTeam: favoriteTeam,
+    });
     await AsyncStorage.setItem("favoriteTeam", favoriteTeam);
     navigation.navigate("Main", {
       screen: "Home",
@@ -51,16 +53,34 @@ const CreatePrediction: React.FC<OnboardingScreenProps> = ({ navigation }) => {
   };
 
   if (isLoading) {
-    return <Text>Loading...</Text>;
+    return (
+      <SafeAreaView style={styles.loadingContainer}>
+        <Text style={styles.loadingText}>Loading...</Text>
+      </SafeAreaView>
+    );
   }
+
   return (
-    <SafeAreaView>
-      <Text>
-        Reorder the standings below to make your prediction. Double click your
-        favorite team, then click 'Save'
-      </Text>
-      <Button title="Save" onPress={() => saveTable()} />
-      <ScrollView>
+    <SafeAreaView style={styles.safeArea}>
+      <View style={styles.header}>
+        <Text style={styles.title}>Create Your Prediction</Text>
+        <View style={styles.headerRow}>
+          <Text style={styles.subtitle}>
+            Reorder the table to predict the final standings. Double-tap to set
+            your favorite team, then save!
+          </Text>
+          <View style={styles.saveButton}>
+            <Button title="Save" onPress={saveTable} />
+          </View>
+        </View>
+      </View>
+
+      <ScrollView
+        contentContainerStyle={styles.scrollContent}
+        persistentScrollbar={true} // <- Forces scrollbar to always show
+        showsVerticalScrollIndicator={true}
+        indicatorStyle="black" // Only works on iOS, but we'll fix it for Android too below
+      >
         <View style={styles.container}>
           <DragAndDrop
             items={teams}
@@ -75,25 +95,59 @@ const CreatePrediction: React.FC<OnboardingScreenProps> = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    paddingLeft: 16,
-    paddingRight: 16,
+  safeArea: {
+    flex: 1,
+    backgroundColor: "#ffffff",
+  },
+  loadingContainer: {
+    flex: 1,
     justifyContent: "center",
-    marginBottom: 100,
+    alignItems: "center",
   },
-  dropdownContainer: {
-    marginTop: 16,
-  },
-  label: {
+  loadingText: {
     fontSize: 18,
-    marginBottom: 8,
+    fontWeight: "500",
+    color: "#444",
   },
-  picker: {
-    height: 50,
+  header: {
+    paddingHorizontal: 24,
+    paddingTop: 24,
+    paddingBottom: 16,
+    alignItems: "center",
+    borderBottomWidth: 1,
+    borderBottomColor: "#eeeeee",
+    backgroundColor: "#ffffff",
+  },
+  title: {
+    fontSize: 26,
+    fontWeight: "bold",
+    marginBottom: 8,
+    textAlign: "center",
+    color: "#222222",
+  },
+  headerRow: {
+    marginTop: 8,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     width: "100%",
   },
-  buttonContainer: {
-    marginTop: 24,
+  subtitle: {
+    fontSize: 16,
+    color: "#666666",
+    lineHeight: 22,
+    flex: 1,
+  },
+  saveButton: {
+    width: "35%", // Adjust size as needed
+  },
+  scrollContent: {
+    paddingTop: 16,
+    paddingBottom: 100,
+    paddingHorizontal: 16,
+  },
+  container: {
+    justifyContent: "center",
   },
 });
 

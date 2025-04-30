@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { Profile } from '../types/types';
 
 export interface SetFavoriteResponse {
   success: boolean;
@@ -34,3 +35,13 @@ export const searchUsers = async (query: string): Promise<string[]> => {
   const response = await axios.get<string[]>(`http://10.0.0.169:9000/api/user/${query}/search`);
   return response.data;
 };
+
+export const getProfile = async (): Promise<Profile> => {
+  const response = await axios.get('http://10.0.0.169:9000/api/user/getProfile');
+  return response.data
+}
+
+export const deleteAccount = async (): Promise<boolean> => {
+  const response = await axios.get('http://10.0.0.169:9000/api/user/deleteAccount');
+  return response.data;
+}

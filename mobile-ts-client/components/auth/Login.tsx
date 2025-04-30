@@ -7,9 +7,11 @@ import {
   Image,
   StyleSheet,
   TouchableOpacity,
+  Keyboard,
 } from "react-native";
 import { loginUser } from "../../actions/auth";
 import { LoginScreenProps } from "../../types/routes";
+import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 
 const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
   const [username, setUsername] = useState("");

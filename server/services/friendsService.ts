@@ -2,6 +2,7 @@ import { FriendRequest } from "../models/friendRequestModel";
 import { Notif } from "../models/notificationModel";
 import { Friends } from "../models/friendModel"
 import * as userService from "./userService"
+import { assignFriendRankService } from "./rankSnapshotService";
 
 export async function sendRequest(from, to) {
   const request = new FriendRequest({ from, to, state: "request" });
@@ -40,6 +41,8 @@ export async function unfriendUserService(from, to) {
       { from: to, to: from }
     ]
   });
+      // TODO: reevallate this just for the active user
+  await assignFriendRankService();
   return true;
 }
 
@@ -87,5 +90,7 @@ export async function acceptRequest(from, to) {
     await newFriends.save();
     await Notif.findOneAndUpdate({from, to, notifType: "sentRequest"}, { $set: {notifType: "acceptedRequest", seen: "false"}})
     await FriendRequest.deleteOne({ from, to });
+        // TODO: reevallate this just for the active user
+    await assignFriendRankService();
   }
 }

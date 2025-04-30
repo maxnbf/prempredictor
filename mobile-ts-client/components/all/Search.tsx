@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { FlatList, TouchableOpacity, View } from "react-native";
 import { TextInput, Card, Text } from "react-native-paper";
-import { useNavigation } from "@react-navigation/native";
-import { searchUsers } from "../../actions/user"; // your API call
-import { Loading } from "../common/Loading";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
+import { searchUsers } from "../../actions/user";
 import { HomeScreenProps } from "../../types/routes";
 
 export const Search = () => {
@@ -12,6 +11,14 @@ export const Search = () => {
   const [loading, setLoading] = useState(false);
 
   const navigation = useNavigation<HomeScreenProps>();
+
+  useFocusEffect(
+    useCallback(() => {
+      setQuery("");
+
+      return () => setQuery("");
+    }, [])
+  );
 
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
@@ -26,7 +33,6 @@ export const Search = () => {
           const response = await searchUsers(query);
           setUsers(response);
         } catch (error) {
-          console.error("Search failed:", error);
           setUsers(undefined);
         } finally {
           setLoading(false);
@@ -53,6 +59,7 @@ export const Search = () => {
         style={{ marginBottom: 8, color: "white" }}
         left={<TextInput.Icon icon="magnify" />}
       />
+
       {!loading && (users?.length ?? 0) > 0 && (
         <View
           style={{

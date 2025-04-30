@@ -43,6 +43,7 @@ export interface FriendRequest {
 export interface UserMetadata {
   username: string;
   favoriteTeam: string;
+  fullName: string
 }
 
 export interface Friend {
@@ -73,4 +74,13 @@ export interface UserScore {
   username: string;
   score: number;
   favorite: string
+}
+
+export interface Profile {
+  username: string;
+  favoriteTeam: string;
+  total: number;
+  joined: Date;
+  friendCount: number;
+  fullName: string;
 }
