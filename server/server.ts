@@ -37,7 +37,7 @@ async function scrapeStandings(): Promise<{ table: string[], srcUrls: string[] }
     try {
         const { data } = await axios.get(url);
         const $ = cheerio.load(data);
-        const table = [];
+        const table: string[] = [];
 
         $("[class*='standings__teamName']").each((index, element) => {
             table.push($(element).text().trim());
