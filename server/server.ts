@@ -201,9 +201,11 @@ async function runScheduledTask() {
         await assignFriendRankService();
         await assignTopLevelStatsService();
     
-    } catch (error) {
-        console.error(`Scheduled task error: ${error.message}`);
-        currentInterval = 60 * 1000;
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            console.error(`Scheduled task error: ${error.message}`);
+            currentInterval = 60 * 1000;
+        }
     }
 
     setTimeout(runScheduledTask, currentInterval);
