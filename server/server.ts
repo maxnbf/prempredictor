@@ -29,7 +29,7 @@ app.use("/auth", authRoutes)
 app.use("/api", authenticatedRoutes)
 
 const PORT = 8080;
-app.listen(PORT, () => {console.log(`Server is running on port: ${PORT}`)})
+app.listen(PORT, '0.0.0.0', () => {console.log(`Server is running on port: ${PORT}`)})
 
 // Function to scrape the web page
 async function scrapeStandings(): Promise<{ table: string[], srcUrls: string[] }> {
