@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { Profile } from '../types/types';
+import { API_URL } from './util';
 
 export interface SetFavoriteResponse {
   success: boolean;
@@ -7,14 +8,14 @@ export interface SetFavoriteResponse {
 
 export const setFavorite = async (favorite: string): Promise<SetFavoriteResponse> => {
   const response = await axios.post<SetFavoriteResponse>(
-    'http://10.0.0.1698080api/user/setFavorite',
+    `${API_URL}/api/user/setFavorite`,
     { favorite }
   );
   return response.data;
 };
 
 export const getFavorite = async (): Promise<string> => {
-  const response = await axios.get<string>('http://10.0.0.1698080api/user/getFavorite');
+  const response = await axios.get<string>(`${API_URL}/api/user/getFavorite`);
   return response.data;
 };
 
@@ -26,22 +27,22 @@ export interface GetUserMetadataResponse {
 
 export const getUserMetadata = async (): Promise<GetUserMetadataResponse> => {
   const response = await axios.get<GetUserMetadataResponse>(
-    'http://10.0.0.1698080api/user/getUserMetadata'
+    `${API_URL}/api/user/getUserMetadata`
   );
   return response.data;
 };
 
 export const searchUsers = async (query: string): Promise<string[]> => {
-  const response = await axios.get<string[]>(`http://10.0.0.1698080api/user/${query}/search`);
+  const response = await axios.get<string[]>(`${API_URL}/api/user/${query}/search`);
   return response.data;
 };
 
 export const getProfile = async (): Promise<Profile> => {
-  const response = await axios.get('http://10.0.0.1698080api/user/getProfile');
+  const response = await axios.get(`${API_URL}/api/user/getProfile`);
   return response.data
 }
 
 export const deleteAccount = async (): Promise<boolean> => {
-  const response = await axios.get('http://10.0.0.1698080api/user/deleteAccount');
+  const response = await axios.get(`${API_URL}/api/user/deleteAccount`);
   return response.data;
 }

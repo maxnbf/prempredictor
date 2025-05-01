@@ -1,0 +1,31 @@
+{
+  "cli": {
+    "version": ">= 16.3.3",
+    "appVersionSource": "remote"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "environment": "development",
+      "channel": "development"
+    },
+    "preview": {
+      "distribution": "internal",
+      "environment": "preview",
+      "channel": "preview"
+    },
+    "production": {
+      "autoIncrement": true,
+      "environment": "production",
+      "channel": "production",
+      "env": {
+        "EXPO_ENV": "production",
+        "DOTENV_CONFIG_PATH": ".env.production.local"
+      }
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}

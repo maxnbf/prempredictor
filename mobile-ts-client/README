@@ -1,0 +1,10 @@
+for dev
+1. Pull env variables: eas env:pull development
+2. Build development build: eas build -p ios --profile development
+3. run the app: npx expo run:ios
+
+for prod
+
+2. Build prod build: eas build -p ios --profile production
+3. Send to testFlight: eas submit --platform ios --profile production
+
