@@ -1,8 +1,8 @@
 import axios from 'axios';
-import { setAuthToken } from './util';
+import { API_URL, setAuthToken } from './util';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Alert } from 'react-native';
-import { resetStore, signInResponse } from '../redux/reducers/auth';
+import { signInResponse } from '../redux/reducers/auth';
 import store from '../redux/store';
 
 
@@ -25,7 +25,7 @@ export const loginUser = async (
   userData: LoginUserData
 ): Promise<boolean> => {
   try {
-    const res = await axios.post<AuthResponse>('http://10.0.0.1698080auth/signin', userData);
+    const res = await axios.post<AuthResponse>(`${API_URL}/auth/signin`, userData);
     const { token, username } = res.data;
 
     // Store token and username in AsyncStorage
@@ -52,8 +52,7 @@ export const loginUser = async (
 // Register User
 export const registerUser = async (userData: RegisterUserData) => {
   try {
-    await  axios
-    .post('http://10.0.0.1698080auth/signup', userData)
+    await axios.post(`${API_URL}/auth/signup`, userData)
   } catch (e) {
     console.log('ERROR', e);
   }

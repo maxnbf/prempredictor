@@ -24,7 +24,7 @@ import {
   ProfileStackParamList,
 } from "./types/routes";
 import { enableScreens } from "react-native-screens";
-import { navigationRef } from "./navigation/navigation";
+import { logoutUser, navigationRef } from "./navigation/navigation";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { NewUserOnboarding } from "./components/home/onboarding/NewUserOnboarding";
 import { SingleTable } from "./components/all/SingleTable";

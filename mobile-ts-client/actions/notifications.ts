@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { Notification } from '../types/types';
+import { API_URL } from './util';
 
 export interface NotificationsResponse {
   notifs: Notification[];
@@ -7,6 +8,6 @@ export interface NotificationsResponse {
 }
 
 export const getNotifs = async (): Promise<NotificationsResponse> => {
-  const response = await axios.get(`http://10.0.0.1698080api/notifs/get-notifs`);
+  const response = await axios.get(`${API_URL}/api/notifs/get-notifs`);
   return response.data as NotificationsResponse;
 };

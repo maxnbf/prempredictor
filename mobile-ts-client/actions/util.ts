@@ -1,5 +1,5 @@
-import store from '../redux/store';
 import axios from 'axios';
+import Constants from 'expo-constants';
 
 // Define the function with a typed parameter
 export const setAuthToken = (token: string | null): void => {
@@ -12,7 +12,11 @@ export const setAuthToken = (token: string | null): void => {
   }
 };
 
+export const API_URL = process.env.EXPO_PUBLIC_API_URL!
+
 export const getLogos = async (): Promise<Record<string, string>> => {
-  const response = await axios.get('http://10.0.0.1698080api/util/getLogos')
+  console.log("hello", API_URL)
+  const response = await axios.get(`${API_URL}/api/util/getLogos`)
   return response.data as Record<string, string>;
 };
+

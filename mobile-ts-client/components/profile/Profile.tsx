@@ -75,12 +75,6 @@ export const ProfileView = () => {
     navigation.navigate("PrivacyPolicy");
   };
 
-  const handleTerms = () => {
-    closeMenu();
-    // TODO: Navigate to Terms page
-    console.log("Opening Terms and Conditions...");
-  };
-
   if (profile === undefined) {
     return <Loading />;
   }
@@ -103,7 +97,6 @@ export const ProfileView = () => {
           <Menu.Item onPress={handleLogout} title="Logout" />
           <Menu.Item onPress={handleDeleteAccount} title="Delete Account" />
           <Menu.Item onPress={handlePrivacyPolicy} title="Privacy Policy" />
-          <Menu.Item onPress={handleTerms} title="Terms & Conditions" />
         </Menu>
       </View>
 

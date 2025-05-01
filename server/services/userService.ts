@@ -14,8 +14,7 @@ export async function setFavoriteService(username: string, favorite: string) {
         { favorite: favorite }
     );
 
-    const userMetadata = new UserMetadata({ username, favoriteTeam: favorite, dateJoined: new Date() });
-    await userMetadata.save()
+    const userMetadata = await UserMetadata.findOneAndUpdate({ username }, { favoriteTeam: favorite})
 
     return true;
 }

@@ -4,8 +4,13 @@
   "main": "index.ts",
   "scripts": {
     "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
+    "startdev": "env-cmd -f .env.development.local expo start",
+    "startprod": "env-cmd -f .env.production.local expo start",
+    "open:xcode": "xed ./ios",
+    "prebuilddev": "env-cmd -f .env.development.local expo prebuild",
+    "prebuildprod": "env-cmd -f .env.production.local expo prebuild",
+    "android": "expo run:android",
+    "ios": "ENVFILE=.env.development.local expo run:ios",
     "web": "expo start --web"
   },
   "dependencies": {
@@ -14,11 +19,18 @@
     "@react-navigation/native-stack": "^7.3.10",
     "@reduxjs/toolkit": "^2.7.0",
     "axios": "^1.8.4",
+    "dotenv": "^16.5.0",
+    "eas-cli": "^16.3.3",
+    "env-cmd": "^10.1.0",
     "expo": "~52.0.46",
+    "expo-dev-client": "~5.0.20",
     "expo-status-bar": "~2.0.1",
+    "expo-updates": "~0.27.4",
     "react": "18.3.1",
     "react-native": "0.76.9",
     "react-native-chart-kit": "^6.12.0",
+    "react-native-config": "^1.5.5",
+    "react-native-dotenv": "^3.4.11",
     "react-native-draggable-flatlist": "^4.0.2",
     "react-native-dropdown-picker": "^5.4.6",
     "react-native-gesture-handler": "~2.20.2",
@@ -29,6 +41,7 @@
     "react-native-reorderable-list": "^0.13.1",
     "react-native-safe-area-context": "4.12.0",
     "react-native-screens": "~4.4.0",
+    "react-native-svg": "^15.11.2",
     "react-redux": "^9.2.0"
   },
   "devDependencies": {
