@@ -21,7 +21,10 @@ export const getLogos = async (): Promise<Record<string, string>> => {
     console.log(response)
     return response.data as Record<string, string>;
   } catch (e) {
-    console.log('ERROR', e);
+    console.log('ERROR', (e as Error).stack);
+    return {
+      
+    }
   }
 
 };

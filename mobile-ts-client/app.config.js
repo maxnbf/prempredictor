@@ -15,11 +15,11 @@ export default ({ config }) => {
     },
     ios: {
       supportsTablet: true,
-      bundleIdentifier: "com.maxnbf.mobiletsclient", // need to put in real thing? from apple developer
+      bundleIdentifier: "com.maxnbf.mobiletsclient",
       infoPlist: {
         ITSAppUsesNonExemptEncryption: false,
         NSAppTransportSecurity: {
-          NSAllowsArbitraryLoads: true,
+          NSAllowsArbitraryLoads: true, //alows for http rather than https? should figure that out
         },
       },
     },

@@ -27,9 +27,16 @@ connectDb()
 
 app.use("/auth", authRoutes)
 app.use("/api", authenticatedRoutes)
-
+app.use((req, res, next) => {
+    console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+    next();
+  });
+  
 const PORT = 8080;
-app.listen(PORT, '0.0.0.0', () => {console.log(`Server is running on port: ${PORT}`)})
+app.listen(PORT, '0.0.0.0', () => { console.log(`Server is running on port: ${PORT}`);})
+app.get("/", (req, res) => {
+    res.send("Hello from Prem Predictor")
+})
 
 // Function to scrape the web page
 async function scrapeStandings(): Promise<{ table: string[], srcUrls: string[] }> {
@@ -46,7 +53,7 @@ async function scrapeStandings(): Promise<{ table: string[], srcUrls: string[] }
         const logos = $("[class*='EntityLogo_entityLogoImage']")
         const srcUrls = logos.map((_, el) => $(el).attr('src')).get();
 
-        console.log(table, srcUrls)
+        // console.log(table, srcUrls)
         return { table, srcUrls } ;
     } catch (error) {
         console.error(`Error: ${error}`);
