@@ -31,6 +31,7 @@ import { SingleTable } from "./components/all/SingleTable";
 import { fetchLogos } from "./redux/reducers/logos";
 import { Friends } from "./components/profile/friends/Friends";
 import { PrivacyPolicy } from "./components/profile/PrivacyPolicy";
+import { Text, View } from "react-native";
 
 enableScreens();
 
@@ -166,7 +167,13 @@ const AppNavigator = () => {
     restoreAuth();
   }, []);
 
-  if (loading || logosLoading) return null; // Show a splash/loading screen here if needed
+  const env = process.env.EXPO_PUBLIC_API_URL;
+  if (loading || logosLoading)
+    return (
+      <View>
+        <Text>{env ?? "undefined"}</Text>
+      </View>
+    ); // Show a splash/loading screen here if needed
 
   // OHHHH... ALL OF THE "Do you have Screen ___" literally refers to the screens not existing here. Think of a better way to do this
   return (

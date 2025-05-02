@@ -18,11 +18,7 @@
     "production": {
       "autoIncrement": true,
       "environment": "production",
-      "channel": "production",
-      "env": {
-        "EXPO_ENV": "production",
-        "DOTENV_CONFIG_PATH": ".env.production.local"
-      }
+      "channel": "production"
     }
   },
   "submit": {

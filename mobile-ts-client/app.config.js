@@ -18,6 +18,9 @@ export default ({ config }) => {
       bundleIdentifier: "com.maxnbf.mobiletsclient", // need to put in real thing? from apple developer
       infoPlist: {
         ITSAppUsesNonExemptEncryption: false,
+        NSAppTransportSecurity: {
+          NSAllowsArbitraryLoads: true,
+        },
       },
     },
     updates: {
