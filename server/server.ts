@@ -10,6 +10,8 @@ import { UserRanking } from "./models/userRankingModel";
 import { TeamLogos } from "./models/teamLogosModel";
 import { updatePointsService } from "./services/rankingService";
 import { assignFavoriteTeamRankService, assignFriendRankService, assignOverallRankService, assignTopLevelStatsService } from "./services/rankSnapshotService";
+import { privacyHtml } from "./privacyPolicy";
+import { support } from "./support";
 
 const app = express();
 
@@ -27,15 +29,17 @@ connectDb()
 
 app.use("/auth", authRoutes)
 app.use("/api", authenticatedRoutes)
-app.use((req, res, next) => {
-    console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
-    next();
-  });
+app.get('/privacy', (req, res) => {
+ res.send(privacyHtml)
+})
+app.get('/support', (req, res) => {
+    res.send(support)
+})
   
 const PORT = 8080;
 app.listen(PORT, '0.0.0.0', () => { console.log(`Server is running on port: ${PORT}`);})
 app.get("/", (req, res) => {
-    res.send("Hello from Prem Predictor")
+    res.send("Hello from League Lock")
 })
 
 // Function to scrape the web page

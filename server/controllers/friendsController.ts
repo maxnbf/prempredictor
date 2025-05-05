@@ -2,7 +2,7 @@ import * as friendService from "../services/friendsService";
 
 export async function sendRequest(request) {
     const from = request?.body?.user?.username;
-    const { to }  = request?.params;
+    const { to } = request?.params;
     await friendService.sendRequest(from, to);
     return true;
 }
