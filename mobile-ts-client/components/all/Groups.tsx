@@ -57,7 +57,7 @@ export const Groups: React.FC = () => {
         <View>
           <View style={styles.topBanner}>
             <View style={{ width: 24 }} />
-            <Text style={styles.topBannerTitle}>Prem Predictor</Text>
+            <Text style={styles.topBannerTitle}>League Lock</Text>
             <View style={{ width: 24 }} />
           </View>
           <View style={{ padding: 20 }}>
@@ -106,7 +106,7 @@ export const Groups: React.FC = () => {
                     {rankingSnapshot?.lowestPoints?.points}
                   </Text>
                   <View style={styles.statWithIcon}>
-                    <Text style={styles.statLabel}>Highest</Text>
+                    <Text style={styles.statLabel}>Best</Text>
                     <Ionicons name="chevron-forward" size={16} color="#555" />
                   </View>
                 </TouchableOpacity>

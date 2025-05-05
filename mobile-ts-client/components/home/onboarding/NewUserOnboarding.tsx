@@ -47,7 +47,7 @@ export const NewUserOnboarding: React.FC<OnboardingScreenProps> = ({
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.scrollContainer}>
           <Image
-            source={require("../../../assets/premlogo.png")}
+            source={require("../../../assets/leaguelock.png")}
             style={styles.logo}
             resizeMode="contain"
           />

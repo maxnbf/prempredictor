@@ -1,15 +1,15 @@
 export default ({ config }) => {
   const res = {
     ...config,
-    name: "Prem Predictor",
+    name: "League Lock",
     slug: "mobile-ts-client",
-    version: "1.0.0",
+    version: "1.0.1",
     orientation: "portrait",
-    icon: "./assets/premlogo.png",
+    icon: "./assets/leaguelock.png",
     userInterfaceStyle: "light",
     newArchEnabled: true,
     splash: {
-      image: "./assets/premlogo.png",
+      image: "./assets/leaguelock.png",
       resizeMode: "contain",
       backgroundColor: "#ffffff",
     },
@@ -18,10 +18,8 @@ export default ({ config }) => {
       bundleIdentifier: "com.maxnbf.mobiletsclient",
       infoPlist: {
         ITSAppUsesNonExemptEncryption: false,
-        NSAppTransportSecurity: {
-          NSAllowsArbitraryLoads: true, //alows for http rather than https? should figure that out
-        },
       },
+      name: "League Lock",
     },
     updates: {
       url: "https://u.expo.dev/1eca2a24-57ce-476f-aa3d-ab6e8d0c02e4",

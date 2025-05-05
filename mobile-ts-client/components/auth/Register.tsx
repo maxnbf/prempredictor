@@ -49,7 +49,7 @@ const RegisterScreen = () => {
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.container}>
         <Image
-          source={require("../../assets/premlogo.png")}
+          source={require("../../assets/leaguelock.png")}
           resizeMode="contain"
           style={{ width: "80%", height: "20%" }}
         />

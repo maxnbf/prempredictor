@@ -83,7 +83,7 @@ export const ProfileView = () => {
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.topBanner}>
         <View style={styles.iconPlaceholder} />
-        <Text style={styles.topBannerTitle}>Prem Predictor</Text>
+        <Text style={styles.topBannerTitle}>League Lock</Text>
 
         <Menu
           visible={menuVisible}

@@ -15,10 +15,8 @@ export const setAuthToken = (token: string | null): void => {
 export const API_URL = process.env.EXPO_PUBLIC_API_URL!
 
 export const getLogos = async (): Promise<Record<string, string>> => {
-  console.log("hello", API_URL)
   try {
-    const response = await axios.get(`http://3.145.171.117:8080/api/util/getLogos`)
-    console.log(response)
+    const response = await axios.get(`${API_URL}/api/util/getLogos`)
     return response.data as Record<string, string>;
   } catch (e) {
     console.log('ERROR', (e as Error).stack);

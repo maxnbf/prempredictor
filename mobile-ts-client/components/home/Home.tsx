@@ -85,7 +85,7 @@ export const Home = () => {
     <SafeAreaView>
       <View style={styles.topBanner}>
         <View style={{ width: 24 }} />
-        <Text style={styles.topBannerTitle}>Prem Predictor</Text>
+        <Text style={styles.topBannerTitle}>League Lock</Text>
         <View style={{ width: 24 }} />
       </View>
       {isLoading ? (

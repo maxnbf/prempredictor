@@ -3,7 +3,7 @@ import { Friend, FriendRequest, FriendStatus } from '../types/types';
 import { API_URL } from './util';
 
 export const sendFriendRequest = async (to: string) => {
-  const response = await axios.post(`${API_URL}/friends/${to}/send-request`);
+  const response = await axios.post(`${API_URL}/api/friends/${to}/send-request`);
   return response.data;
 };
 

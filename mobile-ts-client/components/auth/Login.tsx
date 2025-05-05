@@ -25,7 +25,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Image
-        source={require("../../assets/premlogo.png")}
+        source={require("../../assets/leaguelock.png")}
         resizeMode="contain"
         style={{ width: "80%", height: "20%" }}
       />
