@@ -20,6 +20,7 @@ export default ({ config }) => {
         ITSAppUsesNonExemptEncryption: false,
       },
       name: "League Lock",
+      deviceFamilies: [1],
     },
     updates: {
       url: "https://u.expo.dev/1eca2a24-57ce-476f-aa3d-ab6e8d0c02e4",
