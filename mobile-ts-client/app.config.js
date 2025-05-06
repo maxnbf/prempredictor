@@ -14,12 +14,12 @@ export default ({ config }) => {
       backgroundColor: "#ffffff",
     },
     ios: {
-      supportsTablet: true,
       bundleIdentifier: "com.maxnbf.mobiletsclient",
       infoPlist: {
         ITSAppUsesNonExemptEncryption: false,
       },
       name: "League Lock",
+      supportsTablet: false,
       deviceFamilies: [1],
     },
     updates: {
