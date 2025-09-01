@@ -19,7 +19,6 @@ const CreatePrediction: React.FC<OnboardingScreenProps> = ({ navigation }) => {
   const [teams, setTeams] = useState<Item[]>([]);
   const [favoriteTeam, setFavoriteTeam] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
   const logos = useSelector((state: any) => state.logos.logos);
 
   useEffect(() => {
@@ -32,7 +31,7 @@ const CreatePrediction: React.FC<OnboardingScreenProps> = ({ navigation }) => {
             logo: logos[team],
           }))
         );
-        setFavoriteTeam(liveRanking.ranking[0]);
+        setFavoriteTeam("");
         setIsLoading(false);
       })
       .catch((error) => {
@@ -41,15 +40,22 @@ const CreatePrediction: React.FC<OnboardingScreenProps> = ({ navigation }) => {
   }, []);
 
   const saveTable = async () => {
-    await makeRanking({
-      teams: teams.map((team) => team.team),
-      favoriteTeam: favoriteTeam,
-    });
-    await AsyncStorage.setItem("favoriteTeam", favoriteTeam);
-    navigation.navigate("Main", {
-      screen: "Home",
-      params: { username: undefined, gameweek: undefined },
-    });
+    if (favoriteTeam !== "") {
+      await makeRanking({
+        teams: teams.map((team) => team.team),
+        favoriteTeam: favoriteTeam,
+      });
+      await AsyncStorage.setItem("favoriteTeam", favoriteTeam);
+      navigation.navigate("Main", {
+        screen: "Home",
+        params: { username: undefined, gameweek: undefined },
+      });
+    } else {
+      Alert.alert(
+        "Chose a Favorite Team",
+        "Please select a favorite team by double-tapping on it."
+      );
+    }
   };
 
   if (isLoading) {
