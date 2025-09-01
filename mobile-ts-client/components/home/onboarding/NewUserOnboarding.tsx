@@ -59,7 +59,7 @@ export const NewUserOnboarding: React.FC<OnboardingScreenProps> = ({
           </Text>
 
           <Text style={styles.paragraph}>
-            To get started, create your full prediction for the 2024/2025
+            To get started, create your full prediction for the 2025/2026
             Premier League final standings.{"\n\n"}
             Your accuracy will determine your ranking throughout the season!
           </Text>

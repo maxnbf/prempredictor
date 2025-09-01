@@ -31,6 +31,7 @@ const teamAbbreviations: { [key: string]: string } = {
   "Tottenham Hotspur": "TOT",
   "West Ham United": "WHU",
   "Wolverhampton Wanderers": "WOL",
+  Sunderland: "SUN",
 };
 
 export function getTeamAbbreviation(teamName: string): string {
