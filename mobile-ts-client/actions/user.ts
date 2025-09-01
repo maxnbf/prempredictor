@@ -38,9 +38,7 @@ export const searchUsers = async (query: string): Promise<string[]> => {
 };
 
 export const getProfile = async (): Promise<Profile> => {
-  console.log("WHAAT")
   const response = await axios.get(`${API_URL}/api/user/getProfile`);
-  console.log("HELLO")
   return response.data
 }
 
