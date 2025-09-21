@@ -16,6 +16,7 @@ import { TableView } from "./table/TableView";
 import { HomeRouteProps, HomeScreenProps } from "../../types/routes";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Loading } from "../common/Loading";
+import { logoutUser } from "../../navigation/navigation";
 
 export const Home = () => {
   const [myTable, setMyTable] = useState<UserRanking | undefined>(undefined);
@@ -82,7 +83,7 @@ export const Home = () => {
   }, [ownUsername, username, gameweek]);
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.safeArea}>
       <View style={styles.topBanner}>
         <View style={{ width: 24 }} />
         <Text style={styles.topBannerTitle}>League Lock</Text>
@@ -105,6 +106,9 @@ export const Home = () => {
 };
 
 const styles = StyleSheet.create({
+  safeArea: {
+    backgroundColor: "#f8f9fa",
+  },
   topBanner: {
     paddingHorizontal: 16,
     paddingBottom: 12,

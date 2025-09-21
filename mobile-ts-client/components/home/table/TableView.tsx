@@ -68,35 +68,51 @@ export const TableView = ({
 
   return (
     <>
-      <View style={styles.selectContainer}>
-        <Text style={styles.selectLabel}>Select Gameweek</Text>
-        <DropDownPicker
-          open={open}
-          setOpen={setOpen}
-          value={selectedGameweekState}
-          setValue={setSelectedGameweekState}
-          items={items}
-          setItems={setItems}
-          containerStyle={styles.dropdownContainer}
-          style={styles.dropdown}
-          dropDownContainerStyle={styles.dropDownStyle}
-          listMode="SCROLLVIEW"
-          dropDownDirection="BOTTOM"
-          autoScroll={true}
-          placeholder="Select Gameweek"
-          multiple={false}
-          zIndex={1000}
-        />
+      {/* Header Section with Controls */}
+      <View style={styles.headerSection}>
+        <View style={styles.controlsContainer}>
+          <Text style={styles.selectLabel}>Select Gameweek</Text>
+          <DropDownPicker
+            open={open}
+            setOpen={setOpen}
+            value={selectedGameweekState}
+            setValue={setSelectedGameweekState}
+            items={items}
+            setItems={setItems}
+            containerStyle={styles.dropdownContainer}
+            style={styles.dropdown}
+            dropDownContainerStyle={styles.dropDownStyle}
+            listMode="SCROLLVIEW"
+            dropDownDirection="BOTTOM"
+            autoScroll={true}
+            placeholder="Select Gameweek"
+            multiple={false}
+            zIndex={1000}
+          />
+        </View>
       </View>
+
       <ScrollView
         contentContainerStyle={styles.container}
         keyboardShouldPersistTaps="handled"
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
+        showsVerticalScrollIndicator={false}
       >
-        <MyTable liveTable={live} myTable={myTable} otherTable={otherTable} />
-        <TimeSeriesPointsGraph username={otherTable?.username} />
+        {/* Table Section */}
+        <View style={styles.tableSection}>
+          <MyTable liveTable={live} myTable={myTable} otherTable={otherTable} />
+        </View>
+
+        {/* Chart Section */}
+        <View style={styles.chartSection}>
+          <View style={styles.chartHeader}>
+            <Text style={styles.chartTitle}>Total Points Over Time</Text>
+            <View style={styles.divider} />
+          </View>
+          <TimeSeriesPointsGraph username={otherTable?.username} />
+        </View>
       </ScrollView>
     </>
   );
@@ -107,13 +123,46 @@ const styles = StyleSheet.create({
     padding: 16,
     paddingBottom: 100,
   },
+  headerSection: {
+    backgroundColor: "#fff",
+    borderBottomWidth: 1,
+    borderBottomColor: "#e0e0e0",
+    elevation: 2,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    zIndex: 2000,
+  },
+  headerContent: {
+    padding: 20,
+    paddingBottom: 16,
+  },
+  dashboardTitle: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#1976d2",
+    marginBottom: 8,
+  },
+  dashboardSubtitle: {
+    fontSize: 16,
+    color: "#666",
+    lineHeight: 22,
+  },
+  controlsContainer: {
+    paddingHorizontal: 20,
+    paddingVertical: 20,
+    zIndex: 1001,
+  },
   selectContainer: {
     padding: 16,
-    zIndex: 1000,
+    zIndex: 1001,
   },
   selectLabel: {
     fontSize: 18,
     fontWeight: "bold",
+    marginBottom: 8,
+    color: "#333",
   },
   picker: {
     height: 50,
@@ -123,18 +172,56 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   dropdown: {
-    backgroundColor: "#f0f0f0",
-    borderRadius: 4,
-    paddingHorizontal: 10,
+    backgroundColor: "#f8f9fa",
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    borderWidth: 1,
+    borderColor: "#e0e0e0",
   },
   dropDownStyle: {
-    backgroundColor: "#f0f0f0",
-    borderRadius: 4,
+    backgroundColor: "#f8f9fa",
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: "#e0e0e0",
   },
   dropdownContainer: {
     height: 50,
     width: "100%",
     marginVertical: 10,
-    zIndex: 1000, // Important for DropDownPicker stacking
+    zIndex: 1000,
+  },
+  tableSection: {
+    backgroundColor: "#fff",
+    borderRadius: 12,
+    marginBottom: 20,
+    elevation: 3,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  chartSection: {
+    backgroundColor: "#fff",
+    borderRadius: 12,
+    elevation: 3,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    marginBottom: 96,
+  },
+  chartHeader: {
+    padding: 20,
+    paddingBottom: 16,
+  },
+  chartTitle: {
+    fontSize: 20,
+    fontWeight: "600",
+    color: "#333",
+    marginBottom: 12,
+  },
+  divider: {
+    height: 1,
+    backgroundColor: "#e0e0e0",
   },
 });

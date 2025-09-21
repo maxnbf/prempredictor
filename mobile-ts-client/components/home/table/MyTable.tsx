@@ -31,6 +31,36 @@ const calculateOffsets = (live: string[], user: string[]): MyScore => {
   return { offsets, totalOffset };
 };
 
+const getOffsetStyle = (offset: number) => {
+  const baseStyle = {
+    borderRadius: 12,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    minWidth: 24,
+    textAlign: "center" as const,
+  };
+
+  if (offset > 0) {
+    return {
+      ...baseStyle,
+      backgroundColor: "#4caf50",
+      color: "white",
+    };
+  } else if (offset < 0) {
+    return {
+      ...baseStyle,
+      backgroundColor: "#f44336",
+      color: "white",
+    };
+  } else {
+    return {
+      ...baseStyle,
+      backgroundColor: "#e0e0e0",
+      color: "#666",
+    };
+  }
+};
+
 export const MyTable: React.FC<RankingTableProps> = ({
   liveTable,
   myTable,
@@ -49,34 +79,57 @@ export const MyTable: React.FC<RankingTableProps> = ({
     }
   }, [liveTable, myTable, otherTable]);
 
-  const getOffsetStyle = (offset: number) => {
-    if (offset > 0) return { color: "green" };
-    if (offset < 0) return { color: "red" };
-    return { color: "black" };
-  };
-
   if (!liveTable || !myTable) {
     return <Loading />;
   }
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>
-          @{otherTable ? otherTable.username : myTable.username}{" "}
-          {liveTable.season} Predictions
-        </Text>
-        {otherTable && (
-          <FriendButton
-            activeUser={myTable.username}
-            otherUsername={otherTable.username}
-          />
-        )}
-      </View>
+      {/* Header Section */}
+      <View style={styles.headerSection}>
+        <View style={styles.headerContent}>
+          <View style={styles.titleContainer}>
+            <Text style={styles.title}>
+              @{otherTable ? otherTable.username : myTable.username}
+            </Text>
+            <Text style={styles.subtitle}>
+              updated {timeAgo(liveTable.lastUpdated)}
+            </Text>
+          </View>
+          {otherTable && (
+            <View style={styles.friendButtonContainer}>
+              <FriendButton
+                activeUser={myTable.username}
+                otherUsername={otherTable.username}
+              />
+            </View>
+          )}
+        </View>
 
-      <Text style={styles.subtitle}>
-        Last Updated {timeAgo(liveTable.lastUpdated)}
-      </Text>
+        {/* Summary Stats */}
+        <View style={styles.statsContainer}>
+          <View style={styles.statItem}>
+            <Text style={styles.statLabel}>Your Points</Text>
+            <Text style={[styles.statValue, { color: "#1976d2" }]}>
+              {myScore?.totalOffset}
+            </Text>
+          </View>
+          {otherTable && otherScore && (
+            <View style={styles.statItem}>
+              <Text style={styles.statLabel}>
+                {otherTable.username}'s Points
+              </Text>
+              <Text style={[styles.statValue, { color: "#9c27b0" }]}>
+                {otherScore.totalOffset}
+              </Text>
+            </View>
+          )}
+          <View style={styles.statItem}>
+            <Text style={styles.statLabel}>Gameweek</Text>
+            <Text style={styles.statValue}>{liveTable.currentRound}</Text>
+          </View>
+        </View>
+      </View>
 
       <View style={styles.table}>
         {/* Table Header */}
@@ -84,14 +137,20 @@ export const MyTable: React.FC<RankingTableProps> = ({
           <Text style={styles.pos}>#</Text>
           <Text style={[styles.headerText, { flex: 2 }]}>Live</Text>
           {otherTable && (
-            <Text style={[styles.headerText, { flex: 2 }]}>
+            <Text
+              numberOfLines={1}
+              style={[styles.headerText, styles.usernameHeader, { flex: 2 }]}
+            >
               @{otherTable.username}
             </Text>
           )}
           {otherTable && (
             <Text style={[styles.headerText, { flex: 1 }]}>Pts</Text>
           )}
-          <Text style={[styles.headerText, { flex: 2 }]}>
+          <Text
+            numberOfLines={1}
+            style={[styles.headerText, styles.usernameHeader, { flex: 2 }]}
+          >
             @{myTable.username}
           </Text>
           <Text style={[styles.headerText, { flex: 1 }]}>Pts</Text>
@@ -106,26 +165,37 @@ export const MyTable: React.FC<RankingTableProps> = ({
             <View style={styles.row} key={index}>
               <Text style={styles.pos}>{index + 1}</Text>
 
-              <View style={[styles.teamRow, { flex: 2 }]}>
+              <View
+                style={[
+                  styles.teamRow,
+                  { flex: 2 },
+                  otherTable && { flexDirection: undefined },
+                ]}
+              >
                 <Image
                   source={{ uri: logos[liveTable.ranking[index]] }}
                   style={styles.logo}
                 />
-                <Text>{getTeamAbbreviation(liveTable.ranking[index])}</Text>
+                {!otherTable && (
+                  <Text>{getTeamAbbreviation(liveTable.ranking[index])}</Text>
+                )}
               </View>
 
               {otherTable && (
                 <>
-                  <View style={[styles.teamRow, { flex: 2 }]}>
+                  <View
+                    style={[
+                      styles.teamRow,
+                      { flex: 2 },
+                      otherTable && { flexDirection: undefined },
+                    ]}
+                  >
                     <Image
                       source={{
                         uri: logos[otherTable.ranking[index]],
                       }}
                       style={styles.logo}
                     />
-                    <Text>
-                      {getTeamAbbreviation(otherTable.ranking[index])}
-                    </Text>
                   </View>
                   <Text
                     style={{
@@ -139,14 +209,22 @@ export const MyTable: React.FC<RankingTableProps> = ({
                 </>
               )}
 
-              <View style={[styles.teamRow, { flex: 2 }]}>
+              <View
+                style={[
+                  styles.teamRow,
+                  { flex: 2 },
+                  otherTable && { flexDirection: undefined },
+                ]}
+              >
                 <Image
                   source={{
                     uri: logos[myTable.ranking[index]],
                   }}
                   style={styles.logo}
                 />
-                <Text>{getTeamAbbreviation(myTable.ranking[index])}</Text>
+                {!otherTable && (
+                  <Text>{getTeamAbbreviation(myTable.ranking[index])}</Text>
+                )}
               </View>
               <Text
                 style={{
@@ -184,11 +262,112 @@ export const MyTable: React.FC<RankingTableProps> = ({
 };
 
 const styles = StyleSheet.create({
-  footerRow: {
-    paddingTop: 8,
-  },
   container: {
-    padding: 4,
+    flex: 1,
+  },
+  headerSection: {
+    padding: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: "#e0e0e0",
+  },
+  headerContent: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    marginBottom: 16,
+  },
+  titleContainer: {
+    flex: 1,
+    marginRight: 12,
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: "600",
+    color: "#333",
+    marginBottom: 4,
+  },
+  subtitle: {
+    fontSize: 14,
+    color: "#666",
+    zIndex: -1,
+  },
+  friendButtonContainer: {
+    justifyContent: "center",
+  },
+  statsContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    paddingTop: 16,
+  },
+  statItem: {
+    alignItems: "center",
+  },
+  statLabel: {
+    fontSize: 12,
+    color: "#666",
+    marginBottom: 4,
+  },
+  statValue: {
+    fontSize: 18,
+    fontWeight: "600",
+    color: "#333",
+  },
+  table: {
+    borderTopWidth: 1,
+    borderTopColor: "#f0f0f0",
+  },
+  tableHeader: {
+    backgroundColor: "#f8f9fa",
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+  },
+  headerText: {
+    fontWeight: "600",
+    fontSize: 14,
+    color: "#333",
+  },
+  usernameHeader: {
+    textAlign: "left",
+  },
+  row: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: "#f0f0f0",
+  },
+  pos: {
+    fontSize: 16,
+    width: 40,
+    fontWeight: "500",
+    color: "#666",
+  },
+  teamRow: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  logo: {
+    width: 32,
+    height: 32,
+    marginRight: 8,
+    borderRadius: 4,
+  },
+  offset: {
+    fontSize: 16,
+    fontWeight: "600",
+    textAlign: "center",
+  },
+  footerRow: {
+    backgroundColor: "#1976d2",
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+  },
+  footerText: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: "#fff",
+    textAlign: "center",
   },
   header: {
     flexDirection: "row",
@@ -196,59 +375,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 8,
   },
-  title: {
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-  subtitle: {
-    fontSize: 14,
-    marginBottom: 16,
-  },
-  table: {
-    borderTopWidth: 1,
-    borderColor: "#ccc",
-  },
-  tableHeader: {
-    backgroundColor: "#eee",
-    paddingVertical: 6,
-  },
-  headerText: {
-    fontWeight: "bold",
-    fontSize: 14,
-  },
-  row: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingVertical: 4,
-    borderBottomWidth: 1,
-    borderColor: "#ddd",
-  },
-  pos: {
-    fontSize: 16,
-    width: 40,
-  },
-  teamRow: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  logo: {
-    width: 30,
-    height: 30,
-    marginRight: 8,
-  },
-  offset: {
-    fontSize: 24,
-    marginLeft: 8,
-    textAlign: "left",
-  },
   footer: {
     flexDirection: "row",
     justifyContent: "flex-end",
     marginTop: 16,
-  },
-  footerText: {
-    fontSize: 14,
-    display: "flex",
-    textAlign: "left",
   },
 });

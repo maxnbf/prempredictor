@@ -7,6 +7,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Alert,
+  Dimensions,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
@@ -101,42 +102,56 @@ export const ProfileView = () => {
       </View>
 
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <View style={styles.topSection}>
-          <Avatar.Text
-            label={profile.username.charAt(0).toUpperCase()}
-            style={styles.avatar}
-          />
-          <View style={styles.userInfo}>
-            <Text style={styles.fullName}>{profile.fullName}</Text>
-            <Text style={styles.username}>@{profile.username}</Text>
+        {/* Enhanced Profile Header Card */}
+        <View style={styles.profileCard}>
+          <View style={styles.profileHeader}>
+            <View style={styles.avatarContainer}>
+              <Avatar.Text
+                label={profile.username.charAt(0).toUpperCase()}
+                style={styles.avatar}
+                labelStyle={styles.avatarLabel}
+              />
+              <View style={styles.onlineIndicator} />
+            </View>
+            <View style={styles.userInfo}>
+              <Text style={styles.fullName}>{profile.fullName}</Text>
+              <Text style={styles.username}>@{profile.username}</Text>
+              <View style={styles.scoreContainer}>
+                <Ionicons name="trophy-outline" size={16} color="#FFD700" />
+                <Text style={styles.scoreText}>{profile.total} points</Text>
+              </View>
+            </View>
+            <TouchableOpacity
+              style={styles.friendsButton}
+              onPress={() => navigation.navigate("Friends")}
+            >
+              <Text style={styles.friendsCount}>{profile.friendCount}</Text>
+              <View style={styles.friendsLabelContainer}>
+                <Text style={styles.friendsLabel}>Friends</Text>
+                <Ionicons name="chevron-forward" size={16} color="#666" />
+              </View>
+            </TouchableOpacity>
           </View>
-          <TouchableOpacity
-            style={styles.friendsCountContainer}
-            onPress={() => navigation.navigate("Friends")}
-          >
-            <Text style={styles.friendsCount}>{profile.friendCount}</Text>
-            <Text style={styles.friendsLabel}>Friends</Text>
-          </TouchableOpacity>
         </View>
 
-        <Text style={styles.sectionLabel}>Your Info</Text>
-
-        <View style={styles.detailsSection}>
-          <Text style={styles.detailItem}>
-            <Text style={styles.detailLabel}>Favorite Team: </Text>
-            {profile.favoriteTeam}
-          </Text>
-          <Text style={styles.detailItem}>
-            <Text style={styles.detailLabel}>Joined: </Text>
-            {profile.joined.toString().substring(0, 10)}
-          </Text>
-          <Text style={styles.detailItem}>
-            <Text style={styles.detailLabel}>Score: </Text>
-            {profile.total}
-          </Text>
+        {/* Stats Cards */}
+        <View style={styles.statsGrid}>
+          <View style={styles.statCard}>
+            <Ionicons name="heart-outline" size={24} color="#E91E63" />
+            <Text style={styles.statValue}>{profile.favoriteTeam}</Text>
+            <Text style={styles.statLabel}>Favorite Team</Text>
+          </View>
+          <View style={styles.statCard}>
+            <Ionicons name="calendar-outline" size={24} color="#2196F3" />
+            <Text style={styles.statValue}>
+              {profile.joined.toString().substring(0, 10)}
+            </Text>
+            <Text style={styles.statLabel}>Joined</Text>
+          </View>
         </View>
 
-        <View style={styles.notificationsSection}>
+        {/* Notifications Section */}
+        <View style={styles.notificationsCard}>
           <Notifications />
         </View>
       </ScrollView>
@@ -147,9 +162,11 @@ export const ProfileView = () => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
+    backgroundColor: "#f8f9fa",
   },
   scrollContainer: {
     padding: 16,
+    paddingBottom: 32,
   },
   topBanner: {
     paddingHorizontal: 16,
@@ -165,66 +182,148 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     flex: 1,
+    color: "#333",
   },
   iconPlaceholder: {
     width: 24,
   },
-  topSection: {
+  // Enhanced Profile Card Styles
+  profileCard: {
+    backgroundColor: "#fff",
+    borderRadius: 16,
+    padding: 20,
+    marginBottom: 16,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  profileHeader: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 20,
+  },
+  avatarContainer: {
+    position: "relative",
   },
   avatar: {
-    width: 70,
-    height: 70,
-    borderRadius: 35,
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: "#6366f1",
+  },
+  avatarLabel: {
+    fontSize: 28,
+    fontWeight: "bold",
+    color: "#fff",
+  },
+  onlineIndicator: {
+    position: "absolute",
+    bottom: 4,
+    right: 4,
+    width: 16,
+    height: 16,
+    borderRadius: 8,
+    backgroundColor: "#10b981",
+    borderWidth: 2,
+    borderColor: "#fff",
   },
   userInfo: {
     flex: 1,
-    marginLeft: 12,
+    marginLeft: 16,
   },
   fullName: {
-    fontSize: 18,
-    fontWeight: "600",
+    fontSize: 22,
+    fontWeight: "700",
+    color: "#1f2937",
+    marginBottom: 4,
   },
   username: {
-    fontSize: 14,
-    color: "gray",
+    fontSize: 16,
+    color: "#6b7280",
+    marginBottom: 8,
   },
-  friendsCountContainer: {
+  scoreContainer: {
+    flexDirection: "row",
     alignItems: "center",
   },
+  scoreText: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: "#f59e0b",
+    marginLeft: 4,
+  },
+  friendsButton: {
+    alignItems: "center",
+    backgroundColor: "#f3f4f6",
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderRadius: 12,
+    minWidth: 80,
+  },
   friendsCount: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: "bold",
+    color: "#1f2937",
   },
   friendsLabel: {
     fontSize: 12,
-    color: "gray",
+    color: "#6b7280",
+    marginTop: 2,
   },
-  sectionLabel: {
-    fontSize: 16,
-    fontWeight: "600",
-    marginBottom: 8,
-    marginTop: 16,
-  },
-  detailsSection: {
-    marginBottom: 24,
-  },
-  detailItem: {
-    fontSize: 15,
-    marginBottom: 4,
-  },
-  detailLabel: {
-    fontWeight: "500",
-    color: "#333",
-  },
-  notificationsSection: {
+  // Stats Grid Styles
+  statsGrid: {
+    flexDirection: "row",
+    gap: 12,
     marginBottom: 16,
   },
-  notification: {
-    fontSize: 14,
-    paddingVertical: 4,
-    color: "#444",
+  statCard: {
+    flex: 1,
+    backgroundColor: "#fff",
+    borderRadius: 16,
+    padding: 20,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  statValue: {
+    fontSize: 16,
+    fontWeight: "700",
+    color: "#1f2937",
+    marginTop: 8,
+    marginBottom: 4,
+    textAlign: "center",
+  },
+  statLabel: {
+    fontSize: 12,
+    color: "#6b7280",
+    textAlign: "center",
+  },
+  // Notifications Card Styles
+  notificationsCard: {
+    backgroundColor: "#fff",
+    borderRadius: 16,
+    padding: 20,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  friendsLabelContainer: {
+    flexDirection: "row",
+    alignItems: "center",
   },
 });

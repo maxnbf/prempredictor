@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import { LineChart } from "react-native-chart-kit";
 import { useNavigation } from "@react-navigation/native";
 import { getTimeSeriesPoints } from "../../../actions/rankings";
@@ -69,61 +69,32 @@ export const TimeSeriesPointsGraph: React.FC<TimeSeriesPointsGraphProps> = ({
   }
 
   return (
-    <View style={{ padding: 16 }}>
-      <Text style={{ fontSize: 18, fontWeight: "bold", marginBottom: 8 }}>
-        {isComparingUsers
-          ? `${username} vs ${ownUsername}'s Weekly Scores`
-          : `${ownUsername}'s Weekly Scores`}
-      </Text>
-      {isComparingUsers ? (
-        <View style={{ flexDirection: "row", marginBottom: 8 }}>
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              marginRight: 16,
-            }}
-          >
-            <View
-              style={{
-                width: 12,
-                height: 12,
-                backgroundColor: "#8884d8",
-                marginRight: 6,
-                borderRadius: 2,
-              }}
-            />
-            <Text>{ownUsername}</Text>
+    <View style={styles.container}>
+      {/* Legend */}
+      <View style={styles.legendContainer}>
+        {isComparingUsers ? (
+          <>
+            <View style={styles.legendItem}>
+              <View
+                style={[styles.legendDot, { backgroundColor: "#8884d8" }]}
+              />
+              <Text style={styles.legendText}>{ownUsername}</Text>
+            </View>
+            <View style={styles.legendItem}>
+              <View
+                style={[styles.legendDot, { backgroundColor: "#82ca9d" }]}
+              />
+              <Text style={styles.legendText}>{username}</Text>
+            </View>
+          </>
+        ) : (
+          <View style={styles.legendItem}>
+            <View style={[styles.legendDot, { backgroundColor: "#8884d8" }]} />
+            <Text style={styles.legendText}>{ownUsername}</Text>
           </View>
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <View
-              style={{
-                width: 12,
-                height: 12,
-                backgroundColor: "#82ca9d",
-                marginRight: 6,
-                borderRadius: 2,
-              }}
-            />
-            <Text>{username}</Text>
-          </View>
-        </View>
-      ) : (
-        <View style={{ flexDirection: "row", marginBottom: 8 }}>
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <View
-              style={{
-                width: 12,
-                height: 12,
-                backgroundColor: "#8884d8",
-                marginRight: 6,
-                borderRadius: 2,
-              }}
-            />
-            <Text>{ownUsername}</Text>
-          </View>
-        </View>
-      )}
+        )}
+      </View>
+
       <LineChart
         data={{
           labels: validOwnData.map((entry, index) => {
@@ -179,3 +150,32 @@ export const TimeSeriesPointsGraph: React.FC<TimeSeriesPointsGraphProps> = ({
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 16,
+  },
+  legendContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    marginBottom: 16,
+    flexWrap: "wrap",
+  },
+  legendItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginHorizontal: 12,
+    marginVertical: 4,
+  },
+  legendDot: {
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    marginRight: 6,
+  },
+  legendText: {
+    fontSize: 14,
+    color: "#333",
+    fontWeight: "500",
+  },
+});
