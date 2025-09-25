@@ -4,10 +4,10 @@ import {
   TextInput,
   Card,
   Text,
-  ActivityIndicator,
   List,
   Divider,
   Surface,
+  Portal,
 } from "react-native-paper";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { searchUsers } from "../../actions/user";
@@ -75,78 +75,89 @@ export const Search = () => {
         style={{ marginBottom: 8 }}
         left={<TextInput.Icon icon="magnify" />}
         right={
-          query ? (
-            <TextInput.Icon
-              icon={loading ? "progress-clock" : "close-circle"}
-              onPress={!loading ? clearQuery : undefined}
-            />
-          ) : undefined
+          query
+            ? (
+              <TextInput.Icon
+                icon={loading ? "progress-clock" : "close-circle"}
+                onPress={!loading ? clearQuery : undefined}
+              />
+            )
+            : undefined
         }
       />
 
-      {loading && (
-        <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-          <ActivityIndicator animating size="small" />
-          <Text>Searching…</Text>
-        </View>
-      )}
-
-      {showResults && (
-        <Surface
-          elevation={4}
-          style={{
-            position: "absolute",
-            top: 60,
-            left: 0,
-            right: 0,
-            zIndex: 999,
-            borderRadius: 12,
-            overflow: "hidden",
-          }}
-        >
-          <FlatList
-            data={users}
-            keyExtractor={(item, index) => `${item}-${index}`}
+      {/* Dropdowns rendered in a Portal to appear above other content */}
+      <Portal>
+        {showResults && (
+          <Surface
+            elevation={8}
             style={{
-              maxHeight: 260,
+              position: "absolute",
+              top: 60,
+              left: 0,
+              right: 0,
+              // High zIndex for iOS; Portal ensures top-layer on Android
+              zIndex: 10000,
+              borderRadius: 12,
             }}
-            ItemSeparatorComponent={() => <Divider />}
-            renderItem={({ item, index }) => (
-              <TouchableOpacity onPress={() => navigateToUser(item)}>
-                <List.Item
-                  title={`@${item}`}
-                  left={(props) => <List.Icon {...props} icon="account" />}
-                  right={(props) => <List.Icon {...props} icon="chevron-right" />}
-                  style={{
-                    backgroundColor: "white",
-                  }}
-                />
-              </TouchableOpacity>
-            )}
-          />
-        </Surface>
-      )}
+          >
+            {/* Wrap content to apply overflow without breaking Surface shadow */}
+            <View style={{ borderRadius: 12, overflow: "hidden" }}>
+              <FlatList
+                data={users}
+                keyExtractor={(item, index) => `${item}-${index}`}
+                style={{
+                  maxHeight: 260,
+                }}
+                ItemSeparatorComponent={() => <Divider />}
+                renderItem={({ item }) => (
+                  <TouchableOpacity onPress={() => navigateToUser(item)}>
+                    <List.Item
+                      title={`@${item}`}
+                      left={(props) => <List.Icon {...props} icon="account" />}
+                      right={(props) => (
+                        <List.Icon {...props} icon="chevron-right" />
+                      )}
+                      style={{
+                        backgroundColor: "white",
+                      }}
+                    />
+                  </TouchableOpacity>
+                )}
+              />
+            </View>
+          </Surface>
+        )}
 
-      {showNoResults && (
-        <Surface
-          elevation={2}
-          style={{
-            position: "absolute",
-            top: 60,
-            left: 0,
-            right: 0,
-            zIndex: 999,
-            borderRadius: 12,
-            paddingVertical: 12,
-            paddingHorizontal: 16,
-          }}
-        >
-          <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-            <List.Icon icon="magnify" />
-            <Text>No matches found</Text>
-          </View>
-        </Surface>
-      )}
+        {showNoResults && (
+          <Surface
+            elevation={8}
+            style={{
+              position: "absolute",
+              top: 60,
+              left: 0,
+              right: 0,
+              zIndex: 10000,
+              borderRadius: 12,
+            }}
+          >
+            <View
+              style={{
+                borderRadius: 12,
+                overflow: "hidden",
+                paddingVertical: 12,
+                paddingHorizontal: 16,
+                backgroundColor: "white",
+              }}
+            >
+              <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+                <List.Icon icon="magnify" />
+                <Text>No matches found</Text>
+              </View>
+            </View>
+          </Surface>
+        )}
+      </Portal>
     </View>
   );
 };
