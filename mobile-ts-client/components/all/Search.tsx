@@ -1,6 +1,14 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { FlatList, TouchableOpacity, View } from "react-native";
-import { TextInput, Card, Text } from "react-native-paper";
+import {
+  TextInput,
+  Card,
+  Text,
+  ActivityIndicator,
+  List,
+  Divider,
+  Surface,
+} from "react-native-paper";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { searchUsers } from "../../actions/user";
 import { HomeScreenProps } from "../../types/routes";
@@ -49,6 +57,14 @@ export const Search = () => {
     navigation.navigate("Home", { username: username, gameweek: undefined });
   };
 
+  const clearQuery = () => {
+    setQuery("");
+    setUsers(undefined);
+  };
+
+  const showResults = !loading && (users?.length ?? 0) > 0;
+  const showNoResults = !loading && !!query.trim() && (users?.length ?? 0) === 0;
+
   return (
     <View style={{ width: "100%", marginBottom: 16 }}>
       <TextInput
@@ -56,49 +72,80 @@ export const Search = () => {
         mode="outlined"
         value={query}
         onChangeText={setQuery}
-        style={{ marginBottom: 8, color: "white" }}
+        style={{ marginBottom: 8 }}
         left={<TextInput.Icon icon="magnify" />}
+        right={
+          query ? (
+            <TextInput.Icon
+              icon={loading ? "progress-clock" : "close-circle"}
+              onPress={!loading ? clearQuery : undefined}
+            />
+          ) : undefined
+        }
       />
 
-      {!loading && (users?.length ?? 0) > 0 && (
-        <View
+      {loading && (
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+          <ActivityIndicator animating size="small" />
+          <Text>Searching…</Text>
+        </View>
+      )}
+
+      {showResults && (
+        <Surface
+          elevation={4}
           style={{
             position: "absolute",
             top: 60,
             left: 0,
             right: 0,
             zIndex: 999,
-            backgroundColor: "white",
-            elevation: 5,
-            shadowColor: "#000",
-            shadowOffset: { width: 0, height: 2 },
-            shadowOpacity: 0.2,
-            shadowRadius: 4,
-            borderRadius: 8,
+            borderRadius: 12,
+            overflow: "hidden",
           }}
         >
           <FlatList
             data={users}
             keyExtractor={(item, index) => `${item}-${index}`}
             style={{
-              maxHeight: 200,
-              borderRadius: 8,
-              borderWidth: 1,
+              maxHeight: 260,
             }}
-            renderItem={({ item }) => (
+            ItemSeparatorComponent={() => <Divider />}
+            renderItem={({ item, index }) => (
               <TouchableOpacity onPress={() => navigateToUser(item)}>
-                <Card
-                  mode="contained"
-                  style={{ borderRadius: 0, backgroundColor: "white" }}
-                >
-                  <Card.Content>
-                    <Text>@{item}</Text>
-                  </Card.Content>
-                </Card>
+                <List.Item
+                  title={`@${item}`}
+                  left={(props) => <List.Icon {...props} icon="account" />}
+                  right={(props) => <List.Icon {...props} icon="chevron-right" />}
+                  style={{
+                    backgroundColor: "white",
+                  }}
+                />
               </TouchableOpacity>
             )}
           />
-        </View>
+        </Surface>
+      )}
+
+      {showNoResults && (
+        <Surface
+          elevation={2}
+          style={{
+            position: "absolute",
+            top: 60,
+            left: 0,
+            right: 0,
+            zIndex: 999,
+            borderRadius: 12,
+            paddingVertical: 12,
+            paddingHorizontal: 16,
+          }}
+        >
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+            <List.Icon icon="magnify" />
+            <Text>No matches found</Text>
+          </View>
+        </Surface>
       )}
     </View>
   );
