@@ -160,6 +160,11 @@ const ONE_MINUTE_IN_MILLIS = 60 * ONE_SECOND_IN_MILLIS
 const ONE_HOUR_IN_MILLIS = 60 * ONE_MINUTE_IN_MILLIS
 
 let currentInterval = ONE_HOUR_IN_MILLIS
+
+const hardCodedLogos: Map<string, string> = new Map([
+    ["Watford FC", "https://image-service.onefootball.com/transform?w=128&dpr=2&image=https://images.onefootball.com/icons/teams/164/580.png"]
+]);
+
 async function runScheduledTask() {
     try {
         const { table, srcUrls } = await scrapeStandings();
@@ -183,9 +188,14 @@ async function runScheduledTask() {
             }
         });
 
+        const mergedLogosMap = new Map([
+            ...teamLogosMap,
+            ...hardCodedLogos
+        ]);
+
         await TeamLogos.findOneAndUpdate(
             { },
-            { logos: teamLogosMap },
+            { logos: mergedLogosMap },
             { new: true, upsert: true }
         );
 
