@@ -161,7 +161,8 @@ const styles = StyleSheet.create({
   },
   logo: {
     width: width * 0.6,
-    height: height * 0.12,
+    height: height * 0.2,
+    margin: -30,
   },
   inputContainer: {
     marginBottom: 20,
