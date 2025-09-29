@@ -57,6 +57,12 @@ const RegisterScreen = () => {
     }
   };
 
+  if (isLoading) {
+    <View style={styles.loadingOverlay}>
+      <ActivityIndicator size="large" color="#6366f1" />
+    </View>;
+  }
+
   return (
     <KeyboardAvoidingView
       style={styles.container}
@@ -149,13 +155,6 @@ const RegisterScreen = () => {
           </View>
         </ScrollView>
       </View>
-
-      {/* Loading Overlay */}
-      {isLoading && (
-        <View style={styles.loadingOverlay}>
-          <ActivityIndicator size="large" color="#6366f1" />
-        </View>
-      )}
     </KeyboardAvoidingView>
   );
 };

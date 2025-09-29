@@ -130,7 +130,7 @@ const CreatePrediction: React.FC<OnboardingScreenProps> = ({ navigation }) => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#f8f9fa",
+    backgroundColor: "#6366f1",
   },
   loadingContainer: {
     flex: 1,
