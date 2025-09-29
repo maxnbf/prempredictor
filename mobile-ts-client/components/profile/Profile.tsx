@@ -19,6 +19,7 @@ import { logoutUser } from "../../navigation/navigation";
 import { deleteAccount, getProfile } from "../../actions/user";
 import { Profile } from "../../types/types";
 import { Loading } from "../common/Loading";
+import { useSelector } from "react-redux";
 
 export const ProfileView = () => {
   const [profile, setProfile] = useState<Profile | undefined>(undefined);
@@ -39,7 +40,7 @@ export const ProfileView = () => {
   }, []);
 
   const navigation = useNavigation<ProfileScreenProps>();
-
+  const logos = useSelector((state: any) => state.logos.logos);
   const [menuVisible, setMenuVisible] = useState(false);
 
   const openMenu = () => setMenuVisible(true);
@@ -137,7 +138,10 @@ export const ProfileView = () => {
         {/* Stats Cards */}
         <View style={styles.statsGrid}>
           <View style={styles.statCard}>
-            <Ionicons name="heart-outline" size={24} color="#E91E63" />
+            <Image
+              source={{ uri: logos[profile.favoriteTeam] }}
+              style={styles.logo}
+            />
             <Text style={styles.statValue}>{profile.favoriteTeam}</Text>
             <Text style={styles.statLabel}>Favorite Team</Text>
           </View>
@@ -325,5 +329,9 @@ const styles = StyleSheet.create({
   friendsLabelContainer: {
     flexDirection: "row",
     alignItems: "center",
+  },
+  logo: {
+    width: 24,
+    height: 24,
   },
 });

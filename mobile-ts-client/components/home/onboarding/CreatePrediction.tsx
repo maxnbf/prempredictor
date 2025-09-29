@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Button, StyleSheet, Alert } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Alert,
+  TouchableOpacity,
+  ActivityIndicator,
+} from "react-native";
 import { getLiveRanking, makeRanking } from "../../../actions/rankings";
 import { setFavorite } from "../../../actions/user";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -25,12 +32,14 @@ const CreatePrediction: React.FC<OnboardingScreenProps> = ({ navigation }) => {
     setIsLoading(true);
     getLiveRanking()
       .then((liveRanking) => {
-        setTeams(
-          liveRanking.ranking.map((team: string) => ({
+        const sortedTeams = liveRanking.ranking
+          .map((team: string) => ({
             team,
             logo: logos[team],
           }))
-        );
+          .sort((a, b) => a.team.localeCompare(b.team));
+
+        setTeams(sortedTeams);
         setFavoriteTeam("");
         setIsLoading(false);
       })
@@ -41,19 +50,31 @@ const CreatePrediction: React.FC<OnboardingScreenProps> = ({ navigation }) => {
 
   const saveTable = async () => {
     if (favoriteTeam !== "") {
-      await makeRanking({
-        teams: teams.map((team) => team.team),
-        favoriteTeam: favoriteTeam,
-      });
-      await AsyncStorage.setItem("favoriteTeam", favoriteTeam);
-      navigation.navigate("Main", {
-        screen: "Home",
-        params: { username: undefined, gameweek: undefined },
-      });
+      setIsLoading(true);
+      try {
+        await makeRanking({
+          teams: teams.map((team) => team.team),
+          favoriteTeam: favoriteTeam,
+        });
+        await AsyncStorage.setItem("favoriteTeam", favoriteTeam);
+        navigation.navigate("Main", {
+          screen: "Home",
+          params: { username: undefined, gameweek: undefined },
+        });
+      } catch (error) {
+        console.error("Error saving prediction:", error);
+        Alert.alert(
+          "Error",
+          "Failed to save your prediction. Please try again."
+        );
+      } finally {
+        setIsLoading(false);
+      }
     } else {
       Alert.alert(
-        "Chose a Favorite Team",
-        "Please select a favorite team by double-tapping on it."
+        "Choose a Favorite Team",
+        "Please select a favorite team by double-tapping on it.",
+        [{ text: "OK", style: "default" }]
       );
     }
   };
@@ -61,31 +82,29 @@ const CreatePrediction: React.FC<OnboardingScreenProps> = ({ navigation }) => {
   if (isLoading) {
     return (
       <SafeAreaView style={styles.loadingContainer}>
-        <Text style={styles.loadingText}>Loading...</Text>
+        <View style={styles.loadingBackground}>
+          <ActivityIndicator size="large" color="#ffffff" />
+          <Text style={styles.loadingText}>Loading teams...</Text>
+        </View>
       </SafeAreaView>
     );
   }
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Create Your Prediction</Text>
-        <View style={styles.headerRow}>
+      <View style={styles.headerBackground}>
+        <View style={styles.header}>
+          <Text style={styles.title}>🏆 Create Your Prediction 🏆</Text>
           <Text style={styles.subtitle}>
-            Reorder the table to predict the final standings. Double-tap to set
-            your favorite team, then save!
+            Drag to reorder • Double-tap to set favorite
           </Text>
-          <View style={styles.saveButton}>
-            <Button title="Save" onPress={saveTable} />
-          </View>
         </View>
       </View>
 
       <ScrollView
         contentContainerStyle={styles.scrollContent}
-        persistentScrollbar={true} // <- Forces scrollbar to always show
         showsVerticalScrollIndicator={true}
-        indicatorStyle="black" // Only works on iOS, but we'll fix it for Android too below
+        style={styles.scrollView}
       >
         <View style={styles.container}>
           <DragAndDrop
@@ -96,6 +115,14 @@ const CreatePrediction: React.FC<OnboardingScreenProps> = ({ navigation }) => {
           />
         </View>
       </ScrollView>
+
+      <View style={styles.bottomContainer}>
+        <TouchableOpacity style={styles.saveButton} onPress={saveTable}>
+          <View style={styles.saveButtonBackground}>
+            <Text style={styles.saveButtonText}>Save</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 };
@@ -103,57 +130,141 @@ const CreatePrediction: React.FC<OnboardingScreenProps> = ({ navigation }) => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#ffffff",
+    backgroundColor: "#f8f9fa",
   },
   loadingContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },
+  loadingBackground: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
+  },
   loadingText: {
     fontSize: 18,
-    fontWeight: "500",
-    color: "#444",
+    fontWeight: "600",
+    color: "#ffffff",
+    marginTop: 16,
+  },
+  headerBackground: {
+    backgroundColor: "#6366f1",
+    paddingBottom: 20,
   },
   header: {
     paddingHorizontal: 24,
-    paddingTop: 24,
-    paddingBottom: 16,
+    paddingTop: 20,
+    paddingBottom: 20,
     alignItems: "center",
-    borderBottomWidth: 1,
-    borderBottomColor: "#eeeeee",
-    backgroundColor: "#ffffff",
   },
   title: {
-    fontSize: 26,
+    fontSize: 28,
     fontWeight: "bold",
     marginBottom: 8,
     textAlign: "center",
-    color: "#222222",
-  },
-  headerRow: {
-    marginTop: 8,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    width: "100%",
+    color: "#ffffff",
   },
   subtitle: {
     fontSize: 16,
-    color: "#666666",
+    color: "#ffffff",
+    textAlign: "center",
+    opacity: 0.9,
     lineHeight: 22,
-    flex: 1,
   },
-  saveButton: {
-    width: "35%", // Adjust size as needed
+  favoriteIndicator: {
+    backgroundColor: "rgba(255, 255, 255, 0.2)",
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 20,
+    marginTop: 12,
+  },
+  favoriteText: {
+    color: "#ffffff",
+    fontSize: 16,
+    fontWeight: "600",
+  },
+  scrollView: {
+    flex: 1,
+    backgroundColor: "#f8f9fa",
   },
   scrollContent: {
-    paddingTop: 16,
-    paddingBottom: 100,
+    paddingTop: 20,
+    paddingBottom: 120,
     paddingHorizontal: 16,
   },
   container: {
+    flex: 1,
+  },
+  instructionCard: {
+    backgroundColor: "#ffffff",
+    borderRadius: 12,
+    padding: 20,
+    marginBottom: 20,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  instructionTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#333333",
+    marginBottom: 12,
+  },
+  instructionText: {
+    fontSize: 15,
+    color: "#666666",
+    lineHeight: 22,
+  },
+  bottomContainer: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: "#ffffff",
+    paddingHorizontal: 20,
+    paddingTop: 16,
+    paddingBottom: 34,
+    borderTopWidth: 1,
+    borderTopColor: "#e0e0e0",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: -2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  saveButton: {
+    borderRadius: 12,
+    overflow: "hidden",
+    shadowColor: "#6366f1",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 6,
+  },
+  saveButtonBackground: {
+    paddingVertical: 16,
+    paddingHorizontal: 24,
+    alignItems: "center",
     justifyContent: "center",
+    backgroundColor: "#6366f1",
+  },
+  saveButtonText: {
+    color: "#ffffff",
+    fontSize: 18,
+    fontWeight: "bold",
   },
 });
 

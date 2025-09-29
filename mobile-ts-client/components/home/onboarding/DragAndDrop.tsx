@@ -33,12 +33,17 @@ const Card: React.FC<{
   return (
     <DoubleTapView onDoubleTap={() => setFavoriteTeam(item.team)}>
       <View
-        style={[styles.row, isFavorite && { backgroundColor: "gold" }]}
+        style={[styles.row, isFavorite && styles.favoriteRow]}
         onTouchStart={drag}
       >
-        <Text style={styles.position}>{index + 1}</Text>
-        <Image source={{ uri: item.logo }} style={styles.logo} />
-        <Text style={styles.team}>{item.team}</Text>
+        <Text style={[styles.position, isFavorite && styles.favoriteText]}>
+          {index + 1}
+        </Text>
+        <Image source={{ uri: item.logo }} style={[styles.logo]} />
+        <Text style={[styles.team, isFavorite && styles.favoriteText]}>
+          {item.team}
+        </Text>
+        {isFavorite && <Text style={styles.favoriteIcon}>⭐</Text>}
       </View>
     </DoubleTapView>
   );
@@ -81,45 +86,72 @@ export const DragAndDrop: React.FC<DragAndDropProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    padding: 16,
-    borderRadius: 8,
+    backgroundColor: "#ffffff",
+    borderRadius: 12,
     overflow: "hidden",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
   header: {
     flexDirection: "row",
-    backgroundColor: "#eee",
-    paddingVertical: 12,
-    paddingHorizontal: 16,
+    backgroundColor: "#f8f9fa",
+    paddingVertical: 16,
+    paddingHorizontal: 20,
     borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
+    borderBottomColor: "#e9ecef",
   },
   headerText: {
     fontWeight: "bold",
     fontSize: 16,
+    color: "#495057",
   },
   row: {
     flexDirection: "row",
     alignItems: "center",
-    paddingVertical: 14,
-    paddingHorizontal: 16,
+    paddingVertical: 16,
+    paddingHorizontal: 20,
     backgroundColor: "#fff",
     borderBottomWidth: 1,
-    borderBottomColor: "#ddd",
+    borderBottomColor: "#f1f3f4",
+    minHeight: 60,
   },
   position: {
-    width: 30,
+    width: 35,
     textAlign: "center",
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#6c757d",
   },
   team: {
     flex: 1,
     fontSize: 16,
-    paddingLeft: 12,
+    fontWeight: "500",
+    paddingLeft: 16,
+    color: "#212529",
   },
   logo: {
-    width: 24,
-    height: 24,
-    borderRadius: 16,
-    marginRight: 12,
-    marginLeft: 12,
+    width: 28,
+    height: 28,
+    marginLeft: 8,
+  },
+  favoriteRow: {
+    backgroundColor: "#fff3cd",
+    borderLeftWidth: 4,
+    borderLeftColor: "#ffc107",
+    paddingLeft: 16, // Compensate for the border width
+  },
+  favoriteText: {
+    color: "#856404",
+    fontWeight: "bold",
+  },
+  favoriteIcon: {
+    fontSize: 20,
+    marginLeft: 8,
   },
 });
