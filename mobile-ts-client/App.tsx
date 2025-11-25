@@ -31,7 +31,10 @@ import { SingleTable } from "./components/all/SingleTable";
 import { fetchLogos } from "./redux/reducers/logos";
 import { Friends } from "./components/profile/friends/Friends";
 import { PrivacyPolicy } from "./components/profile/PrivacyPolicy";
-import { Text, View } from "react-native";
+import { Platform, Text, View } from "react-native";
+import * as Notifications from "expo-notifications";
+import * as Device from "expo-device";
+import { registerNotifs } from "./actions/pushnotifs";
 
 enableScreens();
 
@@ -166,6 +169,46 @@ const AppNavigator = () => {
 
     restoreAuth();
   }, []);
+
+
+async function registerForPushNotificationsAsync() {
+  let token;
+
+  if (Device.isDevice) {
+    const { status: existingStatus } =
+      await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+
+    if (existingStatus !== "granted") {
+      const { status } = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
+    }
+
+    if (finalStatus !== "granted") {
+      alert("Failed to get push token for push notification!");
+      return;
+    }
+
+    token = (await Notifications.getExpoPushTokenAsync()).data;
+  } else {
+    alert("Must use physical device for Push Notifications");
+  }
+
+  if (Platform.OS === "android") {
+    Notifications.setNotificationChannelAsync("default", {
+      name: "default",
+      importance: Notifications.AndroidImportance.MAX,
+    });
+  }
+
+  return token;
+}
+useEffect(() => {
+  registerForPushNotificationsAsync().then((token) => {
+    // Send token to your backend to store in MongoDB
+    registerNotifs(token ?? "");
+  });
+}, []);
 
   const env = process.env.EXPO_PUBLIC_API_URL;
   if (loading || logosLoading)

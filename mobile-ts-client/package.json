@@ -24,6 +24,8 @@
     "env-cmd": "^10.1.0",
     "expo": "~52.0.46",
     "expo-dev-client": "~5.0.20",
+    "expo-device": "^7.0.3",
+    "expo-notifications": "^0.29.14",
     "expo-status-bar": "~2.0.1",
     "expo-updates": "~0.27.4",
     "react": "18.3.1",
