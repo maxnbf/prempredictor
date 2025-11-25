@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 export interface UserDocument extends Document {
   username: string;
   password: string;
+  expoPushToken?: string;
 }
 
 const userSchema: Schema<UserDocument> = new mongoose.Schema(
@@ -15,6 +16,10 @@ const userSchema: Schema<UserDocument> = new mongoose.Schema(
     password: {
       type: String,
       required: true,
+    },
+    expoPushToken: {
+      type: String,
+      required: false,
     }
   },
   { autoCreate: true }
