@@ -13,6 +13,16 @@ export default ({ config }) => {
       resizeMode: "contain",
       backgroundColor: "#ffffff",
     },
+    plugins: [
+      [
+        "expo-notifications",
+        {
+          // Optional config:
+          // icon: "./assets/notification-icon.png",
+          enableBackgroundRemoteNotifications: true  // if you need background remote notifications
+        }
+      ]
+    ],
     ios: {
       bundleIdentifier: "com.maxnbf.mobiletsclient",
       infoPlist: {
