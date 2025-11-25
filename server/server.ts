@@ -12,6 +12,7 @@ import { updatePointsService } from "./services/rankingService";
 import { assignFavoriteTeamRankService, assignFriendRankService, assignOverallRankService, assignTopLevelStatsService } from "./services/rankSnapshotService";
 import { privacyHtml } from "./privacyPolicy";
 import { support } from "./support";
+import { sendPushNotificationsToAllUsers } from "./services/pushNotificationService";
 
 const app = express();
 
@@ -170,6 +171,11 @@ async function runScheduledTask() {
     try {
         const { table, srcUrls } = await scrapeStandings();
         const { gameWeek, isWeekComplete, isGamesToday } = await scrapeFixtures();
+        
+        // Read existing LiveTable document before updating
+        const existingLiveTable = await LiveTable.findOne({ currentRound: gameWeek });
+        const previousIsWeekComplete = existingLiveTable?.isWeekComplete ?? false;
+        
         await LiveTable.findOneAndUpdate(
             { currentRound: gameWeek },
             {
@@ -181,6 +187,12 @@ async function runScheduledTask() {
             },
             { new: true, upsert: true }
         );
+        
+        // If week just completed (changed from false to true), trigger push notifications
+        if (!previousIsWeekComplete && isWeekComplete) {
+            console.log(`Game week ${gameWeek} just completed, triggering push notifications`);
+            await sendPushNotificationsToAllUsers(gameWeek);
+        }
 
         const teamLogosMap = new Map<string, string>();
         table.forEach((teamName, index) => {
@@ -233,4 +245,17 @@ async function runScheduledTask() {
     setTimeout(runScheduledTask, currentInterval);
 }
 
+// async function runPushNotificationJob() {
+//     try {
+//         await sendPushNotificationsToAllUsers();
+//     } catch (error: unknown) {
+//         if (error instanceof Error) {
+//             console.error(`Push notification job error: ${error.message}`);
+//         }
+//     }
+    
+//     setTimeout(runPushNotificationJob, 2 * ONE_MINUTE_IN_MILLIS);
+// }
+
 runScheduledTask();
+// runPushNotificationJob();
