@@ -3,7 +3,7 @@ export default ({ config }) => {
     ...config,
     name: "League Lock",
     slug: "mobile-ts-client",
-    version: "1.0.2",
+    version: "1.1.0",
     orientation: "portrait",
     icon: "./assets/leaguelock.png",
     userInterfaceStyle: "light",
