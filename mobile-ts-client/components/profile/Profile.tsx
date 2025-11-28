@@ -78,7 +78,7 @@ export const ProfileView = () => {
   };
 
   if (profile === undefined) {
-    return <Loading />;
+    return <></>
   }
 
   return (
@@ -92,7 +92,7 @@ export const ProfileView = () => {
           onDismiss={closeMenu}
           anchor={
             <TouchableOpacity onPress={openMenu}>
-              <Ionicons name="settings-outline" size={24} color="#333" />
+              <Ionicons name="settings-outline" size={22} color="#1e293b" />
             </TouchableOpacity>
           }
         >
@@ -118,7 +118,7 @@ export const ProfileView = () => {
               <Text style={styles.fullName}>{profile.fullName}</Text>
               <Text style={styles.username}>@{profile.username}</Text>
               <View style={styles.scoreContainer}>
-                <Ionicons name="trophy-outline" size={16} color="#FFD700" />
+                <Ionicons name="trophy-outline" size={14} color="#FFD700" />
                 <Text style={styles.scoreText}>{profile.total} points</Text>
               </View>
             </View>
@@ -129,7 +129,7 @@ export const ProfileView = () => {
               <Text style={styles.friendsCount}>{profile.friendCount}</Text>
               <View style={styles.friendsLabelContainer}>
                 <Text style={styles.friendsLabel}>Friends</Text>
-                <Ionicons name="chevron-forward" size={16} color="#666" />
+                <Ionicons name="chevron-forward" size={14} color="#64748b" />
               </View>
             </TouchableOpacity>
           </View>
@@ -146,7 +146,7 @@ export const ProfileView = () => {
             <Text style={styles.statLabel}>Favorite Team</Text>
           </View>
           <View style={styles.statCard}>
-            <Ionicons name="calendar-outline" size={24} color="#2196F3" />
+            <Ionicons name="calendar-outline" size={20} color="#2196F3" />
             <Text style={styles.statValue}>
               {profile.joined.toString().substring(0, 10)}
             </Text>
@@ -166,7 +166,7 @@ export const ProfileView = () => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#f8f9fa",
+    backgroundColor: "#f8fafc",
   },
   scrollContainer: {
     padding: 16,
@@ -174,19 +174,19 @@ const styles = StyleSheet.create({
   },
   topBanner: {
     paddingHorizontal: 16,
-    paddingBottom: 12,
+    paddingBottom: 10,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     borderBottomWidth: 1,
-    borderColor: "#eee",
+    borderColor: "#e2e8f0",
   },
   topBannerTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
+    fontSize: 18,
+    fontWeight: "700",
     textAlign: "center",
     flex: 1,
-    color: "#333",
+    color: "#1e293b",
   },
   iconPlaceholder: {
     width: 24,
@@ -194,17 +194,17 @@ const styles = StyleSheet.create({
   // Enhanced Profile Card Styles
   profileCard: {
     backgroundColor: "#fff",
-    borderRadius: 16,
-    padding: 20,
-    marginBottom: 16,
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 12,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 1,
     },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 4,
+    shadowOpacity: 0.08,
+    shadowRadius: 6,
+    elevation: 3,
   },
   profileHeader: {
     flexDirection: "row",
@@ -214,124 +214,124 @@ const styles = StyleSheet.create({
     position: "relative",
   },
   avatar: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
+    width: 64,
+    height: 64,
+    borderRadius: 32,
     backgroundColor: "#6366f1",
   },
   avatarLabel: {
-    fontSize: 28,
-    fontWeight: "bold",
+    fontSize: 24,
+    fontWeight: "700",
     color: "#fff",
   },
   onlineIndicator: {
     position: "absolute",
-    bottom: 4,
-    right: 4,
-    width: 16,
-    height: 16,
-    borderRadius: 8,
+    bottom: 2,
+    right: 2,
+    width: 14,
+    height: 14,
+    borderRadius: 7,
     backgroundColor: "#10b981",
     borderWidth: 2,
     borderColor: "#fff",
   },
   userInfo: {
     flex: 1,
-    marginLeft: 16,
+    marginLeft: 12,
   },
   fullName: {
-    fontSize: 22,
+    fontSize: 18,
     fontWeight: "700",
-    color: "#1f2937",
-    marginBottom: 4,
+    color: "#1e293b",
+    marginBottom: 3,
   },
   username: {
-    fontSize: 16,
-    color: "#6b7280",
-    marginBottom: 8,
+    fontSize: 14,
+    color: "#64748b",
+    marginBottom: 6,
   },
   scoreContainer: {
     flexDirection: "row",
     alignItems: "center",
   },
   scoreText: {
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: "600",
     color: "#f59e0b",
     marginLeft: 4,
   },
   friendsButton: {
     alignItems: "center",
-    backgroundColor: "#f3f4f6",
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderRadius: 12,
-    minWidth: 80,
+    backgroundColor: "#f1f5f9",
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    borderRadius: 10,
+    minWidth: 70,
   },
   friendsCount: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "#1f2937",
+    fontSize: 18,
+    fontWeight: "700",
+    color: "#1e293b",
   },
   friendsLabel: {
-    fontSize: 12,
-    color: "#6b7280",
+    fontSize: 11,
+    color: "#64748b",
     marginTop: 2,
   },
   // Stats Grid Styles
   statsGrid: {
     flexDirection: "row",
-    gap: 12,
-    marginBottom: 16,
+    gap: 10,
+    marginBottom: 12,
   },
   statCard: {
     flex: 1,
     backgroundColor: "#fff",
-    borderRadius: 16,
-    padding: 20,
+    borderRadius: 12,
+    padding: 14,
     alignItems: "center",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 1,
     },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 4,
+    shadowOpacity: 0.08,
+    shadowRadius: 6,
+    elevation: 3,
   },
   statValue: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "700",
-    color: "#1f2937",
-    marginTop: 8,
-    marginBottom: 4,
+    color: "#1e293b",
+    marginTop: 6,
+    marginBottom: 3,
     textAlign: "center",
   },
   statLabel: {
-    fontSize: 12,
-    color: "#6b7280",
+    fontSize: 11,
+    color: "#64748b",
     textAlign: "center",
   },
   // Notifications Card Styles
   notificationsCard: {
     backgroundColor: "#fff",
-    borderRadius: 16,
-    padding: 20,
+    borderRadius: 12,
+    padding: 16,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 1,
     },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 4,
+    shadowOpacity: 0.08,
+    shadowRadius: 6,
+    elevation: 3,
   },
   friendsLabelContainer: {
     flexDirection: "row",
     alignItems: "center",
   },
   logo: {
-    width: 24,
-    height: 24,
+    width: 22,
+    height: 22,
   },
 });

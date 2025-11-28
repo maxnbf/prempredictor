@@ -49,7 +49,7 @@ export const Notifications = () => {
   }, []);
 
   if (isLoading || !notifsData) {
-    return <Loading />;
+    return <></>;
   }
 
   const { notifs, newNotifs } = notifsData;
@@ -59,7 +59,7 @@ export const Notifications = () => {
       {/* Header with notification count */}
       <View style={styles.headerContainer}>
         <View style={styles.titleRow}>
-          <Ionicons name="notifications-outline" size={24} color="#6366f1" />
+          <Ionicons name="notifications-outline" size={20} color="#6366f1" />
           <Text style={styles.sectionTitle}>Notifications</Text>
           {newNotifs > 0 && (
             <View style={styles.badge}>
@@ -72,12 +72,12 @@ export const Notifications = () => {
       {/* Friend Requests Section */}
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
-          <Ionicons name="people-outline" size={20} color="#E91E63" />
+          <Ionicons name="people-outline" size={18} color="#E91E63" />
           <Text style={styles.subTitle}>Friend Requests</Text>
         </View>
         {!friendRequests || friendRequests.length === 0 ? (
           <View style={styles.emptyContainer}>
-            <Ionicons name="person-add-outline" size={32} color="#9ca3af" />
+            <Ionicons name="person-add-outline" size={28} color="#9ca3af" />
             <Text style={styles.emptyText}>No friend requests</Text>
           </View>
         ) : (
@@ -102,7 +102,7 @@ export const Notifications = () => {
                 </Text>
                 <Ionicons
                   name={showAllFriends ? "chevron-up" : "chevron-down"}
-                  size={16}
+                  size={14}
                   color="#6366f1"
                 />
               </TouchableOpacity>
@@ -117,18 +117,18 @@ export const Notifications = () => {
       {/* Other Notifications Section */}
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
-          <Ionicons
-            name="information-circle-outline"
-            size={20}
-            color="#2196F3"
-          />
+            <Ionicons
+              name="information-circle-outline"
+              size={18}
+              color="#2196F3"
+            />
           <Text style={styles.subTitle}>Other Notifications</Text>
         </View>
         {notifs.length === 0 ? (
           <View style={styles.emptyContainer}>
             <Ionicons
               name="checkmark-circle-outline"
-              size={32}
+              size={28}
               color="#9ca3af"
             />
             <Text style={styles.emptyText}>All caught up!</Text>
@@ -171,79 +171,79 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   headerContainer: {
-    marginBottom: 20,
+    marginBottom: 16,
   },
   titleRow: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 4,
+    marginBottom: 3,
   },
   sectionTitle: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "700",
-    color: "#1f2937",
+    color: "#1e293b",
     marginLeft: 8,
     flex: 1,
   },
   badge: {
     backgroundColor: "#ef4444",
-    borderRadius: 12,
-    paddingHorizontal: 8,
+    borderRadius: 10,
+    paddingHorizontal: 6,
     paddingVertical: 2,
-    minWidth: 24,
+    minWidth: 20,
     alignItems: "center",
   },
   badgeText: {
     color: "#fff",
-    fontSize: 12,
+    fontSize: 11,
     fontWeight: "600",
   },
   section: {
-    marginBottom: 16,
+    marginBottom: 12,
   },
   sectionHeader: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 12,
+    marginBottom: 10,
   },
   subTitle: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "600",
-    color: "#374151",
+    color: "#1e293b",
     marginLeft: 8,
   },
   emptyContainer: {
     alignItems: "center",
-    paddingVertical: 24,
+    paddingVertical: 20,
   },
   emptyText: {
-    color: "#9ca3af",
-    fontSize: 14,
-    marginTop: 8,
+    color: "#64748b",
+    fontSize: 13,
+    marginTop: 6,
     textAlign: "center",
   },
   contentContainer: {
-    gap: 8,
+    gap: 6,
   },
   expandButton: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    backgroundColor: "#f3f4f6",
+    paddingVertical: 10,
+    paddingHorizontal: 14,
+    backgroundColor: "#f1f5f9",
     borderRadius: 8,
-    marginTop: 8,
+    marginTop: 6,
   },
   expandButtonText: {
     color: "#6366f1",
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: "600",
     marginRight: 4,
   },
   divider: {
     height: 1,
-    backgroundColor: "#e5e7eb",
-    marginVertical: 16,
+    backgroundColor: "#e2e8f0",
+    marginVertical: 12,
   },
 });

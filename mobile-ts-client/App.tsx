@@ -32,6 +32,7 @@ import { fetchLogos } from "./redux/reducers/logos";
 import { Friends } from "./components/profile/friends/Friends";
 import { PrivacyPolicy } from "./components/profile/PrivacyPolicy";
 import { Platform, Text, View } from "react-native";
+import { Loading } from "./components/common/Loading";
 
 enableScreens();
 
@@ -168,13 +169,9 @@ const AppNavigator = () => {
   }, []);
 
   const env = process.env.EXPO_PUBLIC_API_URL;
-  if (loading || logosLoading)
-    return (
-      <View>
-        <Text>{env ?? "undefined"}</Text>
-      </View>
-    ); // Show a splash/loading screen here if needed
-
+  if (loading || logosLoading) {
+    return
+  }
   // OHHHH... ALL OF THE "Do you have Screen ___" literally refers to the screens not existing here. Think of a better way to do this
   return (
     <NavigationContainer ref={navigationRef}>

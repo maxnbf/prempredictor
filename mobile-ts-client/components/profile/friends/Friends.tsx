@@ -33,7 +33,7 @@ export const Friends = () => {
   }, []);
 
   if (isLoading) {
-    return <Loading />;
+    return <></>;
   }
 
   return (
@@ -41,7 +41,7 @@ export const Friends = () => {
       {/* Content */}
       {!friends || friends.length === 0 ? (
         <View style={styles.emptyContainer}>
-          <Ionicons name="person-add-outline" size={48} color="#9ca3af" />
+          <Ionicons name="person-add-outline" size={36} color="#9ca3af" />
           <Text style={styles.emptyTitle}>No friends yet</Text>
           <Text style={styles.emptySubtitle}>
             Start connecting with other players to see them here
@@ -62,91 +62,91 @@ export const Friends = () => {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 16,
-    backgroundColor: "#f8f9fa",
+    padding: 12,
+    backgroundColor: "#f8fafc",
     minHeight: "100%",
   },
   titleRow: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 4,
+    marginBottom: 3,
   },
   title: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: "700",
-    color: "#1f2937",
-    marginLeft: 12,
+    color: "#1e293b",
+    marginLeft: 10,
     flex: 1,
   },
   countBadge: {
     backgroundColor: "#6366f1",
-    borderRadius: 16,
-    paddingHorizontal: 12,
-    paddingVertical: 4,
-    minWidth: 32,
+    borderRadius: 12,
+    paddingHorizontal: 10,
+    paddingVertical: 3,
+    minWidth: 28,
     alignItems: "center",
   },
   countText: {
     color: "#fff",
-    fontSize: 14,
+    fontSize: 12,
     fontWeight: "600",
   },
   emptyContainer: {
     alignItems: "center",
-    paddingVertical: 48,
-    paddingHorizontal: 24,
+    paddingVertical: 32,
+    paddingHorizontal: 16,
   },
   emptyTitle: {
-    fontSize: 20,
+    fontSize: 16,
     fontWeight: "600",
-    color: "#374151",
-    marginTop: 16,
-    marginBottom: 8,
+    color: "#1e293b",
+    marginTop: 10,
+    marginBottom: 5,
   },
   emptySubtitle: {
-    fontSize: 16,
-    color: "#6b7280",
+    fontSize: 13,
+    color: "#64748b",
     textAlign: "center",
-    lineHeight: 24,
+    lineHeight: 18,
   },
   friendsList: {
-    gap: 12,
+    gap: 8,
   },
   friendCard: {
     backgroundColor: "#fff",
-    borderRadius: 12,
-    padding: 16,
+    borderRadius: 10,
+    padding: 10,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 1,
     },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+    shadowOpacity: 0.08,
+    shadowRadius: 6,
     elevation: 2,
   },
   expandButton: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    paddingVertical: 16,
-    paddingHorizontal: 20,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
     backgroundColor: "#fff",
-    borderRadius: 12,
-    marginTop: 8,
+    borderRadius: 10,
+    marginTop: 6,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 1,
     },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+    shadowOpacity: 0.08,
+    shadowRadius: 6,
     elevation: 2,
   },
   expandButtonText: {
     color: "#6366f1",
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "600",
-    marginRight: 8,
+    marginRight: 6,
   },
 });

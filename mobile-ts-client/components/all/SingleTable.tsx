@@ -59,7 +59,7 @@ export const SingleTable: React.FC = () => {
   }, [type]);
 
   if (loading || !ranking) {
-    return <Loading />;
+      return <></>;
   }
 
   return (
@@ -198,71 +198,71 @@ const styles = StyleSheet.create({
   tableHeader: {
     backgroundColor: "#fff",
     flexDirection: "row",
-    paddingHorizontal: 20,
-    paddingVertical: 16,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
     borderBottomWidth: 1,
-    borderBottomColor: "#e0e0e0",
+    borderBottomColor: "#e2e8f0",
   },
   headerText: {
-    fontSize: 14,
+    fontSize: 11,
     fontWeight: "600",
-    color: "#666",
+    color: "#64748b",
     textTransform: "uppercase",
     letterSpacing: 0.5,
   },
   scrollView: {
     flex: 1,
-    marginHorizontal: -12,
   },
   scrollContainer: {
-    paddingHorizontal: 20,
+    paddingHorizontal: 16,
   },
   tableRow: {
     backgroundColor: "#fff",
     flexDirection: "row",
     alignItems: "center",
-    paddingVertical: 16,
-    paddingHorizontal: 16,
-    marginVertical: 4,
-    borderRadius: 12,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    marginVertical: 3,
+    borderRadius: 10,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
+    shadowOpacity: 0.04,
     shadowRadius: 2,
+    elevation: 1,
   },
   topThreeRow: {
     backgroundColor: "#fff",
-    borderLeftWidth: 4,
+    borderLeftWidth: 3,
     borderLeftColor: "#6366f1",
-    paddingLeft: 12,
+    paddingLeft: 9,
     shadowColor: "#6366f1",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.08,
+    shadowRadius: 3,
   },
   currentUserRow: {
     backgroundColor: "#e3f2fd",
-    borderWidth: 2,
+    borderWidth: 1.5,
     borderColor: "#6366f1",
   },
   positionHeader: {
-    width: 60,
+    width: 50,
     alignItems: "center",
   },
   positionContainer: {
-    width: 60,
+    width: 50,
     alignItems: "center",
     justifyContent: "center",
   },
   positionText: {
-    fontSize: 18,
+    fontSize: 14,
     fontWeight: "600",
-    color: "#666",
+    color: "#64748b",
   },
   medal: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
+    width: 26,
+    height: 26,
+    borderRadius: 13,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -276,7 +276,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#cd7f32",
   },
   medalText: {
-    fontSize: 14,
+    fontSize: 12,
     fontWeight: "700",
     color: "#fff",
   },
@@ -287,49 +287,49 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     alignItems: "center",
-    marginHorizontal: 12,
+    marginHorizontal: 10,
   },
   logoContainer: {
     alignItems: "center",
     justifyContent: "center",
-    marginRight: 12,
+    marginRight: 10,
   },
   logo: {
-    width: 32,
-    height: 32,
+    width: 26,
+    height: 26,
   },
   userInfo: {
     flex: 1,
   },
   username: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "600",
-    color: "#1a1a1a",
+    color: "#1e293b",
   },
   pointsHeader: {
-    width: 80,
+    width: 70,
     alignItems: "flex-end",
   },
   pointsContainer: {
     alignItems: "flex-end",
-    minWidth: 80,
+    minWidth: 70,
   },
   pointsText: {
-    fontSize: 18,
+    fontSize: 15,
     fontWeight: "700",
     color: "#6366f1",
   },
   topThreePoints: {
-    fontSize: 20,
+    fontSize: 16,
     color: "#6366f1",
   },
   pointsLabel: {
-    fontSize: 12,
-    color: "#666",
+    fontSize: 10,
+    color: "#64748b",
     fontWeight: "500",
-    marginTop: 2,
+    marginTop: 1,
   },
   bottomSpacing: {
-    height: 20,
+    height: 16,
   },
 });

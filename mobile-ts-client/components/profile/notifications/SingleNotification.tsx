@@ -21,7 +21,7 @@ export const SingleNotification = ({ notif }: NotificationProps) => {
       <TouchableOpacity onPress={goToProfile} style={styles.left}>
         <Avatar.Text
           label={notif.from[0].toUpperCase()}
-          size={40}
+          size={36}
           style={styles.avatar}
         />
         <View>
@@ -41,8 +41,8 @@ export const SingleNotification = ({ notif }: NotificationProps) => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    paddingVertical: 10,
-    paddingHorizontal: 16,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
     justifyContent: "space-between",
     alignItems: "center",
   },
@@ -52,12 +52,15 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   avatar: {
-    marginRight: 12,
+    marginRight: 10,
   },
   timestamp: {
-    color: "#666",
+    color: "#64748b",
+    fontSize: 11,
   },
   meta: {
-    marginLeft: 10,
+    marginLeft: 8,
+    fontSize: 12,
+    color: "#1e293b",
   },
 });

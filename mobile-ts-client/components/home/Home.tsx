@@ -90,7 +90,7 @@ export const Home = () => {
       }
 
       if (finalStatus !== "granted") {
-        alert("Failed to get push token for push notification!");
+        //alert("Failed to get push token for push notification!");
         return;
       }
 
@@ -111,7 +111,9 @@ export const Home = () => {
   useEffect(() => {
     registerForPushNotificationsAsync().then((token) => {
       // Send token to your backend to store in MongoDB
-      registerNotifs(token ?? "");
+      if (token) {
+        registerNotifs(token);
+      }
     });
   }, []);
 
@@ -132,7 +134,7 @@ export const Home = () => {
         <View style={{ width: 24 }} />
       </View>
       {isLoading ? (
-        <Loading />
+        <></>
       ) : (
         <TableView
           setLive={setLive}
@@ -149,23 +151,24 @@ export const Home = () => {
 
 const styles = StyleSheet.create({
   safeArea: {
-    backgroundColor: "#f8f9fa",
+    backgroundColor: "#f8fafc",
   },
   topBanner: {
     paddingHorizontal: 16,
-    paddingBottom: 12,
+    paddingBottom: 10,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     borderBottomWidth: 1,
-    borderColor: "#eee",
+    borderColor: "#e2e8f0",
   },
 
   topBannerTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
+    fontSize: 18,
+    fontWeight: "700",
     textAlign: "center",
     flex: 1,
+    color: "#1e293b",
   },
   iconPlaceholder: {
     width: 24, // matches icon size

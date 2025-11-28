@@ -43,7 +43,7 @@ export const SingleFriendRequest = ({
       <TouchableOpacity onPress={goToProfile} style={styles.left}>
         <Avatar.Text
           label={friendRequest.from[0].toUpperCase()}
-          size={40}
+          size={36}
           style={{ marginRight: 10 }}
         />
         <View>
@@ -84,8 +84,8 @@ export const SingleFriendRequest = ({
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    paddingVertical: 10,
-    paddingHorizontal: 16,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
     justifyContent: "space-between",
     alignItems: "center",
   },
@@ -97,12 +97,13 @@ const styles = StyleSheet.create({
   right: {
     flexDirection: "row",
     alignItems: "center",
-    marginLeft: 10,
+    marginLeft: 8,
   },
   button: {
-    marginLeft: 5,
+    marginLeft: 4,
   },
   timestamp: {
-    color: "#666",
+    color: "#64748b",
+    fontSize: 11,
   },
 });
