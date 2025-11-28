@@ -35,7 +35,7 @@ export const SingleFriend: React.FC<SingleFriendProps> = ({ friend }) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.avatarContainer} onPress={goToProfile}>
-        <Avatar.Text label={friend.user.username[0].toUpperCase()} size={50} />
+        <Avatar.Text label={friend.user.username[0].toUpperCase()} size={40} />
       </TouchableOpacity>
       <View style={styles.infoContainer}>
         <Text variant="bodyLarge" style={styles.fullName}>
@@ -47,15 +47,15 @@ export const SingleFriend: React.FC<SingleFriendProps> = ({ friend }) => {
       </View>
       <View>
         {isFriend ? (
-          <Button mode="outlined" onPress={removeFriend}>
+          <Button mode="outlined" compact onPress={removeFriend} style={styles.button} contentStyle={styles.buttonContent} labelStyle={styles.buttonLabel}>
             Remove Friend
           </Button>
         ) : isRequest ? (
-          <Button mode="outlined" disabled>
+          <Button mode="outlined" compact disabled style={styles.button} contentStyle={styles.buttonContent} labelStyle={styles.buttonLabel}>
             Requested
           </Button>
         ) : (
-          <Button mode="outlined" onPress={addFriend}>
+          <Button mode="outlined" compact onPress={addFriend} style={styles.button} contentStyle={styles.buttonContent} labelStyle={styles.buttonLabel}>
             Add Friend
           </Button>
         )}
@@ -69,20 +69,35 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingVertical: 12,
+    paddingVertical: 6,
   },
   avatarContainer: {
-    marginRight: 12,
+    marginRight: 8,
   },
   infoContainer: {
     flex: 1,
   },
   fullName: {
-    fontSize: 18,
+    fontSize: 15,
     fontWeight: "600",
+    color: "#1e293b",
   },
   username: {
-    fontSize: 14,
-    color: "gray",
+    fontSize: 12,
+    color: "#64748b",
+  },
+  button: {
+    minWidth: 0,
+    height: 32,
+    margin: 0,
+  },
+  buttonContent: {
+    paddingHorizontal: 8,
+    paddingVertical: 0,
+    height: 32,
+  },
+  buttonLabel: {
+    fontSize: 12,
+    marginVertical: 0,
   },
 });

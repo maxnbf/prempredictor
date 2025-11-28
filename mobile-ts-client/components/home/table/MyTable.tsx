@@ -33,10 +33,10 @@ const calculateOffsets = (live: string[], user: string[]): MyScore => {
 
 const getOffsetStyle = (offset: number) => {
   const baseStyle = {
-    borderRadius: 12,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    minWidth: 24,
+    borderRadius: 10,
+    paddingHorizontal: 6,
+    paddingVertical: 3,
+    minWidth: 22,
     textAlign: "center" as const,
   };
 
@@ -80,7 +80,7 @@ export const MyTable: React.FC<RankingTableProps> = ({
   }, [liveTable, myTable, otherTable]);
 
   if (!liveTable || !myTable) {
-    return <Loading />;
+    return;
   }
 
   return (
@@ -135,7 +135,7 @@ export const MyTable: React.FC<RankingTableProps> = ({
         {/* Table Header */}
         <View style={[styles.row, styles.tableHeader]}>
           <Text style={styles.pos}>#</Text>
-          <Text style={[styles.headerText, { flex: 2 }]}>Live</Text>
+          <Text style={[styles.headerText,   { flex: otherTable ? 1 : 2 },]}>Live</Text>
           {otherTable && (
             <Text
               numberOfLines={1}
@@ -168,16 +168,16 @@ export const MyTable: React.FC<RankingTableProps> = ({
               <View
                 style={[
                   styles.teamRow,
-                  { flex: 2 },
-                  otherTable && { flexDirection: undefined },
+                  { flex: otherTable ? 1 : 2 },
+                  otherTable && styles.teamRowCentered,
                 ]}
               >
                 <Image
                   source={{ uri: logos[liveTable.ranking[index]] }}
-                  style={styles.logo}
+                  style={[styles.logo, otherTable && styles.logoCentered]}
                 />
                 {!otherTable && (
-                  <Text>{getTeamAbbreviation(liveTable.ranking[index])}</Text>
+                  <Text style={styles.teamAbbreviation}>{getTeamAbbreviation(liveTable.ranking[index])}</Text>
                 )}
               </View>
 
@@ -186,15 +186,15 @@ export const MyTable: React.FC<RankingTableProps> = ({
                   <View
                     style={[
                       styles.teamRow,
+                      styles.teamRowCentered,
                       { flex: 2 },
-                      otherTable && { flexDirection: undefined },
                     ]}
                   >
                     <Image
                       source={{
                         uri: logos[otherTable.ranking[index]],
                       }}
-                      style={styles.logo}
+                      style={[styles.logo, styles.logoCentered]}
                     />
                   </View>
                   <Text
@@ -213,17 +213,17 @@ export const MyTable: React.FC<RankingTableProps> = ({
                 style={[
                   styles.teamRow,
                   { flex: 2 },
-                  otherTable && { flexDirection: undefined },
+                  otherTable && styles.teamRowCentered,
                 ]}
               >
                 <Image
                   source={{
                     uri: logos[myTable.ranking[index]],
                   }}
-                  style={styles.logo}
+                  style={[styles.logo, otherTable && styles.logoCentered]}
                 />
                 {!otherTable && (
-                  <Text>{getTeamAbbreviation(myTable.ranking[index])}</Text>
+                  <Text style={styles.teamAbbreviation}>{getTeamAbbreviation(myTable.ranking[index])}</Text>
                 )}
               </View>
               <Text
@@ -266,29 +266,29 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   headerSection: {
-    padding: 20,
+    padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: "#e0e0e0",
+    borderBottomColor: "#e2e8f0",
   },
   headerContent: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "flex-start",
-    marginBottom: 16,
+    marginBottom: 12,
   },
   titleContainer: {
     flex: 1,
-    marginRight: 12,
+    marginRight: 10,
   },
   title: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "600",
-    color: "#333",
-    marginBottom: 4,
+    color: "#1e293b",
+    marginBottom: 3,
   },
   subtitle: {
-    fontSize: 14,
-    color: "#666",
+    fontSize: 12,
+    color: "#64748b",
     zIndex: -1,
   },
   friendButtonContainer: {
@@ -297,34 +297,36 @@ const styles = StyleSheet.create({
   statsContainer: {
     flexDirection: "row",
     justifyContent: "space-around",
-    paddingTop: 16,
+    paddingTop: 12,
   },
   statItem: {
     alignItems: "center",
   },
   statLabel: {
-    fontSize: 12,
-    color: "#666",
-    marginBottom: 4,
+    fontSize: 11,
+    color: "#64748b",
+    marginBottom: 3,
   },
   statValue: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "600",
-    color: "#333",
+    color: "#1e293b",
   },
   table: {
     borderTopWidth: 1,
-    borderTopColor: "#f0f0f0",
+    borderTopColor: "#f1f5f9",
   },
   tableHeader: {
-    backgroundColor: "#f8f9fa",
-    paddingVertical: 12,
-    paddingHorizontal: 16,
+    backgroundColor: "#f8fafc",
+    paddingVertical: 10,
+    paddingHorizontal: 14,
   },
   headerText: {
     fontWeight: "600",
-    fontSize: 14,
-    color: "#333",
+    fontSize: 11,
+    color: "#64748b",
+    textTransform: "uppercase",
+    letterSpacing: 0.5,
   },
   usernameHeader: {
     textAlign: "left",
@@ -332,39 +334,51 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: "row",
     alignItems: "center",
-    paddingVertical: 12,
-    paddingHorizontal: 16,
+    paddingVertical: 10,
+    paddingHorizontal: 14,
     borderBottomWidth: 1,
-    borderBottomColor: "#f0f0f0",
+    borderBottomColor: "#f1f5f9",
   },
   pos: {
-    fontSize: 16,
-    width: 40,
+    fontSize: 14,
+    width: 36,
     fontWeight: "500",
-    color: "#666",
+    color: "#64748b",
   },
   teamRow: {
     flexDirection: "row",
     alignItems: "center",
   },
+  teamRowCentered: {
+    justifyContent: "center",
+  },
   logo: {
-    width: 32,
-    height: 32,
-    marginRight: 8,
+    width: 26,
+    height: 26,
+    marginRight: 6,
     borderRadius: 4,
   },
+  logoCentered: {
+    marginRight: 0,
+  },
+  teamAbbreviation: {
+    fontSize: 13,
+    fontWeight: "500",
+    color: "#1e293b",
+    marginLeft: 6
+  },
   offset: {
-    fontSize: 16,
+    fontSize: 13,
     fontWeight: "600",
     textAlign: "center",
   },
   footerRow: {
     backgroundColor: "#1976d2",
-    paddingVertical: 12,
-    paddingHorizontal: 16,
+    paddingVertical: 10,
+    paddingHorizontal: 14,
   },
   footerText: {
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: "600",
     color: "#fff",
     textAlign: "center",
@@ -373,11 +387,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 8,
+    marginBottom: 6,
   },
   footer: {
     flexDirection: "row",
     justifyContent: "flex-end",
-    marginTop: 16,
+    marginTop: 12,
   },
 });

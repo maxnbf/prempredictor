@@ -48,7 +48,7 @@ export const Groups: React.FC = () => {
   }, []);
 
   if (!rankingSnapshot) {
-    return <Loading />;
+    return <></>;
   }
 
   return (
@@ -96,7 +96,7 @@ export const Groups: React.FC = () => {
                   </Text>
                   <View style={styles.statWithIcon}>
                     <Text style={styles.myPointsLabel}>My Points</Text>
-                    <Ionicons name="chevron-forward" size={16} color="#fff" />
+                    <Ionicons name="chevron-forward" size={14} color="#fff" />
                   </View>
                 </TouchableOpacity>
 
@@ -117,7 +117,7 @@ export const Groups: React.FC = () => {
                     <Text style={styles.statLabel}>Best</Text>
                     <Ionicons
                       name="chevron-forward"
-                      size={16}
+                      size={14}
                       color="#6366f1"
                     />
                   </View>
@@ -154,7 +154,7 @@ export const Groups: React.FC = () => {
                   <Text style={[styles.leagueText, { flex: 4 }]}>Overall</Text>
                   <Ionicons
                     name="chevron-forward"
-                    size={20}
+                    size={18}
                     color="#6366f1"
                     style={{ flex: 1, textAlign: "right" }}
                   />
@@ -175,7 +175,7 @@ export const Groups: React.FC = () => {
                   <Text style={[styles.leagueText, { flex: 4 }]}>Friends</Text>
                   <Ionicons
                     name="chevron-forward"
-                    size={20}
+                    size={18}
                     color="#6366f1"
                     style={{ flex: 1, textAlign: "right" }}
                   />
@@ -200,7 +200,7 @@ export const Groups: React.FC = () => {
                   </Text>
                   <Ionicons
                     name="chevron-forward"
-                    size={20}
+                    size={18}
                     color="#6366f1"
                     style={{ flex: 1, textAlign: "right" }}
                   />
@@ -223,51 +223,52 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   content: {
-    padding: 20,
+    padding: 16,
   },
   searchContainer: {
-    marginBottom: 20,
+    marginBottom: 16,
   },
   topBanner: {
     paddingHorizontal: 16,
-    paddingBottom: 12,
+    paddingBottom: 10,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     borderBottomWidth: 1,
-    borderColor: "#eee",
+    borderColor: "#e2e8f0",
   },
   topBannerTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
+    fontSize: 18,
+    fontWeight: "700",
     textAlign: "center",
     flex: 1,
+    color: "#1e293b",
   },
   banner: {
     backgroundColor: "#fff",
-    padding: 20,
-    borderRadius: 16,
-    marginBottom: 24,
+    padding: 16,
+    borderRadius: 12,
+    marginBottom: 20,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 1,
     },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 4,
+    shadowOpacity: 0.08,
+    shadowRadius: 6,
+    elevation: 3,
   },
   gameweekBadge: {
     backgroundColor: "#f1f5f9",
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 20,
-    marginBottom: 20,
+    paddingHorizontal: 14,
+    paddingVertical: 6,
+    borderRadius: 16,
+    marginBottom: 16,
     alignSelf: "center",
   },
   bannerText: {
     color: "#6366f1",
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "700",
     textAlign: "center",
   },
@@ -275,87 +276,87 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    gap: 16,
+    gap: 12,
   },
   statBox: {
     flex: 1,
     alignItems: "center",
-    padding: 12,
+    padding: 10,
   },
   statValue: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: "700",
     color: "#1e293b",
-    marginBottom: 4,
+    marginBottom: 3,
   },
   statLabel: {
-    fontSize: 13,
+    fontSize: 11,
     color: "#64748b",
     fontWeight: "500",
   },
   myPointsContainer: {
     flex: 1,
     alignItems: "center",
-    padding: 16,
-    borderRadius: 12,
+    padding: 12,
+    borderRadius: 10,
     backgroundColor: "#6366f1",
     shadowColor: "#6366f1",
     shadowOffset: {
       width: 0,
-      height: 4,
+      height: 3,
     },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 6,
+    shadowOpacity: 0.25,
+    shadowRadius: 6,
+    elevation: 5,
   },
   myPointsValue: {
-    fontSize: 28,
+    fontSize: 24,
     fontWeight: "800",
     color: "#fff",
-    marginBottom: 4,
+    marginBottom: 3,
   },
   myPointsLabel: {
-    fontSize: 14,
+    fontSize: 12,
     fontWeight: "600",
     color: "#fff",
   },
   statWithIcon: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 4,
+    gap: 3,
   },
   groupsSection: {
-    marginTop: 8,
+    marginTop: 4,
   },
   sectionTitle: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: "700",
     color: "#1e293b",
-    marginBottom: 16,
+    marginBottom: 12,
   },
   groupsCard: {
     backgroundColor: "#fff",
-    borderRadius: 16,
+    borderRadius: 12,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 1,
     },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 4,
+    shadowOpacity: 0.08,
+    shadowRadius: 6,
+    elevation: 3,
     overflow: "hidden",
   },
   tableHeader: {
     flexDirection: "row",
     backgroundColor: "#f8fafc",
-    paddingHorizontal: 20,
-    paddingVertical: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
     borderBottomWidth: 1,
     borderBottomColor: "#e2e8f0",
   },
   headerCell: {
-    fontSize: 14,
+    fontSize: 11,
     fontWeight: "600",
     color: "#64748b",
     textTransform: "uppercase",
@@ -364,8 +365,8 @@ const styles = StyleSheet.create({
   leagueRow: {
     flexDirection: "row",
     alignItems: "center",
-    paddingHorizontal: 20,
-    paddingVertical: 16,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
     borderBottomWidth: 1,
     borderBottomColor: "#f1f5f9",
     backgroundColor: "#fff",
@@ -378,21 +379,21 @@ const styles = StyleSheet.create({
   },
   rankBadge: {
     backgroundColor: "#f1f5f9",
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 12,
-    marginRight: 16,
-    minWidth: 40,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 10,
+    marginRight: 12,
+    minWidth: 36,
     alignItems: "center",
     flex: 1,
   },
   rankText: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "700",
     color: "#475569",
   },
   leagueText: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "500",
     color: "#1e293b",
   },
