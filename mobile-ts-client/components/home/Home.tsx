@@ -10,13 +10,15 @@ import {
   getLiveRankingForGameWeek,
   getRanking,
 } from "../../actions/rankings";
-import { StyleSheet, Text, View } from "react-native";
+import { Platform, StyleSheet, Text, View } from "react-native";
 import { LiveRanking, UserRanking } from "../../types/types";
 import { TableView } from "./table/TableView";
 import { HomeRouteProps, HomeScreenProps } from "../../types/routes";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Loading } from "../common/Loading";
-import { logoutUser } from "../../navigation/navigation";
+import { registerNotifs } from "../../actions/pushnotifs";
+import * as Notifications from "expo-notifications";
+import * as Device from "expo-device";
 
 export const Home = () => {
   const [myTable, setMyTable] = useState<UserRanking | undefined>(undefined);
@@ -72,6 +74,46 @@ export const Home = () => {
       };
     }, [])
   );
+
+  
+  async function registerForPushNotificationsAsync() {
+    let token;
+
+    if (Device.isDevice) {
+      const { status: existingStatus } =
+        await Notifications.getPermissionsAsync();
+      let finalStatus = existingStatus;
+
+      if (existingStatus !== "granted") {
+        const { status } = await Notifications.requestPermissionsAsync();
+        finalStatus = status;
+      }
+
+      if (finalStatus !== "granted") {
+        alert("Failed to get push token for push notification!");
+        return;
+      }
+
+      token = (await Notifications.getExpoPushTokenAsync()).data;
+    } else {
+      alert("Must use physical device for Push Notifications");
+    }
+
+    if (Platform.OS === "android") {
+      Notifications.setNotificationChannelAsync("default", {
+        name: "default",
+        importance: Notifications.AndroidImportance.MAX,
+      });
+    }
+
+    return token;
+  }
+  useEffect(() => {
+    registerForPushNotificationsAsync().then((token) => {
+      // Send token to your backend to store in MongoDB
+      registerNotifs(token ?? "");
+    });
+  }, []);
 
   // Used to reset the selected gameweek when the user navigates back to this screen using params
   useEffect(() => {
