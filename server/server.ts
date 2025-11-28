@@ -58,7 +58,6 @@ async function scrapeStandings(): Promise<{ table: string[], srcUrls: string[] }
         const logos = $("[class*='EntityLogo_entityLogoImage']")
         const srcUrls = logos.map((_, el) => $(el).attr('src')).get();
 
-        // console.log(table, srcUrls)
         return { table, srcUrls } ;
     } catch (error) {
         console.error(`Error: ${error}`);
@@ -66,6 +65,7 @@ async function scrapeStandings(): Promise<{ table: string[], srcUrls: string[] }
     }
 }
 
+// This is used at the beginning of each season
 // async function scrapeAllStandings() {
 //     const url = "https://www.transfermarkt.us/premier-league/spieltag/wettbewerb/GB1/plus/?saison_id=2024&spieltag="
 
@@ -119,7 +119,7 @@ async function scrapeFixtures(): Promise<{ gameWeek: string, isWeekComplete: boo
             .filter(text => text.includes("Today")).length > 0
 
         console.log(gameWeek, isWeekComplete, isGamesToday)
-        return { isWeekComplete, gameWeek, isGamesToday}
+        return { isWeekComplete, gameWeek, isGamesToday: isGamesToday && !isWeekComplete}
 
     } catch (error) {
         console.log(`Error: ${error}`);
@@ -127,34 +127,6 @@ async function scrapeFixtures(): Promise<{ gameWeek: string, isWeekComplete: boo
     }
 }
 
-
-//https://www.api-football.com/documentation-v3#tag/Fixtures/operation/get-fixtures
-// can use get /fixture/rounds to get the dates of each round. then based on the dates i can know what round im in, track
-// current round in the data base. and use that to update points. can use /fixtures?round=X to get fixtures for a round and when
-// theyre all compelte, trigger the async process to update everyones score for that week. 
-// async function getStandingsApi() {
-//     const axios = require('axios');
-
-//     const apiKey = process.env.API_KEY;
-
-//     // Define the API endpoint URL for Premier League standings
-//     //const apiUrl = 'https://v3.football.api-sports.io/standings?league=39&season=2022';
-//     const apiUrl = 'https://v3.football.api-sports.io/fixtures?league=39&season=2022';
-
-//     // Set up the API request headers
-//     const headers = {
-//         'x-apisports-key': apiKey,
-//         'Accept': 'application/json',
-//     };
-
-//     try {
-//         const response = await axios.get(apiUrl, { headers });
-//         //console.log("Standing RES", response.data.response[0].league.standings[0].map(team => team.team));console.log("Standing RES", response.data.response[0].league.standings[0].map(team => team.team));
-//         console.log("Fixture RES", response.data.response[100]);
-//     } catch (error) {
-//         console.error('Error fetching standings:', error);
-//     }
-// }
 
 const ONE_SECOND_IN_MILLIS = 1000
 const ONE_MINUTE_IN_MILLIS = 60 * ONE_SECOND_IN_MILLIS
@@ -215,6 +187,9 @@ async function runScheduledTask() {
         // If games being played today, update every 5 minutes
         if (isGamesToday) {
             currentInterval = 5 * ONE_MINUTE_IN_MILLIS
+        } else {
+            currentInterval = 6 * ONE_HOUR_IN_MILLIS;
+            console.log('No games today, querying again in six hours')
         }
  
         // Dispatch async updates for total points for each user
@@ -235,27 +210,14 @@ async function runScheduledTask() {
         await assignFriendRankService();
         await assignTopLevelStatsService();
     
-    } catch (error: unknown) {
+    } catch (error) {
         if (error instanceof Error) {
             console.error(`Scheduled task error: ${error.message}`);
-            currentInterval = 60 * 1000;
+            currentInterval = ONE_MINUTE_IN_MILLIS;
         }
     }
 
     setTimeout(runScheduledTask, currentInterval);
 }
 
-// async function runPushNotificationJob() {
-//     try {
-//         await sendPushNotificationsToAllUsers();
-//     } catch (error: unknown) {
-//         if (error instanceof Error) {
-//             console.error(`Push notification job error: ${error.message}`);
-//         }
-//     }
-    
-//     setTimeout(runPushNotificationJob, 2 * ONE_MINUTE_IN_MILLIS);
-// }
-
 runScheduledTask();
-// runPushNotificationJob();

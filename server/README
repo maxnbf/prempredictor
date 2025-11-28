@@ -1,0 +1,9 @@
+# Update Server
+1. Sign into AWS
+2. Use google authenticator for 2FA
+3. Make sure SSH Port (22) accepts traffic from my IP
+4. ssh -i leaguelock.pem ec2-user@18.209.166.210
+5. `cd prempredictor/server`
+6. npm install
+7. pm2 status
+8. pm2 restart leaguelock
