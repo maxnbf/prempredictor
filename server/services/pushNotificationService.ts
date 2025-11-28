@@ -3,6 +3,15 @@ import { User } from '../models/userModel';
 
 const expo = new Expo();
 
+export async function saveToken(token, userId) {
+    await User.updateOne(
+        { _id: userId },
+        { $set: { expoPushToken: token } }
+    );
+    
+    return { success: true };
+}
+
 export async function sendPushNotificationsToAllUsers(gameWeek) {
     try {
         // Get all users with expoPushToken populated
