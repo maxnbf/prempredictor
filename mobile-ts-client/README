@@ -8,6 +8,6 @@ for prod
 1. Pull env variables: eas env:pull production
 2. Build prod build: eas build -p ios --profile production
 3. Send to testFlight: eas submit --platform ios --profile production
-4. updates: eas update --branch production
-
+4. OTA (Over the Air): eas update --branch production
+5. For regular update, go to app store connect
 
