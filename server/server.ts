@@ -136,7 +136,7 @@ let currentInterval = ONE_HOUR_IN_MILLIS
 
 const hardCodedLogos: Map<string, string> = new Map([
     ["Watford FC", "https://image-service.onefootball.com/transform?w=128&dpr=2&image=https://images.onefootball.com/icons/teams/164/580.png"],
-    ["Queens Park Rangers", "https://image-service.onefootball.com/transform?w=128&dpr=2&image=https://images.onefootball.com/icons/teams/164/582.png "]
+    ["Queens Park Rangers", "https://image-service.onefootball.com/transform?w=128&dpr=2&image=https://images.onefootball.com/icons/teams/164/582.png"]
 ]);
 
 async function runScheduledTask() {
