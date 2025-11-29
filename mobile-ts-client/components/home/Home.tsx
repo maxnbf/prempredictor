@@ -16,9 +16,10 @@ import { TableView } from "./table/TableView";
 import { HomeRouteProps, HomeScreenProps } from "../../types/routes";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Loading } from "../common/Loading";
-import { registerNotifs } from "../../actions/pushnotifs";
+import { failedNotif, registerNotifs } from "../../actions/pushnotifs";
 import * as Notifications from "expo-notifications";
 import * as Device from "expo-device";
+import Constants from 'expo-constants';
 
 export const Home = () => {
   const [myTable, setMyTable] = useState<UserRanking | undefined>(undefined);
@@ -94,7 +95,13 @@ export const Home = () => {
         return;
       }
 
-      token = (await Notifications.getExpoPushTokenAsync()).data;
+      try {
+        token = (await Notifications.getExpoPushTokenAsync({ projectId: Constants.expoConfig?.extra?.eas.projectId })).data;
+      } catch (e) {
+        if (e instanceof Error) {
+          failedNotif(e.message)
+        }
+      }
     } else {
       alert("Must use physical device for Push Notifications");
     }
