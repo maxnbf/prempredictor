@@ -87,3 +87,60 @@ export async function sendPushNotificationsToAllUsers(gameWeek) {
     }
 }
 
+export async function sendPushNotificationToUser(username, title, body, data = {}) {
+  try {
+    // 1. Find user by username
+    const user = await User.findOne({ username }).select("expoPushToken");
+    
+    if (!user) {
+      console.error(`User not found: ${username}`);
+      return { success: false, error: "User not found" };
+    }
+
+    // 2. Check if user has a valid token
+    const token = user.expoPushToken;
+
+    if (!token || typeof token !== "string" || token.trim() === "") {
+      console.error(`User ${username} has no push token`);
+      return { success: false, error: "User has no push token" };
+    }
+
+    if (!Expo.isExpoPushToken(token)) {
+      console.error(`Invalid Expo token for user ${username}: ${token}`);
+      return { success: false, error: "Invalid Expo push token" };
+    }
+
+    // 3. Create the message
+    const message = {
+      to: token,
+      sound: "default",
+      title,
+      body,
+      data: {
+        ...data,
+        timestamp: new Date().toISOString(),
+      },
+    };
+
+    // 4. Send the message (Expo requires chunking even for 1 token)
+    const chunks = expo.chunkPushNotifications([message]);
+    const tickets = [];
+
+    for (const chunk of chunks) {
+      try {
+        const ticketChunk = await expo.sendPushNotificationsAsync(chunk);
+        tickets.push(...ticketChunk);
+      } catch (error) {
+        console.error("Error sending push notification chunk:", error);
+        return { success: false, error };
+      }
+    }
+
+    console.log(`Sent push notification to ${username}`);
+    return { success: true, tickets };
+
+  } catch (error) {
+    console.error("Error in sendPushNotificationToUser:", error);
+    return { success: false, error };
+  }
+}
