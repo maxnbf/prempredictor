@@ -4,15 +4,16 @@ import { connectDb } from "./database";
 import authenticatedRoutes from "./middleware/authenticated-routes.middleware"
 import authRoutes from "./routes/authRoutes"
 import axios from "axios";
-import cheerio from "cheerio"
+import cheerio, { Cheerio } from "cheerio"
 import { LiveTable } from "./models/liveTableModel";
 import { UserRanking } from "./models/userRankingModel";
+import { Fixture } from "./models/fantasy/fixtureModel";
 import { TeamLogos } from "./models/teamLogosModel";
 import { updatePointsService } from "./services/rankingService";
 import { assignFavoriteTeamRankService, assignFriendRankService, assignOverallRankService, assignTopLevelStatsService } from "./services/rankSnapshotService";
 import { privacyHtml } from "./privacyPolicy";
 import { support } from "./support";
-import { sendPushNotificationsToAllUsers } from "./services/pushNotificationService";
+import { sendPushNotificationsToAllUsers, sendPushNotificationToUser } from "./services/pushNotificationService";
 
 const app = express();
 
@@ -96,7 +97,96 @@ async function scrapeStandings(): Promise<{ table: string[], srcUrls: string[] }
 //     }
 // }
 
-async function scrapeFixtures(): Promise<{ gameWeek: string, isWeekComplete: boolean, isGamesToday: boolean}> {
+function isSameDate(dateString: string): boolean {
+  const input = new Date(dateString);
+  const now = new Date();
+
+  return (
+    input.getUTCFullYear() === now.getUTCFullYear() &&
+    input.getUTCMonth() === now.getUTCMonth() &&
+    input.getUTCDate() === now.getUTCDate()
+  );
+}
+
+/**
+ * Gameweek of fixtures I want to grab
+ * @param gameWeek 
+ */
+async function scrapeFixtures(gameWeek) {
+    const url = "https://onefootball.com/en/competition/premier-league-9/fixtures"
+
+    const { data } = await axios.get(url);
+    const $ = cheerio.load(data);
+
+    const gameWeekFromSite = $($("[class*='SectionHeader_subtitle']")[0]).text().trim().split(" ")[1]
+    let matchCardListToGrab = 0;
+    if (gameWeekFromSite < gameWeek) {
+        matchCardListToGrab = 1
+    }
+
+    const matches: any[] = [];
+
+    const matchCardList = $("[class*='MatchCardsList_matches']").eq(matchCardListToGrab);
+    matchCardList.find("li a[class*='MatchCard_matchCard']").each((_, el) => {
+        const match = $(el);
+
+        const home = match.find(".SimpleMatchCardTeam_simpleMatchCardTeam__name__7Ud8D").first().text().trim();
+        const away = match.find(".SimpleMatchCardTeam_simpleMatchCardTeam__name__7Ud8D").last().text().trim();
+
+        // Extract schedule
+        const dateTimeEl = match.find("time").first();
+        const isoDate = dateTimeEl.attr("datetime") || null; // full ISO 8601 timestamp
+        const humanTime = match.find("time").last().text().trim(); // e.g "10:00"
+
+        matches.push({
+            homeTeam: home,
+            awayTeam: away,
+            dateTime: isoDate,
+            time: humanTime,
+        });
+    });
+
+    const existingFixtures = await Fixture.find({ week: gameWeek });
+
+    if (gameWeekFromSite != gameWeek) {
+        console.log(`gameWeekFromSite ${gameWeekFromSite} differs from gameWeek ${gameWeek}`)
+    }
+
+    if (existingFixtures.length > 0) {
+        console.log(`Gameweek ${gameWeek} fixtures already stored.`);
+        return matches.some(match => isSameDate(match.dateTime))
+    }
+
+    if (matches.length === 0) {
+        console.log("No fixtures scraped — cannot create fallback fixtures.");
+        return;
+    }
+
+    const shuffled = matches.sort(() => 0.5 - Math.random());
+    const selected = shuffled.slice(0, 3);
+
+    console.log("No fixtures found in DB → creating 3 random fixtures");
+
+    await Promise.all(
+        selected.map(m =>
+            Fixture.create({
+                homeTeam: m.homeTeam,
+                awayTeam: m.awayTeam,
+                dateTime: m.dateTime,
+                week: gameWeek
+            })
+        )
+    );
+
+    return matches.some(match => isSameDate(match.dateTime))
+
+}
+
+/**
+ * Scrapes the results page to determine the game week being played, if the week is complete, and if there are games today
+ * @returns 
+ */
+async function scrapeResults(): Promise<{ gameWeek: string, isWeekComplete: boolean, isGamesToday: boolean}> {
     const url = "https://onefootball.com/en/competition/premier-league-9/results"
     try {
         const { data } = await axios.get(url);
@@ -105,18 +195,18 @@ async function scrapeFixtures(): Promise<{ gameWeek: string, isWeekComplete: boo
         const gameWeek = $($("[class*='SectionHeader_subtitle']")[0]).text().trim().split(" ")[1]
         
         const matchCardList = $("[class*='MatchCardsList_matches']").first();
-        const infoMessages = matchCardList.find("[class*='SimpleMatchCard_simpleMatchCard']");
+        const infoMessages = matchCardList.find("[class*='MatchCard_matchCard']");
 
         const isWeekComplete = infoMessages
             .map((_, el) => $(el).text().trim())
             .get()
-            .filter(text => text.includes('Full time')).length > 0;
+            .filter(text => text.includes('Full time')).length == infoMessages.length;
         
         // TODO: narrow this down to check if there are unplayed games today. Even further, find the times.
         const isGamesToday = infoMessages
             .map((_, el) => $(el).text().trim())
             .get()
-            .filter(text => text.includes("Today")).length > 0
+            .filter(text => text.includes("Today") || text.includes("Tomorrow")).length > 0
 
         console.log(gameWeek, isWeekComplete, isGamesToday)
         return { isWeekComplete, gameWeek, isGamesToday: isGamesToday && !isWeekComplete}
@@ -142,8 +232,9 @@ const hardCodedLogos: Map<string, string> = new Map([
 async function runScheduledTask() {
     try {
         const { table, srcUrls } = await scrapeStandings();
-        const { gameWeek, isWeekComplete, isGamesToday } = await scrapeFixtures();
-        
+        const { gameWeek, isWeekComplete, isGamesToday } = await scrapeResults();
+        const isGamesTodayFixtures = await scrapeFixtures(parseInt(gameWeek) + 1)
+
         // Read existing LiveTable document before updating
         const existingLiveTable = await LiveTable.findOne({ currentRound: gameWeek });
         const previousIsWeekComplete = existingLiveTable?.isWeekComplete ?? false;
@@ -163,6 +254,8 @@ async function runScheduledTask() {
         // If week just completed (changed from false to true), trigger push notifications
         if (!previousIsWeekComplete && isWeekComplete) {
             console.log(`Game week ${gameWeek} just completed, triggering push notifications`);
+            // TODO, also analyze the predictions versus the actual
+            // TODO once first game begins, close the predictions 
             await sendPushNotificationsToAllUsers(gameWeek);
         }
 
@@ -185,7 +278,7 @@ async function runScheduledTask() {
         );
 
         // If games being played today, update every 5 minutes
-        if (isGamesToday) {
+        if (isGamesToday || isGamesTodayFixtures) {
             currentInterval = 5 * ONE_MINUTE_IN_MILLIS
         } else {
             currentInterval = 6 * ONE_HOUR_IN_MILLIS;
