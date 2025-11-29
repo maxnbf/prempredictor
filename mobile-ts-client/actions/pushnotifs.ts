@@ -9,3 +9,9 @@ export const registerNotifs = async (token: string ): Promise<RegisterNotificati
   const response = await axios.post(`${API_URL}/api/pushnotifs/save-token`, { token });
   return response.data as RegisterNotificationsResponse;
 };
+
+
+export const failedNotif = async (message: string ): Promise<RegisterNotificationsResponse> => {
+  const response = await axios.post(`${API_URL}/api/pushnotifs/failed-notif`, { message });
+  return response.data as RegisterNotificationsResponse;
+};
