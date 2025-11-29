@@ -3,12 +3,28 @@ import { User } from '../models/userModel';
 
 const expo = new Expo();
 
-export async function saveToken(token, userId) {
+export async function saveToken(token, userId, username) {
+    // Try finding by userId first
+    let user = await User.findById(userId);
+
+    // If not found, try finding by username
+    if (!user) {
+        console.log("No user find with id " + userId)
+        user = await User.findOne({ username });
+    }
+
+    // If still not found, return failure
+    if (!user) {
+        console.log("No user find with id " + username)
+        return { success: false, error: "User not found" };
+    }
+
+    // Update the found user
     await User.updateOne(
-        { _id: userId },
+        { _id: user._id },
         { $set: { expoPushToken: token } }
     );
-    
+
     return { success: true };
 }
 
