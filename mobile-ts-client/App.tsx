@@ -22,17 +22,18 @@ import {
   RootStackParamList,
   GroupsStackParamList,
   ProfileStackParamList,
+  FantasyStackParamList,
 } from "./types/routes";
 import { enableScreens } from "react-native-screens";
-import { logoutUser, navigationRef } from "./navigation/navigation";
+import { navigationRef } from "./navigation/navigation";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { NewUserOnboarding } from "./components/home/onboarding/NewUserOnboarding";
 import { SingleTable } from "./components/all/SingleTable";
 import { fetchLogos } from "./redux/reducers/logos";
 import { Friends } from "./components/profile/friends/Friends";
 import { PrivacyPolicy } from "./components/profile/PrivacyPolicy";
-import { Platform, Text, View } from "react-native";
-import { Loading } from "./components/common/Loading";
+import { Fantasy } from "./components/fantasy/Fantasy";
+import { FantasyRules } from "./components/fantasy/FantasyRules";
 
 enableScreens();
 
@@ -40,6 +41,7 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator<TabParamList>();
 const GroupsStack = createNativeStackNavigator<GroupsStackParamList>();
 const ProfileStack = createNativeStackNavigator<ProfileStackParamList>();
+const FantasyStack = createNativeStackNavigator<FantasyStackParamList>();
 
 const ProfileNavigator = () => {
   return (
@@ -100,6 +102,31 @@ const GroupsNavigator = () => {
   );
 };
 
+const FantasyNavigator = () => {
+  return (
+    <FantasyStack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      <FantasyStack.Screen
+        name="FantasyHome"
+        component={Fantasy}
+        options={{ title: "Fantasy" }}
+      />
+     <FantasyStack.Screen
+        name="FantasyRules"
+        component={FantasyRules}
+        options={() => ({
+          title: "Rules",
+          headerBackTitleVisible: false,
+          headerShown: true,
+        })}
+      />
+    </FantasyStack.Navigator>
+  );
+};
+
 const TabNavigator = () => {
   return (
     <Tab.Navigator
@@ -108,7 +135,7 @@ const TabNavigator = () => {
         headerShown: false, // Disable the header since we'll have a bottom tab navigator
         tabBarActiveTintColor: "#e91e63", // Active icon color
         tabBarInactiveTintColor: "gray", // Inactive icon color
-        tabBarStyle: { backgroundColor: "#fff", height: 60, paddingBottom: 5 },
+        tabBarStyle: { backgroundColor: "#fff", height: 70, paddingBottom: 5 },
       }}
     >
       <Tab.Screen
@@ -126,6 +153,15 @@ const TabNavigator = () => {
         options={{
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="list" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Fantasy"
+        component={FantasyNavigator}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="star" size={size} color={color} />
           ),
         }}
       />
@@ -170,7 +206,7 @@ const AppNavigator = () => {
 
   const env = process.env.EXPO_PUBLIC_API_URL;
   if (loading || logosLoading) {
-    return
+    return;
   }
   // OHHHH... ALL OF THE "Do you have Screen ___" literally refers to the screens not existing here. Think of a better way to do this
   return (
