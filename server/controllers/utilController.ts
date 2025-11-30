@@ -13,6 +13,5 @@ export function withHandler(handler) {
 }
 
 export const getTeamLogos = async () => {
-  console.log("getting logos", new Date())
   return await getTeamLogosService();
 }

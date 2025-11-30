@@ -14,6 +14,7 @@ import { LiveRanking, UserRanking } from "../../../types/types";
 import DropDownPicker from "react-native-dropdown-picker";
 import { Loading } from "../../common/Loading";
 import { useSelector } from "react-redux";
+import { GameweekDropdown } from "../../common/GameWeekDropDown";
 
 interface TableViewProps {
   setLive: React.Dispatch<React.SetStateAction<LiveRanking | undefined>>;
@@ -32,15 +33,8 @@ export const TableView = ({
   currentGameWeek,
   selectedGameWeek,
 }: TableViewProps) => {
-  const [open, setOpen] = useState(false);
-  const [items, setItems] = useState(
-    Array.from({ length: parseInt(currentGameWeek) }, (_, index) => ({
-      label: `Gameweek ${index + 1}`,
-      value: (index + 1).toString(),
-    }))
-  );
   const [selectedGameweekState, setSelectedGameweekState] = useState<string>(
-    selectedGameWeek ?? live?.currentRound.toString() ?? "1"
+    selectedGameWeek ?? live?.currentRound.toString() ?? currentGameWeek
   );
 
   const [refreshing, setRefreshing] = useState(false);
@@ -70,26 +64,11 @@ export const TableView = ({
     <>
       {/* Header Section with Controls */}
       <View style={styles.headerSection}>
-        <View style={styles.controlsContainer}>
-          <Text style={styles.selectLabel}>Select Gameweek</Text>
-          <DropDownPicker
-            open={open}
-            setOpen={setOpen}
-            value={selectedGameweekState}
-            setValue={setSelectedGameweekState}
-            items={items}
-            setItems={setItems}
-            containerStyle={styles.dropdownContainer}
-            style={styles.dropdown}
-            dropDownContainerStyle={styles.dropDownStyle}
-            listMode="SCROLLVIEW"
-            dropDownDirection="BOTTOM"
-            autoScroll={true}
-            placeholder="Select Gameweek"
-            multiple={false}
-            zIndex={1000}
-          />
-        </View>
+      <GameweekDropdown
+        currentGameWeek={currentGameWeek}
+        selectedGameWeek={selectedGameweekState}
+        onSelect={(gameweek) => setSelectedGameweekState(gameweek)}
+      />
       </View>
 
       <ScrollView

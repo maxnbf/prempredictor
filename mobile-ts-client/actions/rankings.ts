@@ -4,7 +4,6 @@ import { API_URL } from './util';
 
 export const makeRanking = async (data: any) => {
   const response = await axios.post(`${API_URL}/api/myTable/ranking`, data)
-  console.log("made ranking", response.data)
   return response.data;
 };
 

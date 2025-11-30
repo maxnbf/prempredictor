@@ -29,6 +29,5 @@ export async function submitFantasyRanking(request) {
 
 export async function getUserPoints(request) {
     const username = request?.body?.user.username;
-    console.log("in controller", username)
     return await fantasyService.getUserPoints(username);
 }

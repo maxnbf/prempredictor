@@ -4,6 +4,8 @@ export interface FixtureDocument extends Document {
     homeTeam: string;
     awayTeam: string;
     dateTime: string;
+    homeScore: number;
+    awayScore: number;
     week: number;
 }
 
@@ -19,6 +21,14 @@ const FixtureSchema: Schema<FixtureDocument> = new mongoose.Schema({
     dateTime: {
         type: String,
         required: true
+    },
+    homeScore: {
+        type: Number, 
+        required: false
+    },
+    awayScore: {
+        type: Number, 
+        required: false
     },
     week: {
         type: Number, 

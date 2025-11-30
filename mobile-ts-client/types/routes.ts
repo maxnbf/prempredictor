@@ -13,6 +13,7 @@ export type RootStackParamList = {
 export type TabParamList = {
     Home: { username: string | undefined; gameweek: string | undefined };
     Groups: NavigatorScreenParams<GroupsStackParamList>;
+    Fantasy: NavigatorScreenParams<FantasyStackParamList>
     Profile: NavigatorScreenParams<ProfileStackParamList>;
 };
 
@@ -20,6 +21,11 @@ export type GroupsStackParamList = {
     GroupHome: undefined;
     Table: { type: string };
 };
+
+export type FantasyStackParamList = {
+    FantasyHome: undefined;
+    FantasyRules: undefined
+}
 
 export type ProfileStackParamList = {
     ProfileHome: undefined;
@@ -40,6 +46,7 @@ export type TableScreenProps = BottomTabNavigationProp<GroupsStackParamList, 'Ta
 export type ProfileScreenProps = BottomTabNavigationProp<ProfileStackParamList, 'ProfileHome'>;
 export type FriendScreenProps = BottomTabNavigationProp<ProfileStackParamList, 'Friends'>;
 export type PrivacyPolicyProps = BottomTabNavigationProp<ProfileStackParamList, 'PrivacyPolicy'>;
+export type FantasyScreenProps = BottomTabNavigationProp<FantasyStackParamList, 'FantasyHome'>;
 
 export type HomeRouteProps = RouteProp<TabParamList, 'Home'>;
 export type TableRouteProps = RouteProp<GroupsStackParamList, 'Table'>;

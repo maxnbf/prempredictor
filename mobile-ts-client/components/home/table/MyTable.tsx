@@ -17,7 +17,7 @@ interface MyScore {
   totalOffset: number;
 }
 
-const calculateOffsets = (live: string[], user: string[]): MyScore => {
+export const calculateOffsets = (live: string[], user: string[]): MyScore => {
   const offsets = [];
   let totalOffset = 0;
 

@@ -15,7 +15,6 @@ import { LiveRanking, UserRanking } from "../../types/types";
 import { TableView } from "./table/TableView";
 import { HomeRouteProps, HomeScreenProps } from "../../types/routes";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Loading } from "../common/Loading";
 import { failedNotif, registerNotifs } from "../../actions/pushnotifs";
 import * as Notifications from "expo-notifications";
 import * as Device from "expo-device";

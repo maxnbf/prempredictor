@@ -11,6 +11,7 @@ export interface LiveRanking {
   season: string;
   currentRound: number;
   lastUpdated: number;
+  isWeekComplete: boolean;
 }
 
 export interface TimeSeriesPoints {
@@ -83,4 +84,26 @@ export interface Profile {
   joined: Date;
   friendCount: number;
   fullName: string;
+}
+
+export interface Fixture {
+  _id: string;
+  homeTeam: string;
+  awayTeam: string;
+  dateTime: string;
+  homeScore: number;
+  awayScore: number;
+  week: number;
+}
+
+export interface Prediction {
+  fixture: Fixture;
+  homeScore: number;
+  awayScore: number;
+}
+
+export interface PredictionInput {
+  fixture: string;
+  homeScore: number;
+  awayScore: number;
 }
