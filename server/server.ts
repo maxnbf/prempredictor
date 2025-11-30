@@ -13,8 +13,8 @@ import { updatePointsService } from "./services/rankingService";
 import { assignFavoriteTeamRankService, assignFriendRankService, assignOverallRankService, assignTopLevelStatsService } from "./services/rankSnapshotService";
 import { privacyHtml } from "./privacyPolicy";
 import { support } from "./support";
-import { sendPushNotificationsToAllUsers, sendPushNotificationToUser } from "./services/pushNotificationService";
-
+import { sendPushNotificationsToAllUsers } from "./services/pushNotificationService";
+import { calculatePointsForWeek, resetAllUserPoints } from "./jobs/awardPoints"
 const app = express();
 
 app.use(cors())
@@ -298,6 +298,12 @@ async function runScheduledTask() {
         const existingLiveTable = await LiveTable.findOne({ currentRound: gameWeek });
         const previousIsWeekComplete = existingLiveTable?.isWeekComplete ?? false;
         
+        // Once new live week starts, clear the points. 
+        if (!existingLiveTable) {
+            console.log("New week beginning")
+            await resetAllUserPoints()
+        }
+
         await LiveTable.findOneAndUpdate(
             { currentRound: gameWeek },
             {
@@ -313,17 +319,9 @@ async function runScheduledTask() {
         // If week just completed (changed from false to true), trigger push notifications
         if (!previousIsWeekComplete && isWeekComplete) {
             console.log(`Game week ${gameWeek} just completed, triggering push notifications`);
-            /* TODO!!
-            * When we detect that the week is complete, kick off a job to analyze the games
-            * predicted vs the actual scores, and allocation people points. Then send notification
-            * to come use their points  
-            */
+            await calculatePointsForWeek(gameWeek)
             await sendPushNotificationsToAllUsers(gameWeek);
         }
-        /* TODO
-        *  Once we detect the first game is in play, then we need to lock the predictions
-        *  This may already be captured by the isWeekComplete field
-        */
 
         const teamLogosMap = new Map<string, string>();
         table.forEach((teamName, index) => {
