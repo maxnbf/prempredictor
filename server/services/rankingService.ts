@@ -52,16 +52,22 @@ export async function getAllService(): Promise<UserScore[]> {
     return rankings.map(ranking => ({ username: ranking.username, score: ranking.total, favorite: ranking.favorite }));
 }
 
-export async function getLiveRankingForGameWeekService(gameWeek) {
-      const liveTable = await LiveTable.findOne({ currentRound: gameWeek });
+export async function getLiveRankingForGameWeekService(gameWeek: number) {
+  // Try to get the live table for the current week
+  let liveTable = await LiveTable.findOne({ currentRound: gameWeek });
 
-      if (!liveTable) {
-        throw new Error("Some data is missing");
-      }
-  
-      return liveTable
+  if (!liveTable && gameWeek > 1) {
+    // If not found, try the previous week
+    liveTable = await LiveTable.findOne({ currentRound: gameWeek - 1 });
+  }
+
+  if (!liveTable) {
+    // If still not found, return null or handle as needed
+    throw new Error("Live table not found for gameweek" + gameWeek)
+  }
+
+  return liveTable;
 }
-
 export async function getTimeSeriesPointsService(username) {
       const userRanking = await UserRanking.findOne({ username });
 

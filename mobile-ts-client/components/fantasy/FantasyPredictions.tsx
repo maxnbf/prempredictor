@@ -24,14 +24,17 @@ export const FantasyPredictions: React.FC<FantasyPredictionProps> = ({
 }) => {
   const [fixtures, setFixtures] = useState<Fixture[]>();
   const [predictions, setPredictions] = useState<Prediction[]>([]);
+  const [originalPredictions, setOriginalPredictions] = useState<Prediction[]>([]);
   const [submittingPredictions, setSubmittingPredictions] = useState(false);
 
   const logos = useSelector((state: any) => state.logos.logos);
 
   const fetchData = async () => {
     const fixturesResponse = await getFixtures(selectedGameWeek);
+
     setFixtures(fixturesResponse.fixtures);
     setPredictions(fixturesResponse.predictions);
+    setOriginalPredictions(fixturesResponse.predictions); // ← store baseline copy
   };
 
   useEffect(() => {
@@ -76,7 +79,12 @@ export const FantasyPredictions: React.FC<FantasyPredictionProps> = ({
       awayScore: p.awayScore,
     })) as PredictionInput[];
 
-    await submitPredictions(payload);
+    const newPredictions = await submitPredictions(payload);
+
+    // Update both current + original predictions
+    setPredictions(newPredictions);
+    setOriginalPredictions(newPredictions);
+
     setSubmittingPredictions(false);
   };
 
@@ -84,30 +92,48 @@ export const FantasyPredictions: React.FC<FantasyPredictionProps> = ({
     return <></>;
   }
 
+  // ----------------------------------------------------------
+  // COMPUTE WHETHER THE BUTTON SHOULD BE ENABLED
+  // ----------------------------------------------------------
+
+  const allPredictionsFilled =
+    predictions.length === fixtures?.length &&
+    !predictions.some((p) => p.homeScore === undefined || p.awayScore === undefined);
+
+  const predictionsChanged = (() => {
+    if (predictions.length !== originalPredictions.length) return true;
+
+    for (let p of predictions) {
+      const orig = originalPredictions.find(
+        (o) => o.fixture._id === p.fixture._id
+      );
+      if (!orig) return true;
+
+      if (orig.homeScore !== p.homeScore || orig.awayScore !== p.awayScore) {
+        return true;
+      }
+    }
+    return false;
+  })();
+
+  const canSubmit =
+    isWeekComplete &&
+    !submittingPredictions &&
+    allPredictionsFilled &&
+    predictionsChanged;
+
+  // ----------------------------------------------------------
+
   return (
     <>
       <View style={styles.headerRow}>
         <Text style={styles.sectionHeader}>Fixtures</Text>
 
-        {isWeekComplete ? (
+        {isWeekComplete && gameWeek === selectedGameWeek ? (
           <TouchableOpacity
-            style={[
-              styles.submitButton,
-              (submittingPredictions ||
-                predictions.length !== fixtures?.length ||
-                predictions.some(
-                  (p) =>
-                    p.homeScore === undefined || p.awayScore === undefined
-                )) && styles.submitButtonDisabled,
-            ]}
+            style={[styles.submitButton, !canSubmit && styles.submitButtonDisabled]}
             onPress={handleSubmitPredictions}
-            disabled={
-              submittingPredictions ||
-              predictions.length !== fixtures?.length ||
-              predictions.some(
-                (p) => p.homeScore === undefined || p.awayScore === undefined
-              )
-            }
+            disabled={!canSubmit}
           >
             <Text style={styles.submitButtonText}>
               {submittingPredictions ? "Submitting..." : "Submit Predictions"}
@@ -116,7 +142,6 @@ export const FantasyPredictions: React.FC<FantasyPredictionProps> = ({
         ) : null}
       </View>
 
-      {/* FIXTURE CARDS */}
       {(fixtures ?? []).map((f) => {
         const prediction = predictions.find((p) => p.fixture._id === f._id);
 
@@ -126,20 +151,18 @@ export const FantasyPredictions: React.FC<FantasyPredictionProps> = ({
         const userHome = prediction?.homeScore;
         const userAway = prediction?.awayScore;
 
-        // Live / current score
-        // TODO: add live (and ultimately final) scores to the model
-        const liveHome = null;
-        const liveAway = null;
-        const matchInProgress = liveHome !== null && liveAway !== null && !isWeekComplete;
+        // Placeholder until live data is implemented
+        const liveHome = f.homeScore;
+        const liveAway = f.awayScore;
+        const matchInProgress = liveHome !== undefined && liveAway !== undefined
 
         return (
           <View key={f._id} style={styles.card}>
-            {/* TEAMS + SCORES */}
             <View style={styles.rowContainer}>
               <Image source={{ uri: homeLogo }} style={styles.logo} />
 
               <View style={styles.centerContent}>
-                {isWeekComplete ? (
+                {isWeekComplete && gameWeek === selectedGameWeek ? (
                   <View style={styles.inputRow}>
                     <TextInput
                       style={styles.input}
@@ -190,21 +213,17 @@ export const FantasyPredictions: React.FC<FantasyPredictionProps> = ({
 };
 
 const styles = StyleSheet.create({
-  // Header row at the top with section title and submit button
   headerRow: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     marginVertical: 10,
   },
-
   sectionHeader: {
     fontSize: 20,
     fontWeight: "700",
     color: "#1e293b",
   },
-
-  // Card container for each fixture
   card: {
     marginBottom: 16,
     padding: 14,
@@ -213,38 +232,28 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: "#fff",
   },
-
-  // Row for logos and central content
   rowContainer: {
     flexDirection: "row",
-    alignItems: "center", // vertically center logos and central content
+    alignItems: "center",
     justifyContent: "space-between",
   },
-
-  // Center content between logos
   centerContent: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
     paddingHorizontal: 8,
-    minHeight: 60, // ensures consistent card height
+    minHeight: 60,
   },
-
-  // Team logos
   logo: {
     width: 48,
-    height: 48, // keep logos square
+    height: 48,
     resizeMode: "contain",
     borderRadius: 6,
   },
-
-  // Row for home/away input fields
   inputRow: {
     flexDirection: "row",
     alignItems: "center",
   },
-
-  // Input fields for prediction
   input: {
     width: 40,
     height: 40,
@@ -257,15 +266,11 @@ const styles = StyleSheet.create({
     color: "#1e293b",
     marginHorizontal: 4,
   },
-
-  // Dash between scores
   scoreDash: {
     fontSize: 18,
     fontWeight: "700",
     color: "#1e293b",
   },
-
-  // Locked prediction text
   lockedPrediction: {
     fontSize: 18,
     fontWeight: "600",
@@ -273,8 +278,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     paddingVertical: 4,
   },
-
-  // Live score text
   liveScoreBelowPrediction: {
     marginTop: 4,
     fontSize: 12,
@@ -282,29 +285,21 @@ const styles = StyleSheet.create({
     color: "#dc2626",
     textAlign: "center",
   },
-
-  // Date text below prediction
   date: {
     marginTop: 4,
     fontSize: 12,
     color: "#64748b",
     textAlign: "center",
   },
-
-  // Submit button
   submitButton: {
     backgroundColor: "#1976d2",
     paddingVertical: 8,
     paddingHorizontal: 12,
     borderRadius: 6,
   },
-
-  // Disabled state of submit button
   submitButtonDisabled: {
     backgroundColor: "#90caf9",
   },
-
-  // Submit button text
   submitButtonText: {
     color: "#fff",
     fontWeight: "700",

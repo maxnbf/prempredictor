@@ -16,6 +16,11 @@ export interface FantasyRankingProps {
   liveRanking: string[];
 }
 
+export function arraysEqual<T>(a: T[], b: T[]): boolean {
+  if (a.length !== b.length) return false;
+  return a.every((val, i) => val === b[i]);
+}
+
 export const FantasyRanking: React.FC<FantasyRankingProps> = ({
   isWeekComplete,
   gameWeek,
@@ -52,7 +57,15 @@ export const FantasyRanking: React.FC<FantasyRankingProps> = ({
   const handleSubmitRanking = async () => {
     if (gameWeek === undefined) return;
     setSubmittingRanking(true);
-    await submitFantasyRanking(adjustedRanking, pointsUsed, gameWeek);
+
+    const newFantasyRanking = await submitFantasyRanking(
+      adjustedRanking,
+      pointsUsed,
+      gameWeek
+    );
+    setMyRanking(newFantasyRanking.ranking);
+    setMyPoints(newFantasyRanking.userPoints);
+    setPointsUsed(0);
     setSubmittingRanking(false);
   };
 
@@ -75,24 +88,28 @@ export const FantasyRanking: React.FC<FantasyRankingProps> = ({
     fetchData();
   }, [selectedGameWeek]);
 
+  // TODO, make the buttons and arrows only appear for this gameweek
   return (
     <>
       {/* HEADER */}
       <Text style={styles.title}>My Season Ranking</Text>
 
       {/* CONTROL BAR */}
-      {isWeekComplete ? (
+      {isWeekComplete && selectedGameWeek === gameWeek ? (
         <View style={styles.controlBar}>
           <View style={styles.leftButtons}>
-
             {/* SUBMIT BUTTON FIRST */}
             <TouchableOpacity
               style={[
                 styles.submitButton,
-                submittingRanking && styles.submitDisabled,
+                (submittingRanking ||
+                  arraysEqual(myRanking, adjustedRanking)) &&
+                  styles.submitDisabled,
               ]}
               onPress={handleSubmitRanking}
-              disabled={submittingRanking}
+              disabled={
+                submittingRanking || arraysEqual(myRanking, adjustedRanking)
+              }
             >
               <Text style={styles.submitText}>
                 {submittingRanking ? "Updating..." : "Submit"}
@@ -110,7 +127,6 @@ export const FantasyRanking: React.FC<FantasyRankingProps> = ({
             >
               <Text style={styles.resetText}>Reset</Text>
             </TouchableOpacity>
-
           </View>
 
           {/* POINTS DISPLAY */}
@@ -126,9 +142,7 @@ export const FantasyRanking: React.FC<FantasyRankingProps> = ({
         liveRanking={liveRanking}
         myRanking={adjustedRanking}
         logos={logos}
-        pointsUsed={pointsUsed}
-        myPoints={myPoints}
-        isEditable={isWeekComplete}
+        isEditable={isWeekComplete && selectedGameWeek === gameWeek}
         moveTeam={moveTeam}
       />
     </>

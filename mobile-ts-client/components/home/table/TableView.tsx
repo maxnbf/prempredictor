@@ -37,7 +37,6 @@ export const TableView = ({
     selectedGameWeek ?? live?.currentRound.toString() ?? currentGameWeek
   );
 
-  console.log(selectedGameWeek, currentGameWeek, live?.currentRound)
   const [refreshing, setRefreshing] = useState(false);
 
   const fetchData = async () => {

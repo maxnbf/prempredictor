@@ -39,7 +39,7 @@ export async function submitPredictions(username, predictions) {
                     awayScore: p.awayScore
                 },
                 { new: true, upsert: true } // create if it doesn't exist
-            );
+            ).populate("fixture");
         })
     );
 
@@ -101,8 +101,8 @@ export async function submitFantasyRanking(
 
 
     return {
-        ranking,
-        userPoints
+        ranking: ranking.ranking,
+        userPoints: userPoints.points
     };
 }
 

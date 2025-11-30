@@ -7,7 +7,10 @@ import {
   StyleSheet,
   SafeAreaView,
 } from "react-native";
-import { getLiveRanking } from "../../actions/rankings";
+import {
+  getLiveRanking,
+  getLiveRankingForGameWeek,
+} from "../../actions/rankings";
 import { FantasyPredictions } from "./FantasyPredictions";
 import { GameweekDropdown } from "../common/GameWeekDropDown";
 import { FantasyRanking } from "./FantasyRanking";
@@ -25,7 +28,9 @@ export const Fantasy = () => {
   const navigation = useNavigation<FantasyScreenProps>();
   const fetchData = async () => {
     setLoading(true);
-    const rankingResult = await getLiveRanking();
+    let rankingResult;
+
+    rankingResult = await getLiveRanking();
 
     setLiveRanking(rankingResult.ranking);
     setIsWeekComplete(rankingResult.isWeekComplete);
@@ -43,16 +48,23 @@ export const Fantasy = () => {
     fetchData();
   }, []);
 
+  const fetchNewLiveData = async () => {
+    const liveRanking = await getLiveRankingForGameWeek(
+      selectedGameWeek.toString()
+    );
+    setLiveRanking(liveRanking.ranking);
+    setIsWeekComplete(liveRanking.isWeekComplete);
+  };
+
+  useEffect(() => {
+    if (selectedGameWeek) {
+      fetchNewLiveData();
+    }
+  }, [selectedGameWeek]);
+
   useFocusEffect(
     useCallback(() => {
       fetchData();
-      //   return () => {
-      //     setSelectedGameWeek(undefined);
-      //     setMyTable(undefined);
-      //     setOtherTable(undefined);
-      //     setLive(undefined);
-      //     navigation.setParams({ username: undefined, gameweek: undefined });
-      //   };
     }, [])
   );
 

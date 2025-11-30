@@ -8,8 +8,6 @@ interface FantasyTableProps {
   liveRanking: string[];
   myRanking: string[];
   logos: Record<string, string>;
-  pointsUsed: number;
-  myPoints: number;
   isEditable: boolean;
   moveTeam: (index: number, direction: -1 | 1) => void;
 }
@@ -36,8 +34,6 @@ export const FantasyTable: React.FC<FantasyTableProps> = ({
   liveRanking,
   myRanking,
   logos,
-  pointsUsed,
-  myPoints,
   isEditable,
   moveTeam,
 }) => {

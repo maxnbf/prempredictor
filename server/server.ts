@@ -182,6 +182,61 @@ async function scrapeFixtures(gameWeek) {
 
 }
 
+interface MatchResult {
+  homeTeam: string;
+  homeScore: number;
+  awayTeam: string;
+  awayScore: number;
+}
+
+async function updateFixtureScores(elements: string[], gameWeek: string) {
+    const matches: MatchResult[] = elements
+  .filter((text) => text.includes("Full time"))
+  .map((text) => {
+    // Remove "TodayFull time" / "YesterdayFull time" at the end
+    const cleanText = text.replace(/(Today|Yesterday)Full time$/, "");
+
+    // Match the pattern: HomeTeamScoreAwayTeamScore
+    // This assumes scores are always numbers
+    const match = cleanText.match(/^(.+?)(\d+)(.+?)(\d+)$/);
+
+    if (!match) {
+      console.warn("Could not parse:", text);
+      return null;
+    }
+
+    const [, homeTeam, homeScore, awayTeam, awayScore] = match;
+
+    return {
+      homeTeam: homeTeam.trim(),
+      homeScore: parseInt(homeScore, 10),
+      awayTeam: awayTeam.trim(),
+      awayScore: parseInt(awayScore, 10),
+    } as MatchResult;
+  })
+  .filter(Boolean) as MatchResult[];
+
+    for (const match of matches) {
+    // Find the fixture by homeTeam, awayTeam and week
+    const fixture = await Fixture.findOne({
+      homeTeam: match.homeTeam,
+      awayTeam: match.awayTeam,
+      week: gameWeek,
+    });
+
+    if (!fixture) {
+      continue;
+    }
+
+    // Update the scores
+    fixture.homeScore = match.homeScore;
+    fixture.awayScore = match.awayScore;
+
+    await fixture.save();
+  }
+    
+}
+
 /**
  * Scrapes the results page to determine the game week being played, if the week is complete, and if there are games today
  * @returns 
@@ -198,9 +253,13 @@ async function scrapeResults(): Promise<{ gameWeek: string, isWeekComplete: bool
         const infoMessages = matchCardList.find("[class*='MatchCard_matchCard']");
 
         const isWeekComplete = infoMessages
-            .map((_, el) => $(el).text().trim())
+            .map((_, el) => {
+                return $(el).text().trim()
+            })
             .get()
             .filter(text => text.includes('Full time')).length == infoMessages.length;
+        
+        updateFixtureScores(infoMessages.map((_, el) =>$(el).text().trim()).get(), gameWeek)
         
         // TODO: narrow this down to check if there are unplayed games today. Even further, find the times.
         const isGamesToday = infoMessages
