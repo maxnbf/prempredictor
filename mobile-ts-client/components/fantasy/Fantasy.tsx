@@ -49,11 +49,13 @@ export const Fantasy = () => {
   }, []);
 
   const fetchNewLiveData = async () => {
-    const liveRanking = await getLiveRankingForGameWeek(
-      selectedGameWeek.toString()
-    );
-    setLiveRanking(liveRanking.ranking);
-    setIsWeekComplete(liveRanking.isWeekComplete);
+    if (selectedGameWeek != -1) {
+      const liveRanking = await getLiveRankingForGameWeek(
+        selectedGameWeek.toString()
+      );
+      setLiveRanking(liveRanking.ranking);
+      setIsWeekComplete(liveRanking.isWeekComplete);
+    }
   };
 
   useEffect(() => {
