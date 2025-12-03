@@ -3,15 +3,28 @@ import { Notif } from "../models/notificationModel";
 import { Friends } from "../models/friendModel"
 import * as userService from "./userService"
 import { assignFriendRankService } from "./rankSnapshotService";
+import { sendPushNotificationToUser } from "./pushNotificationService";
 
 export async function sendRequest(from, to) {
+  // 1. Save friend request
   const request = new FriendRequest({ from, to, state: "request" });
   await request.save();
 
+  // 2. Save notification record
   const notif = new Notif({ from, to, notifType: "sentRequest", seen: false });
   await notif.save();
+
+  // 3. Send push notification to the recipient
+  await sendPushNotificationToUser(
+    to, 
+    "New Friend Request",
+    `${from} has sent you a friend request.`,
+    { from }
+  );
+
   return true;
 }
+
 
 export async function rejectRequest(from, to) {
   await FriendRequest.deleteOne({ from, to });

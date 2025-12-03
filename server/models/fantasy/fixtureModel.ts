@@ -7,6 +7,7 @@ export interface FixtureDocument extends Document {
     homeScore: number;
     awayScore: number;
     week: number;
+    notified: boolean;
 }
 
 const FixtureSchema: Schema<FixtureDocument> = new mongoose.Schema({
@@ -33,6 +34,10 @@ const FixtureSchema: Schema<FixtureDocument> = new mongoose.Schema({
     week: {
         type: Number, 
         required: true
+    }, 
+    notified: {
+        type: Boolean,
+        required: false
     }
 }, { autoCreate: true})
 
