@@ -6,6 +6,7 @@ import {
   ActivityIndicator,
   StyleSheet,
   SafeAreaView,
+  TouchableOpacity,
 } from "react-native";
 import {
   getLiveRanking,
@@ -70,14 +71,6 @@ export const Fantasy = () => {
     }, [])
   );
 
-  if (loading) {
-    return (
-      <View style={styles.loader}>
-        <ActivityIndicator size="large" />
-      </View>
-    );
-  }
-
   const handleInfoPress = () => {
     navigation.navigate("FantasyRules");
   };
@@ -85,36 +78,39 @@ export const Fantasy = () => {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.topBanner}>
+        <View style={styles.iconPlaceholder} />
         <Text style={styles.topBannerTitle}>League Lock</Text>
-        <View style={styles.infoButtonWrapper}>
-          <IconButton
-            icon="information-outline"
-            size={20}
-            onPress={handleInfoPress}
-            style={styles.infoButton}
+        <TouchableOpacity onPress={handleInfoPress} style={styles.infoButtonWrapper}>
+          <Icon
+            source="information-outline"
+            size={24}
           />
+        </TouchableOpacity>
+      </View>
+      {!loading ? 
+        <View>
+          <View style={styles.headerSection}>
+            <GameweekDropdown
+              currentGameWeek={gameWeek.toString()}
+              selectedGameWeek={selectedGameWeek.toString()}
+              onSelect={(gw: string) => setSelectedGameWeek(parseInt(gw))}
+            />
+          </View>
+          <ScrollView style={styles.container}>
+            <FantasyPredictions
+              isWeekComplete={isWeekComplete}
+              gameWeek={gameWeek}
+              selectedGameWeek={selectedGameWeek}
+            />
+            <FantasyRanking
+              liveRanking={liveRanking}
+              isWeekComplete={isWeekComplete}
+              gameWeek={gameWeek}
+              selectedGameWeek={selectedGameWeek}
+            />
+          </ScrollView>
         </View>
-      </View>
-      <View style={styles.headerSection}>
-        <GameweekDropdown
-          currentGameWeek={gameWeek.toString()}
-          selectedGameWeek={selectedGameWeek.toString()}
-          onSelect={(gw: string) => setSelectedGameWeek(parseInt(gw))}
-        />
-      </View>
-      <ScrollView style={styles.container}>
-        <FantasyPredictions
-          isWeekComplete={isWeekComplete}
-          gameWeek={gameWeek}
-          selectedGameWeek={selectedGameWeek}
-        />
-        <FantasyRanking
-          liveRanking={liveRanking}
-          isWeekComplete={isWeekComplete}
-          gameWeek={gameWeek}
-          selectedGameWeek={selectedGameWeek}
-        />
-      </ScrollView>
+       : null}
     </SafeAreaView>
   );
 };
@@ -160,12 +156,9 @@ const styles = StyleSheet.create({
     zIndex: 2000,
   },
   infoButtonWrapper: {
-    position: "absolute",
-    right: 10,
-    top: -10,
+    top: 0,
   },
-  infoButton: {
-    backgroundColor: "lightblue",
-    margin: 0,
+  iconPlaceholder: {
+    width: 24,
   },
 });
