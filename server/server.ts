@@ -72,7 +72,6 @@ const hardCodedLogos: Map<string, string> = new Map([
 ]);
 
 async function runScheduledTask() {
-   await calculatePointsForWeek('14');
   try {
     const { table, srcUrls } = await scrapeStandings();
     const { gameWeek, isWeekComplete } = await scrapeResults();
