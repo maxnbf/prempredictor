@@ -22,7 +22,10 @@ export async function calculatePointsForWeek(week: string) {
   const userPointsMap: Record<string, number> = {}; // username -> points earned this week
 
   predictions.forEach((pred) => {
-    const fixture = fixtures.find((f) => pred.fixture == f._id);
+    const fixture = fixtures.find((f) => {
+      return pred.fixture._id.toString() == f._id.toString()
+    });
+  
     if (!fixture) return;
 
     const actualHome = fixture.homeScore;
