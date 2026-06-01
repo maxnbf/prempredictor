@@ -99,7 +99,7 @@ app.get("/support", (req, res) => {
 // - PORT 8080: The network port the server will listen on
 // - "0.0.0.0": Listen on all network interfaces (not just localhost)
 // - Callback function runs when server successfully starts
-const PORT = process.env.PORT || 8080;
+const PORT = Number(process.env.PORT) || 8080;
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server is running on port: ${PORT}`);
 });
